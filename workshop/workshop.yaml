@@ -1,0 +1,6 @@
+---
+name: OpenShift Service Mesh 3.0 Workshop
+
+modules:
+  activate:
+    - index
