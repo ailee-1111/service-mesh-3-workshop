@@ -19,11 +19,39 @@
   * 애플리케이션 컨테이너와 나란히 배포되어 마이크로서비스 간의 모든 네트워크 통신을 투명하게 가로채는 지능형 프록시(Envoy)들로 구성됩니다.
   * 제어 평면의 지침에 따라 동적 서비스 디스커버리, 로드 밸런싱, 암호화 통신, 서킷 브레이킹, 트래픽 분할 등의 실질적인 네트워크 처리를 수행합니다.
 
+### 아키텍처 다이어그램 (제어 및 데이터 평면 구조)
+
+```mermaid
+graph TD
+  subgraph Data Plane [데이터 평면 - Data Plane]
+    direction LR
+    IGW[인그레스 게이트웨이 - Ingress Gateway] --> ProxyA[Service A Proxy]
+    ProxyA <--> ProxyB[Service B Proxy]
+    ProxyB <--> ProxyC[Service C Proxy]
+    ProxyC --> EGW[이그레스 트래픽 - Egress Traffic]
+  end
+
+  subgraph Control Plane [제어 평면 - Control Plane]
+    Istiod[istiod]
+  end
+
+  Istiod -.-> |설정 전파 및 xDS 제어| ProxyA
+  Istiod -.-> |설정 전파 및 xDS 제어| ProxyB
+  Istiod -.-> |설정 전파 및 xDS 제어| ProxyC
+
+  classDef plane fill:#f9f9f9,stroke:#333,stroke-width:1px;
+  classDef ctrl fill:#e1f5fe,stroke:#0288d1,stroke-width:2px;
+  classDef data fill:#efebe9,stroke:#5d4037,stroke-width:2px;
+  class Data Plane plane;
+  class Control Plane plane;
+  class Istiod ctrl;
+```
+
 ---
 
 ## 2. Sail Operator와 핵심 Istio CRDs
 
-오픈시프트 서비스 메시에서 **Sail Operator**는 컨트롤 플레인의 라이프사이클을 전담 관리하며, 다음과 같은 핵심 커스텀 리소스(CR)들을 조율합니다.
+오픈시프트 서비스 메시에서 Sail Operator는 컨트롤 플레인의 라이프사이클을 전담 관리하며, 다음과 같은 핵심 커스텀 리소스(CR)들을 조율합니다.
 
 ### Istio
 클러스터 전역에서 이스티오 컨트롤 플레인을 배포하고 관리하는 가장 상위 수준의 리소스입니다.
@@ -51,6 +79,33 @@
   * **L4 보안 계층 (ztunnel):** 노드 단위로 가동되는 경량 에이전트인 `ztunnel`이 mTLS 암호화 통신과 L4 수준의 인증 정책을 가볍게 수행하여 오버헤드를 극적으로 최소화합니다.
   * **L7 가상 라우팅 계층 (waypoint proxies):** L7 수준의 정교한 라우팅 제어나 서킷 브레이킹이 필수적인 네임스페이스에만 Envoy 기반의 `waypoint` 프록시를 별도로 두어 필요한 시점에만 L7 처리를 집중 수행합니다.
 
+### 데이터 평면 배포 모델 비교 아키텍처 다이어그램
+
+```mermaid
+graph TB
+  subgraph Sidecar Mode [사이드카 모드 - Sidecar Mode]
+    subgraph Pod1 [Pod A]
+      AppA[App A] <--> ProxyA[Envoy Proxy]
+    end
+    subgraph Pod2 [Pod B]
+      AppB[App B] <--> ProxyB[Envoy Proxy]
+    end
+    ProxyA <--> |mTLS 통신 및 프록싱| ProxyB
+  end
+
+  subgraph Ambient Mode [엠비언트 모드 - Ambient Mode]
+    subgraph Node1 [물리 노드 - Worker Node]
+      AppC[App C] <--> ZTunnel[ztunnel - L4 프록시]
+      AppD[App D] <--> ZTunnel
+      ZTunnel <--> |L4 보안 전송| ZTunnel
+    end
+    subgraph Namespace L7 [네임스페이스 L7 처리 영역]
+      Waypoint[Waypoint Proxy - L7 프록시]
+    end
+    ZTunnel -.-> |L7 정책 가공 필요 시 경유| Waypoint
+  end
+```
+
 ---
 
 ## 4. 플랫폼 연동 구조 (Integrations)
@@ -68,11 +123,11 @@
 
 ---
 
-## 💻 5. [실습] 컨트롤 플레인 엔진 상태 진단
+## 5. [실습] 컨트롤 플레인 엔진 상태 진단
 
 오른쪽 화면에 열려있는 첫 번째 터미널(Terminal 1)과 두 번째 터미널(Terminal 2)을 활용해, 공식 아키텍처 교재 명세에 따라 현재 클러스터에 정상 설치 및 가동 중인 서비스 메시 3 엔진들을 확인해 보겠습니다.
 
-### 🟢 실습 1. Sail Operator 및 CNI 제어부 포드 점검
+### 실습 1. Sail Operator 및 CNI 제어부 포드 점검
 현재 클러스터의 오퍼레이터 영역에서 수명 주기를 전담 관리하는 Sail Operator 포드가 성공적으로 가동되고 있는지 확인합니다.
 
 아래 명령어를 마우스로 클릭하여 실행해 보세요.
@@ -80,24 +135,24 @@
 oc get pods -n openshift-operators -l app.kubernetes.io/name=sail-operator
 ```
 
-### 🟢 실습 2. 노드별 CNI 드라이버 데몬셋 배포 확인
+### 실습 2. 노드별 CNI 드라이버 데몬셋 배포 확인
 SFC 및 컨테이너 권한 상승 없이 안전하게 가상 방화벽(Netfilter) 규칙을 생성 및 매핑해 주는 CNI 플러그인이 각 물리 노드 단위로 가동 중인지 데몬셋을 조회합니다.
 ```execute
 oc get daemonset -n openshift-operators
 ```
 
-### 🟢 실습 3. 이스티오 컨트롤 플레인 설치 제어자(CRD) 검증
+### 실습 3. 이스티오 컨트롤 플레인 설치 제어자(CRD) 검증
 새롭게 제공되는 단일 표준 최상위 배포 지침인 `istios.sailoperator.io` 리소스 명세 정의서가 클러스터에 안전하게 등록되어 작동 준비를 마쳤는지 검출합니다.
 ```execute-2
 oc get crd | grep sailoperator.io
 ```
 
-### 🟢 실습 4. 자신의 실습 네임스페이스 환경 전환
-실습 진행을 위해 자신에게 격리 배정된 네임스페이스(`service-mesh-%username%`) 영역으로 이동하여 정상 작동 여부를 점검합니다.
+### 실습 4. 자신의 실습 네임스페이스 환경 전환
+실습 진행을 위해 자신에게 격리 배정된 네임스페이스 영역으로 이동하여 정상 작동 여부를 점검합니다.
 ```execute-2
 oc project %username%
 ```
 
 ---
 
-*이것으로 공식 교재에 수록된 서비스 메시 3.0의 제어 평면, 데이터 평면, 배포 모델별 아키텍처 특징 분석 및 클러스터 진단 실습을 완벽하게 끝마쳤습니다. 다음 장으로 넘어가 컨트롤 플레인을 직접 배포하고 도메인을 설정하는 방법을 이어서 수행하겠습니다.*
+이것으로 공식 교재에 수록된 서비스 메시 3.0의 제어 평면, 데이터 평면, 배포 모델별 아키텍처 특징 분석 및 클러스터 진단 실습을 완벽하게 끝마쳤습니다. 다음 장으로 넘어가 컨트롤 플레인을 직접 배포하고 도메인을 설정하는 방법을 이어서 수행하겠습니다.
