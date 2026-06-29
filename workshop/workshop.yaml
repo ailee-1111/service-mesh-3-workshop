@@ -5,3 +5,4 @@ modules:
   activate:
     - index
     - lab1.1_architecture
+    - lab1.2_application_deployment
