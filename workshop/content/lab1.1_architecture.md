@@ -70,7 +70,7 @@ spec:
 
 OpenShift Service Mesh는 오픈시프트 플랫폼 내의 다양한 타 핵심 인프라 오퍼레이터 및 자원들과 통합되어, 메시 워크로드의 관찰 가능성(Observability), 암호화 보안, 그리고 릴리즈 배포 라이프사이클 관리를 극적으로 향상시킵니다.
 
-<img src="images/page-03.png" width="100%" alt="Figure 1.3: OpenShift Service Mesh with OpenShift Integrations" />
+<img src="images/page-03.svg" width="100%" alt="Figure 1.3: OpenShift Service Mesh with OpenShift Integrations" />
 
 * **OpenShift Monitoring (모니터링 연동):**
   * 오픈시프트의 기본 프로메테우스(Prometheus) 모니터링 스택과 연계되어 메시 전반의 메트릭 데이터를 수집 및 저장합니다. 
@@ -80,7 +80,7 @@ OpenShift Service Mesh는 오픈시프트 플랫폼 내의 다양한 타 핵심 
 * **OpenShift Cert Manager (보안 인증서 자동 갱신):**
   * 서비스 메시는 보안 암호화 통신을 위해 자가 서명 인증서(Self-signed CA)를 내장해 사용하지만, 기업 보안 가이드라인 준수를 위해 외부 공인 인증기관(Active Directory CA 혹은 외부 Commercial CA)과 연계되어 신뢰할 수 있는 SSL 인증서를 주입받아야 할 수 있습니다.
   * Cert Manager 오퍼레이터와 통합되면 `istio-csr` 인증 대행자가 동적으로 CSR 요청서를 발급하고 Cert Manager가 일괄 중앙 통제 갱신을 주도하게 되므로, 메시 내부의 상호 TLS(mTLS) 인증서 관리가 안전하고 완벽하게 자동화됩니다.
-* **Argo Rollouts (고급 Canary 배포 연동):**
+* **Argo Workflows / Argo Rollouts (고급 Canary 배포 연동):**
   * 쿠버네티스의 기본 Rolling Update 방식보다 더욱 수려하고 복잡한 점진적 트래픽 이식 배포를 지원합니다.
   * Argo Rollouts와 통합되면, 가상 라우팅 규칙(`VirtualService`)의 내부 가중치 비율을 메트릭 수집 현황에 따라 동적이고 세부적으로 조절하여 안전하게 카나리, 블루-그린 릴리즈를 통제할 수 있습니다.
 
@@ -90,7 +90,7 @@ OpenShift Service Mesh는 오픈시프트 플랫폼 내의 다양한 타 핵심 
 
 제어 평면은 실시간으로 발생하는 물리적인 서비스 통신(런타임 트래픽) 경로 상에 직접 머무르거나 연동하지 않으며, 오직 데이터 평면의 지능형 프록시들을 프로그래밍하여 제어하는 설계 구조를 유지합니다.
 
-<img src="images/page-04.png" width="100%" alt="Figure 1.4: Control Plane and Data Plane Architecture" />
+<img src="images/page-04.svg" width="100%" alt="Figure 1.4: Control Plane and Data Plane Architecture" />
 
 ### 제어 및 데이터 평면의 통신 흐름 방식
 1. 애플리케이션 개발자 또는 관리자가 오픈시프트 콘솔 및 API를 사용해 `VirtualService`나 `DestinationRule` 같은 이스티오 표준 가상 설정을 생성하거나 수정합니다.
@@ -110,16 +110,16 @@ OpenShift Service Mesh는 오픈시프트 플랫폼 내의 다양한 타 핵심 
 
 서비스 메시 3은 인프라 자원의 가용성 및 보안 요건에 맞추어 사이드카(Sidecar) 방식과 차세대 사이드카리스인 엠비언트(Ambient) 방식의 두 가지 데이터 평면 가동 모델을 완벽히 제공합니다.
 
-<img src="images/page-06.png" width="100%" alt="Figure 1.5: Data Plane Deployment Models Comparison" />
+<img src="images/page-06.svg" width="100%" alt="Figure 1.5: Data Plane Deployment Models Comparison" />
 
 ### 사이드카 모드 (Sidecar Mode - 전통적 구조)
-각 애플리케이션 포드 내부마다 개별 Envoy 프록시가 강제 주입(Injection)되어 포드를 넘나드는 모든 인그레스 및 이그레스 트래픽을 완벽하게 가로챕니다.
+각 애플리케이션 포드 내부마다 개별 Envoy 프록시가 가위 주입(Injection)되어 포드를 넘나드는 모든 인그레스 및 이그레스 트래픽을 완벽하게 가로챕니다.
 * **한계 및 과제:** 각 포드마다 개별 프록시 구동을 위한 메모리/CPU 고유 오버헤드가 발생하며, 수많은 포드가 기동될 시 클러스터의 전반적인 가용 자원 효율과 스케일링 복잡도가 높아지는 단점이 동반됩니다.
 
 ### 엠비언트 모드 (Ambient Mode - 차세대 무주입 구조)
 사이드카 주입 문제를 근본적으로 극복하기 위해, 가상 네트워크 기능을 L4 보안 오버레이 레이어와 L7 애플리케이션 가공 레이어로 나누어 노드 및 네임스페이스 격리 구조로 설계했습니다.
 
-<img src="images/page-07.png" width="100%" alt="Figure 1.6: Ambient Mode Components" />
+<img src="images/page-07.svg" width="100%" alt="Figure 1.6: Ambient Mode Components" />
 
 * **L4 보안 제어 (ztunnel):** 
   * 각 노드 단위로 단 1개씩만 배포되어 가동되는 극도의 초경량 프록시인 `ztunnel`이 노드 내의 모든 포드들의 L4 암호화 보안 터널(mTLS), 전송 모니터링, L4 인가 정책 설정을 가볍고 신속하게 수립합니다. 포드마다 프록시를 띄우지 않으므로 전체 서버 자원을 경이롭게 절약할 수 있습니다.
@@ -134,7 +134,7 @@ OpenShift Service Mesh는 오픈시프트 플랫폼 내의 다양한 타 핵심 
 
 클러스터 내에서 조직의 규모와 애플리케이션 전파 범위가 넓어짐에 따라, 자원 고가용성과 독립 격리성을 유지하기 위해 고도의 확장 모델이 지원됩니다.
 
-<img src="images/page-08.png" width="100%" alt="Figure 1.7 & 1.8: Scaling and Multicluster Deployment Models" />
+<img src="images/page-08.svg" width="100%" alt="Figure 1.7 & 1.8: Scaling and Multicluster Deployment Models" />
 
 ### 다중 테넌시 격리 (Multitenancy Features)
 * **네임스페이스 기반 단일 제어 모델:** 단일 이스티오 컨트롤 플레인(`Istio` 리소스)을 띄우고, `discoverySelectors` 필터를 사용하여 레이블이 지정된 격리된 특정 네임스페이스들의 자원들만 메시가 바라보도록 안전하게 격리합니다.
@@ -178,4 +178,4 @@ oc project %username%
 
 ---
 
-이것으로 레드햇 공식 교육 교재 본문 내용에 대한 100% 정밀 한글 복원 학습과 실제 다이어그램 그림 연동, 그리고 클러스터 검증 실습을 완전히 끝마쳤습니다. 수고 많으셨습니다! 다음 장으로 이어서 넘어가 컨트롤 플레인을 실제 배포하는 과정을 계속 집필하도록 하겠습니다.
+이것으로 공식 교재에 수록된 서비스 메시 3.0의 제어 평면, 데이터 평면, 배포 모델별 아키텍처 특징 분석 및 클러스터 진단 실습을 완벽하게 끝마쳤습니다. 다음 장으로 넘어가 컨트롤 플레인을 직접 배포하고 도메인을 설정하는 방법을 이어서 수행하겠습니다.
