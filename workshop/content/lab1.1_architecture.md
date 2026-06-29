@@ -17,7 +17,7 @@ Red Hat OpenShift Service Mesh는 Red Hat OpenShift Container Platform 위에서
 
 다음 다이어그램은 서비스 메시를 구성하는 고수준 컴포넌트들의 전체 통합 아키텍처를 보여줍니다.
 
-<img src="images/page-01.png" width="100%" alt="Figure 1.2: OpenShift Service Mesh High Level Components" />
+<img src="images/page-01.svg" width="100%" alt="Figure 1.2: OpenShift Service Mesh High Level Components" />
 
 ### 제어 평면 및 데이터 평면 아키텍처 (Control Plane and Data Plane Architecture)
 서비스 메시의 전반적인 시스템 아키텍처는 논리적으로 제어 평면(Control Plane)과 데이터 평면(Data Plane)의 두 가지 레이어로 엄격하게 분리됩니다.
