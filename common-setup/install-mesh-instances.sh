@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==============================================================================
-# OpenShift Service Mesh 3.0 Workshop - 다중 유저별 격리 인스턴스 자동화 배포 스크립트
+# OpenShift Service Mesh 3.0 Workshop - 다중 유저별 격리 인프라 자동화 배포 스크립트 (Kiali 공유 모델)
 # ==============================================================================
 set -eo pipefail
 
@@ -53,7 +53,13 @@ echo "   ➡️ [Tracing] MinIO 및 TempoStack 백엔드 기동..."
 oc apply -f "$SCRIPT_DIR/03_tracing/minio-and-tempo.yaml"
 oc apply -f "$SCRIPT_DIR/03_tracing/tempo-rbac.yaml"
 
-# 5. 다중 사용자별 개별 격리 인스턴스 생성 루프
+# Global Kiali 공유 인스턴스 전개 (오픈시프트 콘솔 메뉴 완벽 노출 및 자원 낭비 최소화)
+echo "   ➡️ [Kiali] 글로벌 공유 Kiali 및 모니터링 연동 기동..."
+cp "$SCRIPT_DIR/03_tracing/kiali-shared.yaml" /tmp/kiali-shared-temp.yaml
+perl -pi -e "s/YOUR_NEW_CLUSTER_SUBDOMAIN/${NEW_SUBDOMAIN}/g" /tmp/kiali-shared-temp.yaml
+oc apply -f /tmp/kiali-shared-temp.yaml
+
+# 5. 다중 사용자별 개별 격리 인스턴스 생성 루프 (학생 실습지는 제외하고 순수 제어평면과 게이트웨이만 배포)
 echo "📦 4. 사용자별($USER_COUNT명) 격리 서비스 메시 및 인그레스 게이트웨이 전개..."
 TEMPLATE_DIR="$SCRIPT_DIR/03_instances/user-template"
 RENDER_DIR="/tmp/rendered-mesh-instances"
@@ -66,14 +72,14 @@ for ((i=1; i<=USER_COUNT; i++)); do
     USER_RENDER_DIR="$RENDER_DIR/$USER_NAME"
     mkdir -p "$USER_RENDER_DIR"
     
-    # 템플릿 파일을 읽어 플레이스홀더를 사용자에 맞게 치환
+    # 템플릿 파일을 읽어 플레이스홀더를 사용자에 맞게 치환 (Kiali CR은 전역 기동이므로 템플릿 처리 시 제외)
     for f in "$TEMPLATE_DIR"/*.yaml; do
         filename=$(basename "$f")
-        cp "$f" "$USER_RENDER_DIR/$filename"
-        
-        # 플레이스홀더 변경
-        perl -pi -e "s/USER_NAME_PLACEHOLDER/${USER_NAME}/g" "$USER_RENDER_DIR/$filename"
-        perl -pi -e "s/YOUR_NEW_CLUSTER_SUBDOMAIN/${NEW_SUBDOMAIN}/g" "$USER_RENDER_DIR/$filename"
+        if [ "$filename" != "kiali-cr.yaml" ] && [ "$filename" != "kiali-viewer-crb.yaml" ] && [ "$filename" != "kiali-monitoring-crb.yaml" ]; then
+            cp "$f" "$USER_RENDER_DIR/$filename"
+            perl -pi -e "s/USER_NAME_PLACEHOLDER/${USER_NAME}/g" "$USER_RENDER_DIR/$filename"
+            perl -pi -e "s/YOUR_NEW_CLUSTER_SUBDOMAIN/${NEW_SUBDOMAIN}/g" "$USER_RENDER_DIR/$filename"
+        fi
     done
     
     # 해당 사용자의 네임스페이스 기동 및 레이블 설정
@@ -81,69 +87,50 @@ for ((i=1; i<=USER_COUNT; i++)); do
     oc apply -f "$USER_RENDER_DIR/namespace-istio-system.yaml"
     oc apply -f "$USER_RENDER_DIR/namespace-istio-ingress.yaml"
     
-    # 실습용 네임스페이스 사전 기동 및 격리 레이블 적용 (Kiali 권한 연동 목적)
-    oc new-project "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || oc project "${USER_NAME}-meshintro-bookinfo" &>/dev/null
-    oc label namespace "${USER_NAME}-meshintro-bookinfo" istio-discovery="${USER_NAME}" --overwrite 2>/dev/null || true
-    oc label namespace "${USER_NAME}-meshintro-bookinfo" istio.io/rev="${USER_NAME}" --overwrite 2>/dev/null || true
-    
-    # Istio 및 Kiali, OTel Collector CR 배포
-    echo "      🏗️  Istio, Kiali, OpenTelemetry 인스턴스 전개..."
+    # Istio 및 OTel Collector CR 배포
+    echo "      🏗️  Istio, OpenTelemetry 인스턴스 전개..."
     oc apply -f "$USER_RENDER_DIR/istio-cr.yaml"
     oc apply -f "$USER_RENDER_DIR/otel-collector-cr.yaml"
-    oc apply -f "$USER_RENDER_DIR/kiali-cr.yaml"
-    oc apply -f "$USER_RENDER_DIR/kiali-viewer-crb.yaml"
-    oc apply -f "$USER_RENDER_DIR/kiali-monitoring-crb.yaml"
     
     # 메트릭 수집을 위한 ServiceMonitor 및 PodMonitor 전개 (cannot load the graph 완파 솔루션)
     echo "      📊 메트릭 수집용 ServiceMonitor 및 PodMonitor 배포..."
     oc apply -f "$USER_RENDER_DIR/istiod-servicemonitor.yaml" -n "${USER_NAME}-istio-system"
     oc apply -f "$USER_RENDER_DIR/istio-proxies-podmonitor.yaml" -n "${USER_NAME}-istio-system"
     oc apply -f "$USER_RENDER_DIR/istio-proxies-podmonitor.yaml" -n "${USER_NAME}-istio-ingress"
-    oc apply -f "$USER_RENDER_DIR/istio-proxies-podmonitor.yaml" -n "${USER_NAME}-meshintro-bookinfo"
     
     # Ingress Gateway 배포
     echo "      🌐 Ingress Gateway, Service, Route 전개..."
     oc apply -f "$USER_RENDER_DIR/ingress-gateway-deployment.yaml"
     oc apply -f "$USER_RENDER_DIR/ingress-gateway-service-route.yaml"
 
-    # Kiali 서비스 계정에 각 네임스페이스 읽기 권한(view) 결합 (cannot load the graph 완파 솔루션)
-    echo "      🔑 Kiali 전용 격리 네임스페이스 권한 주입..."
-    oc create rolebinding "kiali-${USER_NAME}-view" --clusterrole=view --serviceaccount="${USER_NAME}-istio-system:kiali-service-account" -n "${USER_NAME}-istio-system" 2>/dev/null || true
-    oc create rolebinding "kiali-${USER_NAME}-view" --clusterrole=view --serviceaccount="${USER_NAME}-istio-system:kiali-service-account" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
-    oc create rolebinding "kiali-${USER_NAME}-view" --clusterrole=view --serviceaccount="${USER_NAME}-istio-system:kiali-service-account" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
-
     # 사용자 서비스 계정에 격리된 네임스페이스별 권한 주입 (Cluster 1 developer 수준 + 격리 보장)
     echo "      🔑 네임스페이스 권한 주입 (ServiceAccount)..."
     oc adm policy add-role-to-user admin "system:serviceaccount:homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-system" 2>/dev/null || true
     oc adm policy add-role-to-user admin "system:serviceaccount:homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
-    oc adm policy add-role-to-user admin "system:serviceaccount:homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
 
     # 사용자 계정(User) 자체에도 네임스페이스별 권한 주입 (웹 콘솔 로그인 세션용!)
     echo "      🔑 네임스페이스 권한 주입 (User)..."
     oc adm policy add-role-to-user admin "${USER_NAME}" -n "${USER_NAME}-istio-system" 2>/dev/null || true
     oc adm policy add-role-to-user admin "${USER_NAME}" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
-    oc adm policy add-role-to-user admin "${USER_NAME}" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
 
     # Istio Extended Permissions ClusterRole을 각 네임스페이스의 RoleBinding으로 연계 바인딩
     oc create rolebinding "workshop-${USER_NAME}-istio-extended-sa" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-system" 2>/dev/null || true
     oc create rolebinding "workshop-${USER_NAME}-istio-extended-sa" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
-    oc create rolebinding "workshop-${USER_NAME}-istio-extended-sa" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
 
     oc create rolebinding "workshop-${USER_NAME}-istio-extended-user" --clusterrole=kiali-istio-extended-permissions --user="${USER_NAME}" -n "${USER_NAME}-istio-system" 2>/dev/null || true
     oc create rolebinding "workshop-${USER_NAME}-istio-extended-user" --clusterrole=kiali-istio-extended-permissions --user="${USER_NAME}" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
-    oc create rolebinding "workshop-${USER_NAME}-istio-extended-user" --clusterrole=kiali-istio-extended-permissions --user="${USER_NAME}" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
 done
 
-# 6. OpenShift Web Console 'Service Mesh' 통합 플러그인 연동 및 기동
+# 6. OpenShift Web Console 'Service Mesh' 통합 플러그인 연동 및 기동 (전역 공유 Kiali 기준 단 1회 등록)
 echo "🔌 5. OpenShift Web Console 'Service Mesh' 메뉴 활성화 및 플러그인 등록..."
-if oc get project user1-istio-system &>/dev/null; then
-    echo "   ➡️  user1-istio-system 기준 OSSMConsole 생성..."
+if oc get project istio-system &>/dev/null; then
+    echo "   ➡️  istio-system 기준 OSSMConsole 생성..."
     cat <<EOF | oc apply -f -
 apiVersion: kiali.io/v1alpha1
 kind: OSSMConsole
 metadata:
   name: ossmconsole
-  namespace: user1-istio-system
+  namespace: istio-system
 EOF
 
     echo "   ➡️  OpenShift Console 클러스터 명세에 ossmconsole 플러그인 활성화..."
@@ -151,6 +138,6 @@ EOF
 fi
 
 echo "=========================================================="
-echo "🎉 서비스 메시 3.0 다중 유저 격리 인스턴스 구성이 성료되었습니다!"
-echo "   (사용자 $USER_COUNT명 격리 제어평면 및 게이트웨이 기동 중)"
+echo "🎉 서비스 메시 3.0 다중 유저 격리 인프라 구성이 성료되었습니다!"
+echo "   (글로벌 공유 Kiali 및 사용자별 격리 메시 가동 중)"
 echo "=========================================================="
