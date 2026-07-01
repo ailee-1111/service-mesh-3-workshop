@@ -72,7 +72,7 @@ source ~/.bashrc
 2.2. 제공된 웹 터미널 창을 활성화하고, `%username%` 사용자명과 `openshift` 비밀번호를 사용해 클러스터에 원격 로그인한 다음 `%username%-meshintro-bookinfo` 프로젝트로 안전하게 이동합니다:
 
 ```execute
-oc login -u %username% -p openshift %k8s_api_url%
+oc login -u %username% -p openshift https://$KUBERNETES_SERVER
 ```
 
 * **로그인 수행 완료 로그:**
@@ -83,7 +83,7 @@ Use insecure connections? (y/n): y
 
 WARNING: Using insecure TLS client config. Setting this option is not supported!
 
-Logged into "%k8s_api_url%" as "%username%" using the password provided.
+Logged into "https://$KUBERNETES_SERVER" as "%username%" using the password provided.
 
 You have access to 78 projects.
 Using project "default".
@@ -96,7 +96,7 @@ oc project %username%-meshintro-bookinfo
 * **프로젝트 이동 결과 로그:**
 
 ```bash
-Now using project "%username%-meshintro-bookinfo" on server "%k8s_api_url%".
+Now using project "%username%-meshintro-bookinfo" on server "https://$KUBERNETES_SERVER".
 ```
 
 2.3. 실습 가이드 디렉토리로 이동한 후, `traffic_gen.py` 스크립트를 즉시 실행시켜 reviews Bookinfo 마이크로서비스에 대해 균등한 트래픽 부하 주입을 수행합니다. 부하가 전송되는 중간에 이를 수동 정지시키려면 터미널 포커스를 두고 **Ctrl+C**를 누르면 중단됩니다.
