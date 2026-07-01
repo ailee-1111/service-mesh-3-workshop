@@ -48,6 +48,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "   ➡️ [CNI] 글로벌 IstioCNI 인스턴스 기동..."
 oc apply -f "$SCRIPT_DIR/01_operators/istio-cni-instance.yaml"
 
+# Global 모니터링 관리자 권한 집계 적용 (학생들이 PodMonitor를 생성할 수 있도록 허용)
+echo "   ➡️ [RBAC] 전역 PodMonitor 권한 집계 주입..."
+oc apply -f "$SCRIPT_DIR/02_homeroom/podmonitor-rbac.yaml"
+
 # Global Tracing-System 적용
 echo "   ➡️ [Tracing] MinIO 및 TempoStack 백엔드 기동..."
 oc apply -f "$SCRIPT_DIR/03_tracing/minio-and-tempo.yaml"
