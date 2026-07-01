@@ -148,11 +148,11 @@ traffic_gen.py continuous.yaml
 
 3.5. `productpage` 삼각형에서 외부로 뻗어나가는 경로 화살표를 마우스로 추적하여, 상단의 삼각형 노드 위로 커서를 올립니다. 이는 책의 원천 데이터를 제공하는 `details` 서비스 노드 정보입니다.
 
-<img src="images/fig-007.svg" width="100%" alt="Figure 1.16: details service information in traffic graph" />
+<img src="images/fig-008.svg" width="100%" alt="Figure 1.16: details service information in traffic graph" />
 
 3.6. 그 바로 아래편에 입체적인 `reviews` 서비스 노드 정보가 존재합니다. `reviews` 삼각형 노드로부터 오른쪽 편으로 향하는 3개의 라우팅 분기선 화살표가 나가는 것에 특히 주목해 주십시오. 이것이 병렬 가동 중인 reviews 마이크로서비스의 3가지 다른 실행 버전들을 나타냅니다.
 
-<img src="images/fig-007.svg" width="100%" alt="Figure 1.17: reviews service with three version variants in traffic graph" />
+<img src="images/fig-009.svg" width="100%" alt="Figure 1.17: reviews service with three version variants in traffic graph" />
 
 3.7. 둥근 사각형들 위로 마우스 포인터를 차례대로 올리면, `reviews` 서비스의 `v1`, `v2`, `v3` 버전을 직접 식별하여 조회할 수 있습니다. `reviews:v1` 노드는 우측의 `ratings` 서비스를 전혀 호출하지 않는 형태로 고립 전송되는 반면, `reviews:v2` 및 `reviews:v3` 노드만 `ratings` 서비스를 직접 호출하여 평점 별점 데이터를 받아오고 있는 차이점을 정교하게 판별하십시오.
 
@@ -162,15 +162,15 @@ traffic_gen.py continuous.yaml
 
 4.1. 트래픽 그래프에서 `reviews` 서비스 노드를 마우스로 클릭하여 선택합니다. 우측 화면에 세부 정보 패널 창이 열리면, 우상단의 삼점(⋮) 단추를 눌러 드롭다운 목록을 연 후, **Traffic Shifting** 메뉴를 정식 선택 및 클릭합니다.
 
-<img src="images/fig-007.svg" width="100%" alt="Figure 1.18: Add traffic shifting configurations to the reviews service" />
+<img src="images/fig-010.svg" width="100%" alt="Figure 1.18: Add traffic shifting configurations to the reviews service" />
 
-<img src="images/fig-008.svg" width="100%" alt="Figure 1.19: reviews service traffic weight configuration form" />
+<img src="images/fig-011.svg" width="100%" alt="Figure 1.19: reviews service traffic weight configuration form" />
 
 4.2. Create Traffic Shifting 설정 입력 화면에서, 빨간색 별점을 출력하는 새로운 버전인 `reviews-v3` 서비스의 Traffic Weight(트래픽 가중치 비율)를 **100**으로 정의하고, 나머지 `reviews-v1` 및 `reviews-v2` 서비스의 가중치 비율은 전부 **0**으로 입력해 정비합니다. 설정이 끝나면 하단의 **Preview** 버튼을 클릭하여 생성될 OSSM 리소스 명세를 시각적으로 검증합니다.
 
 4.3. **VirtualService** 탭을 선택하고 화면을 아래로 스크롤하여, 트래픽의 100%가 서비스 서브셋 `v3`으로 전량 강제 할당되고 `v1` 및 `v2`로는 0% 할당되는 이스티오 설정이 맞게 구성되었는지 최종 검증 및 검사합니다. 확인이 완료되면 **Create** 버튼을 클릭합니다.
 
-<img src="images/fig-008.svg" width="100%" alt="Figure 1.20: reviews VirtualService traffic routing configuration" />
+<img src="images/fig-012.svg" width="100%" alt="Figure 1.20: reviews VirtualService traffic routing configuration" />
 
 4.4. 리소스 생성 확인 대화 상자에서 **Create**를 클릭하여 OSSM 리소스 생성을 최종 확인합니다.
 
@@ -212,7 +212,7 @@ OpenShift Service Mesh 3.0 인프라가 실시간 트래픽 시프팅 설정을 
 
 4.6. 새 브라우저 탭에서 이스티오 인그레스 게이트웨이 주소인 `http://istio-ingressgateway-istio-ingress.%cluster_subdomain%/productpage`로 다시 접속하여 Bookinfo `productpage` 애플리케이션을 엽니다.
 
-<img src="images/fig-012.svg" width="100%" alt="Figure 1.21: Bookinfo application showing only red stars after traffic shifting to v3" />
+<img src="images/fig-013.svg" width="100%" alt="Figure 1.21: Bookinfo application showing only red stars after traffic shifting to v3" />
 
 페이지를 여러 번 새로고침하더라도 도서 리뷰의 별점이 항상 빨간색 별로 유지되며, 해당 리뷰를 처리하는 파드가 `reviews-v3` 버전임이 표시되는 것을 직접 관찰하십시오. 화면이 계속 동일하게 유지되는지 확실히 확인합니다.
 
