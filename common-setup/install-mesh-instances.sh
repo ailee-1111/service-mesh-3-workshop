@@ -80,6 +80,10 @@ for ((i=1; i<=USER_COUNT; i++)); do
     oc apply -f "$USER_RENDER_DIR/namespace-istio-system.yaml"
     oc apply -f "$USER_RENDER_DIR/namespace-istio-ingress.yaml"
     
+    # 실습용 네임스페이스 사전 기동 및 격리 레이블 적용 (Kiali 권한 연동 목적)
+    oc new-project "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || oc project "${USER_NAME}-meshintro-bookinfo" &>/dev/null
+    oc label namespace "${USER_NAME}-meshintro-bookinfo" istio-discovery="${USER_NAME}" --overwrite 2>/dev/null || true
+    
     # Istio 및 Kiali, OTel Collector CR 배포
     echo "      🏗️  Istio, Kiali, OpenTelemetry 인스턴스 전개..."
     oc apply -f "$USER_RENDER_DIR/istio-cr.yaml"
@@ -92,6 +96,12 @@ for ((i=1; i<=USER_COUNT; i++)); do
     echo "      🌐 Ingress Gateway, Service, Route 전개..."
     oc apply -f "$USER_RENDER_DIR/ingress-gateway-deployment.yaml"
     oc apply -f "$USER_RENDER_DIR/ingress-gateway-service-route.yaml"
+
+    # Kiali 서비스 계정에 각 네임스페이스 읽기 권한(view) 결합 (cannot load the graph 완파 솔루션)
+    echo "      🔑 Kiali 전용 격리 네임스페이스 권한 주입..."
+    oc create rolebinding "kiali-${USER_NAME}-view" --clusterrole=view --serviceaccount="${USER_NAME}-istio-system:kiali-service-account" -n "${USER_NAME}-istio-system" 2>/dev/null || true
+    oc create rolebinding "kiali-${USER_NAME}-view" --clusterrole=view --serviceaccount="${USER_NAME}-istio-system:kiali-service-account" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
+    oc create rolebinding "kiali-${USER_NAME}-view" --clusterrole=view --serviceaccount="${USER_NAME}-istio-system:kiali-service-account" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
 
     # 사용자 서비스 계정에 격리된 네임스페이스별 권한 주입 (Cluster 1 developer 수준 + 격리 보장)
     echo "      🔑 네임스페이스 권한 주입..."
