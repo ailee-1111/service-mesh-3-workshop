@@ -93,6 +93,22 @@ for ((i=1; i<=USER_COUNT; i++)); do
     oc apply -f "$USER_RENDER_DIR/ingress-gateway-service-route.yaml"
 done
 
+# 6. OpenShift Web Console 'Service Mesh' 통합 플러그인 연동 및 기동
+echo "🔌 5. OpenShift Web Console 'Service Mesh' 메뉴 활성화 및 플러그인 등록..."
+if oc get project user1-istio-system &>/dev/null; then
+    echo "   ➡️  user1-istio-system 기준 OSSMConsole 생성..."
+    cat <<EOF | oc apply -f -
+apiVersion: kiali.io/v1alpha1
+kind: OSSMConsole
+metadata:
+  name: ossmconsole
+  namespace: user1-istio-system
+EOF
+
+    echo "   ➡️  OpenShift Console 클러스터 명세에 ossmconsole 플러그인 활성화..."
+    oc patch console.operator.openshift.io cluster --type=merge -p '{"spec":{"plugins":["networking-console-plugin","monitoring-plugin","ossmconsole"]}}' || true
+fi
+
 echo "=========================================================="
 echo "🎉 서비스 메시 3.0 다중 유저 격리 인스턴스 구성이 성료되었습니다!"
 echo "   (사용자 $USER_COUNT명 격리 제어평면 및 게이트웨이 기동 중)"
