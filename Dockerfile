@@ -8,7 +8,9 @@ COPY . /tmp/src
 RUN sed -i 's/oc login \$KUBECTL_CA_ARGS/oc login --server=https:\/\/\$KUBERNETES_SERVER --insecure-skip-tls-verify/g' /opt/workshop/bin/setup-environ.sh
 
 RUN cp /tmp/src/labs/mesh-scripts/traffic_gen.py /usr/local/bin/traffic_gen.py && \
-    chmod +x /usr/local/bin/traffic_gen.py
+    chmod +x /usr/local/bin/traffic_gen.py && \
+    cp /tmp/src/labs/mesh-scripts/lab /usr/local/bin/lab && \
+    chmod +x /usr/local/bin/lab
 
 RUN rm -rf /tmp/src/.git* && \
     chown -R 1001 /tmp/src && \

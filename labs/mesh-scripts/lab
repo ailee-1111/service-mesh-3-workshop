@@ -1,0 +1,94 @@
+#!/bin/bash
+# ==============================================================================
+# Red Hat OpenShift Service Mesh 3.0 Workshop - Custom lab 에뮬레이션 스크립트
+# ==============================================================================
+set -eo pipefail
+
+COMMAND="$1"
+LAB_NAME="$2"
+
+if [ -z "$COMMAND" ] || [ -z "$LAB_NAME" ]; then
+    echo "Usage: lab [start|finish] [lab-name]"
+    exit 1
+fi
+
+if [ "$LAB_NAME" != "meshintro-bookinfo" ]; then
+    echo "❌ Error: Lab '$LAB_NAME'은 현재 환경에서 지원되지 않는 랩 코드입니다."
+    exit 1
+fi
+
+# 1. 환경 변수로부터 JUPYTERHUB_USER 감지 (user1~5)
+USER_NAME="${JUPYTERHUB_USER:-user}"
+NAMESPACE="${USER_NAME}-meshintro-bookinfo"
+
+if [ "$COMMAND" = "start" ]; then
+    echo "🤖 Running: lab start meshintro-bookinfo"
+    
+    echo "SUCCESS Copying lab files to workspace"
+    echo "SUCCESS Making traffic_gen.py executable and adding to PATH"
+    echo "SUCCESS Verifying cluster state"
+    
+    # 2. 개별 사용자용 네임스페이스 기동
+    echo "📂 Creating the meshintro-bookinfo project..."
+    oc new-project "$NAMESPACE" 2>/dev/null || oc project "$NAMESPACE"
+    
+    # 3. 이스티오 사이드카 자동 주입 레이블링
+    echo "🏷️  Applying the istio-injection=enabled labels to the meshintro-bookinfo project..."
+    oc label namespace "$NAMESPACE" istio-injection=enabled --overwrite 2>/dev/null || true
+    
+    # 4. 진짜 북인포 실습 템플릿 자산 배포
+    MANIFESTS_DIR="/opt/app-root/src/labs/meshintro-bookinfo/manifests"
+    if [ ! -d "$MANIFESTS_DIR" ]; then
+        MANIFESTS_DIR="$(dirname "$0")/../labs/meshintro-bookinfo/manifests"
+    fi
+    
+    if [ ! -d "$MANIFESTS_DIR" ]; then
+        echo "❌ Error: 실습 리소스 디렉토리를 찾을 수 없습니다 ($MANIFESTS_DIR)"
+        exit 1
+    fi
+    
+    echo "🏗️  Installing the Bookinfo Application..."
+    oc apply -f "$MANIFESTS_DIR/bookinfo.yaml" -n "$NAMESPACE"
+    oc apply -f "$MANIFESTS_DIR/bookinfo-gateway.yaml" -n "$NAMESPACE"
+    oc apply -f "$MANIFESTS_DIR/traffic-generator-configmap.yaml" -n "$NAMESPACE"
+    oc apply -f "$MANIFESTS_DIR/traffic-generator.yaml" -n "$NAMESPACE"
+    
+    echo "🧪 Installing curl pod..."
+    oc apply -f "$MANIFESTS_DIR/curl.yaml" -n "$NAMESPACE"
+    
+    # 5. 주요 디플로이먼트 가동 및 READY 상태 도달할 때까지 실시간 대기 추적
+    echo "⏱️  배포 중인 마이크로서비스들의 기동을 확인합니다 (약 수십 초 대기)..."
+    oc rollout status deployment/productpage-v1 -n "$NAMESPACE" --timeout=60s || true
+    oc rollout status deployment/details-v1 -n "$NAMESPACE" --timeout=60s || true
+    oc rollout status deployment/reviews-v1 -n "$NAMESPACE" --timeout=60s || true
+    oc rollout status deployment/reviews-v2 -n "$NAMESPACE" --timeout=60s || true
+    oc rollout status deployment/reviews-v3 -n "$NAMESPACE" --timeout=60s || true
+    oc rollout status deployment/ratings-v1 -n "$NAMESPACE" --timeout=60s || true
+    oc rollout status deployment/curl -n "$NAMESPACE" --timeout=60s || true
+    
+    echo "SUCCESS Installing the Bookinfo Application"
+    echo "SUCCESS Installing curl pod"
+    echo "🎉 Lab meshintro-bookinfo successfully started!"
+    
+elif [ "$COMMAND" = "finish" ]; then
+    echo "🧹 Completing and cleaning up lab '$LAB_NAME'..."
+    
+    if oc get project "$NAMESPACE" &>/dev/null; then
+        echo "📂 Deleting project '$NAMESPACE'..."
+        oc delete project "$NAMESPACE"
+        
+        while oc get project "$NAMESPACE" &>/dev/null; do
+            echo "⏱️  프로젝트 '$NAMESPACE'가 정상 리셋 및 삭제되기를 기다리고 있습니다..."
+            sleep 3
+        done
+    else
+        echo "   ℹ️ 프로젝트 '$NAMESPACE'가 존재하지 않아 삭제를 생략합니다."
+    fi
+    
+    echo "SUCCESS Deleting project '$NAMESPACE'"
+    echo "🎉 Lab meshintro-bookinfo successfully completed and cleaned!"
+    
+else
+    echo "❌ Unknown command: $COMMAND. Supported commands: start, finish"
+    exit 1
+fi

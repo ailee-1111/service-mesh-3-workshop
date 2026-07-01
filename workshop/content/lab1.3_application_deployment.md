@@ -1,10 +1,10 @@
-style>
+<style>
   h1 { font-size: 24px !important; }
   h2 { font-size: 20px !important; }
   h3 { font-size: 16px !important; }
 </style>
 
-# 가이드 실습: 서비스 메시 쇼룸 애플리케이션 (Guided Exercise: Service Mesh Showroom Application)
+# 모듈 1.3: 서비스 메시 쇼룸 애플리케이션 (Service Mesh Showroom Application)
 
 Bookinfo 애플리케이션이 트래픽 라우팅, 관찰 가능성, 보안을 포함하여 OpenShift Service Mesh 기능을 실증하기 위한 현실적인 시나리오를 어떻게 제공하는지 설명합니다.
 
@@ -40,7 +40,10 @@ source ~/.bashrc
 ### 1. 서비스 메시의 초기 상태를 검증합니다.
 
 1.1. 브라우저에서 OpenShift 웹 콘솔을 엽니다.
-`https://console-openshift-console.%cluster_subdomain%` 주소로 접속한 후, `htpasswd_provider`를 클릭하고 사용자 이름은 `%username%`을, 비밀번호는 `openshift`를 입력해 관리자 권한으로 로그인합니다. 가이드 투어(Guided Tour)가 표시되면 **Skip tour**를 클릭해 건너뜁니다.
+`https://console-openshift-console.%cluster_subdomain%` 주소로 접속하여 로그인 단계를 진행합니다.
+*(참고: 대시보드 인터페이스 상단 메뉴에 장착되어 있는 **Web Console** 탭을 클릭하시면, 새 브라우저 창을 띄우거나 별도 주소를 입력하지 않고도 가이드북 내부에서 원스톱으로 오픈시프트 웹 콘솔에 즉시 원격 접속하여 더욱 쾌적하고 간편하게 실습을 즐기실 수 있습니다. 본 교육 과정에서는 이 탭 클릭 접속 방식을 매우 권장합니다!)*
+
+`htpasswd_provider`를 클릭하고 사용자 이름은 `%username%`을, 비밀번호는 `openshift`를 입력해 관리자 권한으로 로그인합니다. 가이드 투어(Guided Tour)가 표시되면 **Skip tour**를 클릭해 건너뜁니다.
 
 1.2. 왼쪽 측면 메뉴에서 **Developer**를 클릭하여 개발자 관점(Developer perspective) 상태를 적용하고 유지 중인지 확인합니다.
 
@@ -120,7 +123,9 @@ traffic_gen.py continuous.yaml
 
 ### 3. 마이크로서비스 간의 트래픽 흐름을 탐색합니다.
 
-3.1. 브라우저의 OpenShift 웹 콘솔 화면으로 이동하여 관리자(Administrator) 관점으로 뷰를 전환합니다. 콘솔 상단 좌측 모서리의 **Developer** 전환 콤보박스를 클릭하고 **Administrator**를 선택합니다.
+3.1. OpenShift 웹 콘솔 화면으로 이동합니다.
+*(참고: 가이드북 상단의 **Web Console** 탭을 클릭해 열어둔 화면에서 손쉽게 계속 진행하실 수 있습니다.)*
+관리자(Administrator) 관점으로 뷰를 전환합니다. 콘솔 상단 좌측 모서리의 **Developer** 전환 콤보박스를 클릭하고 **Administrator**를 선택합니다.
 
 3.2. 왼쪽의 통합 메뉴 중에서 **Service Mesh > Overview** 메뉴를 클릭하여 서비스 메시 관리 개요 섹션으로 진입합니다.
 
