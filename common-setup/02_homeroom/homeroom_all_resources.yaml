@@ -150,7 +150,7 @@ spec:
         - name: CONSOLE_BRANDING
           value: openshift
         - name: CONSOLE_IMAGE
-          value: quay.io/openshift/origin-console:4.10
+          value: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:de57f817f26a9778169b7c2fcab98a43fc97626bec49b390e56b0030299a84c0
         - name: IDLE_TIMEOUT
           value: "7200"
         - name: OAUTH_CLIENT_SECRET
