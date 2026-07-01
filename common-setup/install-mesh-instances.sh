@@ -51,6 +51,7 @@ oc apply -f "$SCRIPT_DIR/01_operators/istio-cni-instance.yaml"
 # Global Tracing-System 적용
 echo "   ➡️ [Tracing] MinIO 및 TempoStack 백엔드 기동..."
 oc apply -f "$SCRIPT_DIR/03_tracing/minio-and-tempo.yaml"
+oc apply -f "$SCRIPT_DIR/03_tracing/tempo-rbac.yaml"
 
 # 5. 다중 사용자별 개별 격리 인스턴스 생성 루프
 echo "📦 4. 사용자별($USER_COUNT명) 격리 서비스 메시 및 인그레스 게이트웨이 전개..."

@@ -52,6 +52,14 @@ if [ "$COMMAND" = "start" ]; then
     oc apply -f "$MANIFESTS_DIR/bookinfo.yaml" -n "$NAMESPACE"
     oc apply -f "$MANIFESTS_DIR/bookinfo-gateway.yaml" -n "$NAMESPACE"
     oc apply -f "$MANIFESTS_DIR/traffic-generator-configmap.yaml" -n "$NAMESPACE"
+    
+    # 트래픽 제너레이터의 대상을 해당 유저 전용 인그레스 게이트웨이 주소로 동적 패치!
+    INGRESS_HOST=$(oc get route istio-ingressgateway -n "${USER_NAME}-istio-ingress" -o jsonpath='{.spec.host}' 2>/dev/null || true)
+    if [ -n "$INGRESS_HOST" ]; then
+        echo "🔧 Patching traffic generator config to use dynamic route http://${INGRESS_HOST}/productpage..."
+        oc patch configmap traffic-generator-config -n "$NAMESPACE" --type=merge -p "{\"data\":{\"route\":\"http://${INGRESS_HOST}/productpage\"}}" 2>/dev/null || true
+    fi
+    
     oc apply -f "$MANIFESTS_DIR/traffic-generator.yaml" -n "$NAMESPACE"
     
     echo "🧪 Installing curl pod..."
