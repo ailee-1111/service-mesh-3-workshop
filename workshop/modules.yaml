@@ -3,6 +3,6 @@ modules:
   index:
     name: Index
   lab1.1_architecture:
-    name: Lab 1.1
+    name: lab1.1-아키텍쳐
   lab1.2_application_intro:
-    name: Lab 1.2
+    name: lab1.2-애플리케이션 소개

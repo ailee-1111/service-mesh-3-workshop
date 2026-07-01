@@ -1,3 +1,9 @@
+<style>
+  h1 { font-size: 24px !important; }
+  h2 { font-size: 20px !important; }
+  h3 { font-size: 16px !important; }
+</style>
+
 # 모듈 1.2: 서비스 메시 쇼룸 애플리케이션 (Service Mesh Showroom Application)
 
 ## 학습 목표 (Objectives)

@@ -1,3 +1,9 @@
+<style>
+  h1 { font-size: 24px !important; }
+  h2 { font-size: 20px !important; }
+  h3 { font-size: 16px !important; }
+</style>
+
 # 모듈 1.1: 오픈시프트 서비스 메시 아키텍처 탐구 (Exploring the OpenShift Service Mesh Architecture)
 
 ## 학습 목표 (Objectives)

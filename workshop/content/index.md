@@ -1,3 +1,9 @@
+<style>
+  h1 { font-size: 24px !important; }
+  h2 { font-size: 20px !important; }
+  h3 { font-size: 16px !important; }
+</style>
+
 # Red Hat OpenShift Service Mesh 3.0 Workshop (한국어)
 
 본 실습 교육 과정은 **Red Hat OpenShift Service Mesh 3.0 (OSSM v3)** 환경 상에서 마이크로서비스 간의 트래픽 라우팅, 복원력 제어, 옵저버빌리티 관찰 및 강력한 mTLS 보안 제어 등을 자율적으로 학습할 수 있도록 설계된 차세대 실습 교육 가이드라인입니다.
