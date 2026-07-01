@@ -24,7 +24,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-      - image: registry.ocp4.example.com:8443/redhattraining/kiali/kiali-test-mesh-traffic-generator:latest 
+      - image: quay.io/kiali/kiali-test-mesh-traffic-generator:latest
         name: kiali-traffic-generator
         imagePullPolicy: IfNotPresent
         env:

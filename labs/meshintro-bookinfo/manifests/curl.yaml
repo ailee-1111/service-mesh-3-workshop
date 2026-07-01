@@ -52,7 +52,7 @@ spec:
       serviceAccountName: curl
       containers:
       - name: curl
-        image: registry.ocp4.example.com:8443/redhattraining/mesh/curl:latest
+        image: curlimages/curl:latest
         command: ["/bin/sleep", "infinity"]
         imagePullPolicy: IfNotPresent
         volumeMounts:
