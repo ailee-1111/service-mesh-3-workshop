@@ -1,4 +1,4 @@
-# 모듈 1.2-1: 서비스 메시 쇼룸 애플리케이션 (Service Mesh Showroom Application)
+# 모듈 1.2: 서비스 메시 쇼룸 애플리케이션 (Service Mesh Showroom Application)
 
 ## 학습 목표 (Objectives)
 * Bookinfo 애플리케이션이 트래픽 라우팅, 관찰 가능성(Observability), 보안을 포함한 OpenShift Service Mesh 기능들을 실증하고 탐구하는 데 어떻게 현실적인 실습 시나리오를 제공하는지 설명할 수 있습니다.
