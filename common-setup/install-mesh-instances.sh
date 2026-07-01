@@ -104,14 +104,25 @@ for ((i=1; i<=USER_COUNT; i++)); do
     oc create rolebinding "kiali-${USER_NAME}-view" --clusterrole=view --serviceaccount="${USER_NAME}-istio-system:kiali-service-account" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
 
     # 사용자 서비스 계정에 격리된 네임스페이스별 권한 주입 (Cluster 1 developer 수준 + 격리 보장)
-    echo "      🔑 네임스페이스 권한 주입..."
+    echo "      🔑 네임스페이스 권한 주입 (ServiceAccount)..."
     oc adm policy add-role-to-user admin "system:serviceaccount:homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-system" 2>/dev/null || true
     oc adm policy add-role-to-user admin "system:serviceaccount:homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
     oc adm policy add-role-to-user admin "system:serviceaccount:homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
 
-    oc create rolebinding "workshop-${USER_NAME}-istio-extended" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-system" 2>/dev/null || true
-    oc create rolebinding "workshop-${USER_NAME}-istio-extended" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
-    oc create rolebinding "workshop-${USER_NAME}-istio-extended" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
+    # 사용자 계정(User) 자체에도 네임스페이스별 권한 주입 (웹 콘솔 로그인 세션용!)
+    echo "      🔑 네임스페이스 권한 주입 (User)..."
+    oc adm policy add-role-to-user admin "${USER_NAME}" -n "${USER_NAME}-istio-system" 2>/dev/null || true
+    oc adm policy add-role-to-user admin "${USER_NAME}" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
+    oc adm policy add-role-to-user admin "${USER_NAME}" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
+
+    # Istio Extended Permissions ClusterRole을 각 네임스페이스의 RoleBinding으로 연계 바인딩
+    oc create rolebinding "workshop-${USER_NAME}-istio-extended-sa" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-system" 2>/dev/null || true
+    oc create rolebinding "workshop-${USER_NAME}-istio-extended-sa" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
+    oc create rolebinding "workshop-${USER_NAME}-istio-extended-sa" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
+
+    oc create rolebinding "workshop-${USER_NAME}-istio-extended-user" --clusterrole=kiali-istio-extended-permissions --user="${USER_NAME}" -n "${USER_NAME}-istio-system" 2>/dev/null || true
+    oc create rolebinding "workshop-${USER_NAME}-istio-extended-user" --clusterrole=kiali-istio-extended-permissions --user="${USER_NAME}" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
+    oc create rolebinding "workshop-${USER_NAME}-istio-extended-user" --clusterrole=kiali-istio-extended-permissions --user="${USER_NAME}" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
 done
 
 # 6. OpenShift Web Console 'Service Mesh' 통합 플러그인 연동 및 기동
