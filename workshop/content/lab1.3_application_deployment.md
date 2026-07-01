@@ -60,7 +60,7 @@ source ~/.bashrc
 ### 2. Bookinfo 애플리케이션을 탐색합니다.
 
 2.1. 브라우저의 새 탭에서 Bookinfo `productpage` 웹 페이지를 엽니다.
-`http://istio-ingressgateway-istio-ingress.%cluster_subdomain%/productpage` 주소로 이동합니다.
+`http://istio-ingressgateway-%username%-istio-ingress.%cluster_subdomain%/productpage` 주소로 이동합니다.
 
 <img src="images/fig-004.svg" width="100%" alt="Figure 1.12: Bookinfo application homepage" />
 
@@ -72,7 +72,7 @@ source ~/.bashrc
 2.2. 제공된 웹 터미널 창을 활성화하고, `%username%` 사용자명과 `openshift` 비밀번호를 사용해 클러스터에 원격 로그인한 다음 `%username%-meshintro-bookinfo` 프로젝트로 안전하게 이동합니다:
 
 ```execute
-oc login -u %username% -p openshift https://api.%cluster_subdomain%:6443
+oc login -u %username% -p openshift %k8s_api_url%
 ```
 * **로그인 수행 완료 로그:**
 ```bash
@@ -81,7 +81,7 @@ Use insecure connections? (y/n): y
 
 WARNING: Using insecure TLS client config. Setting this option is not supported!
 
-Logged into "https://api.%cluster_subdomain%:6443" as "%username%" using the password provided.
+Logged into "%k8s_api_url%" as "%username%" using the password provided.
 
 You have access to 78 projects.
 Using project "default".
@@ -92,7 +92,7 @@ oc project %username%-meshintro-bookinfo
 ```
 * **프로젝트 이동 결과 로그:**
 ```bash
-Now using project "%username%-meshintro-bookinfo" on server "https://api.%cluster_subdomain%:6443".
+Now using project "%username%-meshintro-bookinfo" on server "%k8s_api_url%".
 ```
 
 2.3. 실습 가이드 디렉토리로 이동한 후, `traffic_gen.py` 스크립트를 즉시 실행시켜 reviews Bookinfo 마이크로서비스에 대해 균등한 트래픽 부하 주입을 수행합니다. 부하가 전송되는 중간에 이를 수동 정지시키려면 터미널 포커스를 두고 **Ctrl+C**를 누르면 중단됩니다.
@@ -108,12 +108,11 @@ traffic_gen.py continuous.yaml
 
 세 가지 버전의 reviews 서비스 모두가 균형 있게 트래픽을 처리하며 골고루 분사되어 기동 응답을 전송하고 있는지 확인하십시오. (본인의 출력되는 응답 건수 및 응답 시간 percentiles 수치는 환경 상태에 따라 다르게 나타날 수 있습니다.)
 
-```bash
-# 참고 구문 (실행 환경에 맞게 PATH 및 path 변수 갱신 상태 검증)
+```execute
 source ~/.bashrc
 ```
 
-2.4. `traffic_gen.py` 스크립트를 재실행하여 reviews 서비스에 대한 트래픽을 지속해서 주입하도록 설정합니다. 이 터미널은 멈추지 말고 그대로 가동한 상태로 놔둡니다.
+2.4. `traffic_gen.py` 스크립트를 재실행하여 reviews 서비스에 대한 트래픽을 지속해서 주입하도록 설정합니다. 이 터미널은 멈추지 말고 그대로 가동한 상태로 놔둔 상태에서 진행하십시오.
 
 ```execute
 traffic_gen.py continuous.yaml
@@ -215,7 +214,7 @@ OpenShift Service Mesh 3.0 인프라가 실시간 트래픽 시프팅 설정을 
 > traffic_gen.py continuous.yaml
 > ```
 
-4.6. 새 브라우저 탭에서 이스티오 인그레스 게이트웨이 주소인 `http://istio-ingressgateway-istio-ingress.%cluster_subdomain%/productpage`로 다시 접속하여 Bookinfo `productpage` 애플리케이션을 엽니다.
+4.6. 새 브라우저 탭에서 이스티오 인그레스 게이트웨이 주소인 `http://istio-ingressgateway-%username%-istio-ingress.%cluster_subdomain%/productpage`로 다시 접속하여 Bookinfo `productpage` 애플리케이션을 엽니다.
 
 <img src="images/fig-013.svg" width="100%" alt="Figure 1.21: Bookinfo application showing only red stars after traffic shifting to v3" />
 
