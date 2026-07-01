@@ -86,6 +86,7 @@ for ((i=1; i<=USER_COUNT; i++)); do
     oc apply -f "$USER_RENDER_DIR/otel-collector-cr.yaml"
     oc apply -f "$USER_RENDER_DIR/kiali-cr.yaml"
     oc apply -f "$USER_RENDER_DIR/kiali-viewer-crb.yaml"
+    oc apply -f "$USER_RENDER_DIR/kiali-monitoring-crb.yaml"
     
     # Ingress Gateway 배포
     echo "      🌐 Ingress Gateway, Service, Route 전개..."
