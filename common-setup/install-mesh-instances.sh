@@ -84,6 +84,7 @@ for ((i=1; i<=USER_COUNT; i++)); do
     # 실습용 네임스페이스 사전 기동 및 격리 레이블 적용 (Kiali 권한 연동 목적)
     oc new-project "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || oc project "${USER_NAME}-meshintro-bookinfo" &>/dev/null
     oc label namespace "${USER_NAME}-meshintro-bookinfo" istio-discovery="${USER_NAME}" --overwrite 2>/dev/null || true
+    oc label namespace "${USER_NAME}-meshintro-bookinfo" istio.io/rev="${USER_NAME}" --overwrite 2>/dev/null || true
     
     # Istio 및 Kiali, OTel Collector CR 배포
     echo "      🏗️  Istio, Kiali, OpenTelemetry 인스턴스 전개..."
