@@ -74,7 +74,9 @@ source ~/.bashrc
 ```execute
 oc login -u %username% -p openshift %k8s_api_url%
 ```
+
 * **로그인 수행 완료 로그:**
+
 ```bash
 The server uses a certificate signed by an unknown authority.
 Use insecure connections? (y/n): y
@@ -90,7 +92,9 @@ Using project "default".
 ```execute
 oc project %username%-meshintro-bookinfo
 ```
+
 * **프로젝트 이동 결과 로그:**
+
 ```bash
 Now using project "%username%-meshintro-bookinfo" on server "%k8s_api_url%".
 ```
@@ -100,6 +104,7 @@ Now using project "%username%-meshintro-bookinfo" on server "%k8s_api_url%".
 ```execute
 cd ~/labs/meshintro-bookinfo
 ```
+
 ```execute
 traffic_gen.py continuous.yaml
 ```
