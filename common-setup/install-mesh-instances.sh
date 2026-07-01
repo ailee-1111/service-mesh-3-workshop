@@ -93,6 +93,13 @@ for ((i=1; i<=USER_COUNT; i++)); do
     oc apply -f "$USER_RENDER_DIR/kiali-viewer-crb.yaml"
     oc apply -f "$USER_RENDER_DIR/kiali-monitoring-crb.yaml"
     
+    # 메트릭 수집을 위한 ServiceMonitor 및 PodMonitor 전개 (cannot load the graph 완파 솔루션)
+    echo "      📊 메트릭 수집용 ServiceMonitor 및 PodMonitor 배포..."
+    oc apply -f "$USER_RENDER_DIR/istiod-servicemonitor.yaml" -n "${USER_NAME}-istio-system"
+    oc apply -f "$USER_RENDER_DIR/istio-proxies-podmonitor.yaml" -n "${USER_NAME}-istio-system"
+    oc apply -f "$USER_RENDER_DIR/istio-proxies-podmonitor.yaml" -n "${USER_NAME}-istio-ingress"
+    oc apply -f "$USER_RENDER_DIR/istio-proxies-podmonitor.yaml" -n "${USER_NAME}-meshintro-bookinfo"
+    
     # Ingress Gateway 배포
     echo "      🌐 Ingress Gateway, Service, Route 전개..."
     oc apply -f "$USER_RENDER_DIR/ingress-gateway-deployment.yaml"
