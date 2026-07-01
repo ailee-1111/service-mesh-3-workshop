@@ -109,10 +109,18 @@ traffic_gen.py config-file.yaml
 트래픽 제너레이터 도구는 실행 즉시 클러스터에 배포된 서비스 메시의 인그레스 게이트웨이 엔드포인트 URL 주소를 자동 감지하고 즉시 트래픽 주입을 기동하기 시작합니다. 기동되는 동안 화면상에 실시간으로 전송 진행 상황과 처리 속도, 응답 Preview 결과를 세련되게 보여주고, 테스트 종료 시점에 성공률, 응답 유형 편차 분석, 네트워크 레이턴시 등 세분화된 종합 성능 분석 통계 수치 보고서를 종합 산출하여 터미널에 프린트해 줍니다.
 
 ### 트래픽 생성 출력 결과 해석하기 (Understanding the Output)
+가이드북 대시보드와 완벽히 통합된 웹 터미널 창을 활성화합니다. 아래 실행 블록들을 차례대로 클릭하여 실습 디렉토리로 이동한 후, `continuous.yaml` 시나리오를 사용해 트래픽을 즉시 주입해 볼 수 있습니다:
+
+```execute
+cd ~/labs/meshintro-bookinfo
+```
+```execute
+traffic_gen.py continuous.yaml
+```
+
 트래픽 제너레이터를 가동하게 되면, 터미널 상에 다음과 같은 유익한 진행 결과 로그 및 실시간 보고 데이터를 조회할 수 있습니다:
 
 ```bash
-[user@host ~]$ traffic_gen.py continuous.yaml
 Continuous mode: 600s to http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
 curl -s http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
 [1]    HTTP 200 -- red (0.0s)              ✅
