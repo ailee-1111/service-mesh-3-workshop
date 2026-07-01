@@ -7,11 +7,12 @@ spec:
   auth:
     strategy: openshift
   deployment:
-    accessible_namespaces:
-    - USER_NAME_PLACEHOLDER-meshintro-bookinfo
-    - USER_NAME_PLACEHOLDER-istio-ingress
     namespace: USER_NAME_PLACEHOLDER-istio-system
     cluster_wide_access: false
+    discovery_selectors:
+      default:
+      - matchLabels:
+          istio-discovery: USER_NAME_PLACEHOLDER
     pod_labels:
       sidecar.istio.io/inject: "false"
     view_only_mode: false
