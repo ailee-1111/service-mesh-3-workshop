@@ -15,7 +15,7 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 20Gi
 ---
 apiVersion: v1
 kind: Secret
@@ -111,7 +111,7 @@ spec:
       type: s3
     tls:
       enabled: false
-  storageSize: 1Gi
+  storageSize: 20Gi
   template:
     compactor:
       replicas: 1

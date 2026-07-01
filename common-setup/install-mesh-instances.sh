@@ -33,6 +33,7 @@ DETECTED_USERS=$(oc get projects --no-headers 2>/dev/null | grep -E -o "user[0-9
 USER_COUNT="${USER_COUNT:-$DETECTED_USERS}"
 
 if [ "$USER_COUNT" -eq 0 ] || [ -z "$USER_COUNT" ]; then
+    # [수정필요] 클러스터에 사용자가 아직 로그인하지 않았을 때 적용할 기본 가상 사용자 수를 조절하려면 아래 USER_COUNT=5 값을 10, 20 등으로 직접 수정하세요.
     echo "   ⚠️  userX 형태의 프로젝트가 감지되지 않았습니다. 기본값인 5명으로 격리 환경을 전개합니다."
     USER_COUNT=5
 else

@@ -1,0 +1,35 @@
+apiVersion: tempo.grafana.com/v1alpha1
+kind: TempoStack
+metadata:
+  name: sample
+  namespace: tracing-system
+spec:
+  managementState: Managed
+  storage:
+    secret:
+      name: my-storage-secret
+      type: s3
+    tls:
+      enabled: false
+  storageSize: 20Gi
+  template:
+    gateway:
+      enabled: true
+    querier:
+      resources:
+        limits:
+          cpu: "2"
+    queryFrontend:
+      component:
+        resources:
+          limits:
+            memory: 6Gi
+      jaegerQuery:
+        enabled: true
+  tenants:
+    authentication:
+    - tenantId: f78bf974-aee2-47e8-8bb4-9ba41a41824a
+      tenantName: north
+    - tenantId: ac4dd897-40da-4403-9cab-53905e22ef78
+      tenantName: south
+    mode: openshift
