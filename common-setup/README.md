@@ -29,7 +29,18 @@
 oc login --token=YOUR_CLUSTER_TOKEN --server=https://api.YOUR_CLUSTER_URL:6443
 ```
 
-### 2단계: 자동 설치 스크립트 실행
+### 2단계 (선택): 이전 실습 불필요 자원 및 네임스페이스 정리 (ArgoCD 랩 청소)
+새로운 서비스 메시 3.0 실습 환경을 쾌적하고 충돌 없이 이식하기 위해, 기존 ArgoCD 기반의 불필요한 네임스페이스와 오퍼레이터(GitOps Operator 등)를 일괄 제거하는 정리 스크립트를 기동합니다.
+
+```bash
+# 1. 정리 스크립트 권한 부여
+chmod +x cleanup_unused_resources.sh
+
+# 2. 스크립트 실행
+./cleanup_unused_resources.sh
+```
+
+### 3단계: 자동 설치 스크립트 실행
 본 디렉토리 하위의 `install-operators.sh` 스크립트를 기동합니다. 스크립트가 오퍼레이터 리소스를 반영한 뒤, 4종 오퍼레이터가 클러스터 내에 무사히 주입되어 최종 'Succeeded' 성공 단계를 얻을 때까지 실시간으로 추적하며 대기합니다.
 
 ```bash
