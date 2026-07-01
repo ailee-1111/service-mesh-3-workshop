@@ -91,6 +91,16 @@ for ((i=1; i<=USER_COUNT; i++)); do
     echo "      🌐 Ingress Gateway, Service, Route 전개..."
     oc apply -f "$USER_RENDER_DIR/ingress-gateway-deployment.yaml"
     oc apply -f "$USER_RENDER_DIR/ingress-gateway-service-route.yaml"
+
+    # 사용자 서비스 계정에 격리된 네임스페이스별 권한 주입 (Cluster 1 developer 수준 + 격리 보장)
+    echo "      🔑 네임스페이스 권한 주입..."
+    oc adm policy add-role-to-user admin "system:serviceaccount:homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-system" 2>/dev/null || true
+    oc adm policy add-role-to-user admin "system:serviceaccount:homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
+    oc adm policy add-role-to-user admin "system:serviceaccount:homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
+
+    oc create rolebinding "workshop-${USER_NAME}-istio-extended" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-system" 2>/dev/null || true
+    oc create rolebinding "workshop-${USER_NAME}-istio-extended" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
+    oc create rolebinding "workshop-${USER_NAME}-istio-extended" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${USER_NAME}" -n "${USER_NAME}-meshintro-bookinfo" 2>/dev/null || true
 done
 
 # 6. OpenShift Web Console 'Service Mesh' 통합 플러그인 연동 및 기동
