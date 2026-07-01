@@ -1,0 +1,20 @@
+apiVersion: sailoperator.io/v1
+kind: Istio
+metadata:
+  name: USER_NAME_PLACEHOLDER
+spec:
+  namespace: USER_NAME_PLACEHOLDER-istio-system
+  updateStrategy:
+    type: InPlace
+  values:
+    meshConfig:
+      enableTracing: true
+      discoverySelectors:
+      - matchLabels:
+          istio-discovery: USER_NAME_PLACEHOLDER
+      extensionProviders:
+      - name: otel
+        opentelemetry:
+          port: 4317
+          service: otel-collector.USER_NAME_PLACEHOLDER-istio-system.svc.cluster.local
+  version: v1.26.2

@@ -51,6 +51,17 @@ chmod +x install-operators.sh
 ./install-operators.sh
 ```
 
+### 4단계: 다중 사용자 격리 서비스 메시 및 추적(Tracing) 인스턴스 전개
+오퍼레이터 설치가 완료되면, 서비스 메시 3.0 실습에 필요한 글로벌 자원(글로벌 CNI, MinIO 및 TempoStack 분산 추적 백엔드) 및 다중 사용자별(`user1`~`user5`) 격리된 제어 평면(`Istio`), 시각화 대시보드(`Kiali`), 수집기(`OpenTelemetryCollector`), 사용자 전용 인그레스 게이트웨이(`istio-ingressgateway`)를 일괄 생성하는 인스턴스 구성 자동화 스크립트를 기동합니다.
+
+```bash
+# 1. 인스턴스 구성 스크립트 권한 부여
+chmod +x install-mesh-instances.sh
+
+# 2. 스크립트 실행 (사용자 수 기본 5명 오토-스포닝, 오버라이드 원할 시 USER_COUNT=10 등으로 실행 가능)
+./install-mesh-instances.sh
+```
+
 ---
 
 ## 🔍 수동 검증 및 검사 방법 (How to Verify)

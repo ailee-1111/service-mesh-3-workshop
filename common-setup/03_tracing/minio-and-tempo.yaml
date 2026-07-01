@@ -1,0 +1,161 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tracing-system
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-pv-claim
+  namespace: tracing-system
+  labels:
+    app: minio-storage-claim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-storage-secret
+  namespace: tracing-system
+type: Opaque
+stringData:
+  access_key_id: minio
+  access_key_secret: minio123
+  bucket: tempo-data
+  endpoint: http://minio.tracing-system.svc.cluster.local:9000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  namespace: tracing-system
+spec:
+  selector:
+    matchLabels:
+      app: minio
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      initContainers:
+      - name: create-buckets
+        image: busybox:latest
+        command:
+        - sh
+        - -c
+        - mkdir -p /storage/tempo-data
+        volumeMounts:
+        - name: storage
+          mountPath: /storage
+      containers:
+      - name: minio
+        image: quay.io/minio/minio:latest
+        args:
+        - server
+        - /storage
+        env:
+        - name: MINIO_ROOT_USER
+          value: minio
+        - name: MINIO_ROOT_PASSWORD
+          value: minio123
+        ports:
+        - containerPort: 9000
+          name: api
+        - containerPort: 9001
+          name: console
+        volumeMounts:
+        - name: storage
+          mountPath: /storage
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: minio-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: tracing-system
+spec:
+  ports:
+  - name: api
+    port: 9000
+    protocol: TCP
+    targetPort: 9000
+  - name: console
+    port: 9001
+    protocol: TCP
+    targetPort: 9001
+  selector:
+    app: minio
+  type: ClusterIP
+---
+apiVersion: tempo.grafana.com/v1alpha1
+kind: TempoStack
+metadata:
+  name: sample
+  namespace: tracing-system
+spec:
+  managementState: Managed
+  storage:
+    secret:
+      name: my-storage-secret
+      type: s3
+    tls:
+      enabled: false
+  storageSize: 1Gi
+  template:
+    compactor:
+      replicas: 1
+    distributor:
+      component:
+        replicas: 1
+      tls:
+        enabled: false
+    gateway:
+      component:
+        replicas: 1
+      enabled: true
+      ingress:
+        route:
+          termination: reencrypt
+        type: route
+      rbac:
+        enabled: false
+    ingester:
+      replicas: 1
+    querier:
+      replicas: 1
+      resources:
+        limits:
+          cpu: "2"
+    queryFrontend:
+      component:
+        replicas: 1
+        resources:
+          limits:
+            memory: 6Gi
+      jaegerQuery:
+        enabled: true
+        ingress:
+          route: {}
+        monitorTab:
+          enabled: false
+          prometheusEndpoint: ""
+        servicesQueryDuration: 72h0m0s
+        tempoQuery: {}
+  tenants:
+    authentication:
+    - tenantId: f78bf974-aee2-47e8-8bb4-9ba41a41824a
+      tenantName: north
+    - tenantId: ac4dd897-40da-4403-9cab-53905e22ef78
+      tenantName: south
+    mode: openshift

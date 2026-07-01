@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istio-ingressgateway
+  namespace: USER_NAME_PLACEHOLDER-istio-ingress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  template:
+    metadata:
+      annotations:
+        inject.istio.io/templates: gateway
+      labels:
+        app: istio-ingressgateway
+        istio: ingressgateway
+        sidecar.istio.io/inject: "true"
+        istio.io/rev: USER_NAME_PLACEHOLDER
+    spec:
+      containers:
+      - image: auto
+        imagePullPolicy: Always
+        name: istio-proxy

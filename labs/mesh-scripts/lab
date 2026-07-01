@@ -32,9 +32,10 @@ if [ "$COMMAND" = "start" ]; then
     echo "📂 Creating the meshintro-bookinfo project..."
     oc new-project "$NAMESPACE" 2>/dev/null || oc project "$NAMESPACE"
     
-    # 3. 이스티오 사이드카 자동 주입 레이블링
-    echo "🏷️  Applying the istio-injection=enabled labels to the meshintro-bookinfo project..."
-    oc label namespace "$NAMESPACE" istio-injection=enabled --overwrite 2>/dev/null || true
+    # 3. 이스티오 사이드카 자동 주입 및 디스커버리 레이블링 (OSSM v3 다중 유저 격리 표준)
+    echo "🏷️  Applying the istio.io/rev=${USER_NAME} and istio-discovery=${USER_NAME} labels to the meshintro-bookinfo project..."
+    oc label namespace "$NAMESPACE" istio.io/rev="${USER_NAME}" --overwrite 2>/dev/null || true
+    oc label namespace "$NAMESPACE" istio-discovery="${USER_NAME}" --overwrite 2>/dev/null || true
     
     # 4. 진짜 북인포 실습 템플릿 자산 배포
     MANIFESTS_DIR="/opt/app-root/src/labs/meshintro-bookinfo/manifests"

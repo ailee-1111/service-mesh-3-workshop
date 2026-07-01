@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: istio-ingressgateway
+  namespace: USER_NAME_PLACEHOLDER-istio-ingress
+spec:
+  ports:
+  - name: status-port
+    port: 15021
+    protocol: TCP
+    targetPort: 15021
+  - name: http2
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 8443
+  selector:
+    app: istio-ingressgateway
+    istio: ingressgateway
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: istio-ingressgateway
+  namespace: USER_NAME_PLACEHOLDER-istio-ingress
+spec:
+  port:
+    targetPort: http2
+  to:
+    kind: Service
+    name: istio-ingressgateway
+    weight: 100
+  wildcardPolicy: None

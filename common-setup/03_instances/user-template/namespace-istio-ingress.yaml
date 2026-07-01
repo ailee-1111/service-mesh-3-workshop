@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: USER_NAME_PLACEHOLDER-istio-ingress
+  labels:
+    istio-discovery: USER_NAME_PLACEHOLDER
+    istio.io/rev: USER_NAME_PLACEHOLDER

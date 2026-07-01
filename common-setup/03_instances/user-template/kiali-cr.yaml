@@ -1,0 +1,46 @@
+apiVersion: kiali.io/v1alpha1
+kind: Kiali
+metadata:
+  name: kiali
+  namespace: USER_NAME_PLACEHOLDER-istio-system
+spec:
+  auth:
+    strategy: openshift
+  deployment:
+    accessible_namespaces:
+    - USER_NAME_PLACEHOLDER-meshintro-bookinfo
+    - USER_NAME_PLACEHOLDER-istio-ingress
+    namespace: USER_NAME_PLACEHOLDER-istio-system
+    pod_labels:
+      sidecar.istio.io/inject: "false"
+    view_only_mode: false
+  external_services:
+    grafana:
+      enabled: false
+    prometheus:
+      auth:
+        type: bearer
+        use_kiali_token: true
+      query_scope:
+        mesh_id: USER_NAME_PLACEHOLDER
+      thanos_proxy:
+        enabled: true
+      url: https://thanos-querier.openshift-monitoring.svc.cluster.local:9091
+    tracing:
+      auth:
+        insecure_skip_verify: true
+        type: bearer
+        use_kiali_token: true
+      enabled: true
+      external_url: https://tempo-sample-gateway-tracing-system.YOUR_NEW_CLUSTER_SUBDOMAIN/api/traces/v1/north/search
+      health_check_url: https://tempo-sample-gateway-tracing-system.YOUR_NEW_CLUSTER_SUBDOMAIN/api/traces/v1/north/tempo/api/echo
+      internal_url: https://tempo-sample-gateway.tracing-system.svc.cluster.local:8080/api/traces/v1/north/tempo
+      provider: tempo
+      query_timeout: 60
+      tempo_config:
+        url_format: jaeger
+      use_grpc: false
+  installation_tag: "Kiali [USER_NAME_PLACEHOLDER]"
+  istio_namespace: USER_NAME_PLACEHOLDER-istio-system
+  server:
+    write_timeout: 60
