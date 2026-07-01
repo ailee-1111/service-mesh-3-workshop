@@ -1,0 +1,223 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: workshop-spawner
+  namespace: homeroom
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: workshop-basic
+  namespace: homeroom
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edit
+subjects:
+- kind: ServiceAccount
+  name: workshop-spawner
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: workshop-spawner-data
+  namespace: homeroom
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: workshop-session-envvars
+  namespace: homeroom
+data:
+  gateway.sh: ""
+  terminal.sh: ""
+  workshop.sh: ""
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: workshop-spawner-configs
+  namespace: homeroom
+data:
+  jupyterhub_config.py: ""
+  jupyterhub_config.sh: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: workshop-spawner
+  namespace: homeroom
+spec:
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: 8081-tcp
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    deploymentconfig: workshop-spawner
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: username-distribution
+  namespace: homeroom
+spec:
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    deploymentconfig: username-distribution
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: workshop-spawner
+  namespace: homeroom
+spec:
+  host: workshop-homeroom.YOUR_NEW_CLUSTER_SUBDOMAIN
+  port:
+    targetPort: 8080-tcp
+  to:
+    kind: Service
+    name: workshop-spawner
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: username-distribution
+  namespace: homeroom
+spec:
+  port:
+    targetPort: 8080-tcp
+  to:
+    kind: Service
+    name: username-distribution
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: workshop-spawner
+  namespace: homeroom
+spec:
+  replicas: 1
+  selector:
+    deploymentconfig: workshop-spawner
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: workshop
+        class: spawner
+        deploymentconfig: workshop-spawner
+        spawner: hosted-workshop
+    spec:
+      serviceAccountName: workshop-spawner
+      containers:
+      - name: spawner
+        image: quay.io/redhatgov/workshop-spawner@sha256:24593f2f2690a0f3d6b41aad03d18e6f8e73a90afa899de8ce31d9d643e404ac
+        env:
+        - name: CONFIGURATION_TYPE
+          value: hosted-workshop
+        - name: APPLICATION_NAME
+          value: workshop
+        - name: WORKSHOP_NAME
+          value: workshop
+        - name: WORKSHOP_IMAGE
+          value: image-registry.openshift-image-registry.svc:5000/homeroom/workshop-content:latest
+        - name: WORKSHOP_MEMORY
+          value: 512Mi
+        - name: CONSOLE_MEMORY
+          value: 128Mi
+        - name: CONSOLE_BRANDING
+          value: openshift
+        - name: CONSOLE_IMAGE
+          value: quay.io/openshift/origin-console:4.10
+        - name: IDLE_TIMEOUT
+          value: "7200"
+        - name: OAUTH_CLIENT_SECRET
+          value: VFW8tPQAe7JFL6bOSrEyUpmuKtsToQbR
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            memory: 768Mi
+          requests:
+            memory: 768Mi
+        volumeMounts:
+        - mountPath: /opt/app-root/data
+          name: data
+        - mountPath: /opt/app-root/configs
+          name: configs
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: workshop-spawner-data
+      - configMap:
+          name: workshop-spawner-configs
+        name: configs
+  triggers:
+  - type: ConfigChange
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: username-distribution
+  namespace: homeroom
+spec:
+  replicas: 1
+  selector:
+    app: username-distribution
+    deploymentconfig: username-distribution
+  strategy:
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        app: username-distribution
+        deploymentconfig: username-distribution
+    spec:
+      containers:
+      - name: username-distribution
+        image: quay.io/redhatgov/username-distribution@sha256:837fb4ab092dccc289630cdbffb1a31623b7e3363cb53f7503c52d4acd737d39
+        env:
+        - name: LAB_TITLE
+          value: Red Hat OpenShift Service Mesh 3.0 Workshop
+        - name: LAB_USER_COUNT
+          value: "LAB_USER_COUNT_PLACEHOLDER"
+        - name: LAB_USER_ACCESS_TOKEN
+          value: redhatlabs
+        - name: LAB_USER_PASS
+          value: MjcwMjI3
+        - name: LAB_USER_PREFIX
+          value: user
+        - name: LAB_MODULE_URLS
+          value: https://workshop-homeroom.YOUR_NEW_CLUSTER_SUBDOMAIN;Workshop Dashboard
+        - name: LAB_USER_PAD_ZERO
+          value: "false"
+        - name: LAB_ADMIN_PASS
+          value: pleasechangethis
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+  triggers:
+  - type: ConfigChange
