@@ -5,7 +5,7 @@ metadata:
   namespace: USER_NAME_PLACEHOLDER-istio-system
 spec:
   auth:
-    strategy: openshift
+    strategy: anonymous
   deployment:
     accessible_namespaces:
     - USER_NAME_PLACEHOLDER-meshintro-bookinfo
