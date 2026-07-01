@@ -77,7 +77,8 @@ OSSM v3 랩은 아래 실습 시나리오 목록을 목표로 순차 기획 및 
 | **Index** | [Index (워크숍 대시보드 홈)](./workshop/content/index.md) | ✅ 완료 | 서비스 메시 3.0 전체 아키텍처 및 코스 목차 설명 |
 | **Module 1.1** | [오픈시프트 서비스 메시 아키텍처 탐구](./workshop/content/lab1.1_architecture.md) | ✅ 완료 | OSSM v3 Sail Operator 및 CNI, 제어/데이터 평면 아키텍처 이론 |
 | **Module 1.2** | [서비스 메시 쇼룸 애플리케이션](./workshop/content/lab1.2_application_intro.md) | ✅ 완료 | Bookinfo 다국어 마이크로서비스 아키텍처 이론 및 트래픽 제너레이터 사용법 설명 |
-| **Module 1.3** | **Istio 버전 마이그레이션** | ⬜ 대기 | 이스티오 버전 마이그레이션 수립 및 점진적 업그레이드 |
+| **Module 1.3** | [서비스 메시 쇼룸 실습 배포](./workshop/content/lab1.3_application_deployment.md) | ✅ 완료 | Bookinfo 애플리케이션 설치 및 기본 인그레스 트래픽, Kiali 트래픽 시프팅 실습 |
+| **Module 1.4** | **Istio 버전 마이그레이션** | ⬜ 대기 | 이스티오 버전 마이그레이션 수립 및 점진적 업그레이드 |
 | **Module 2.1** | **Bookinfo 트래픽 제어** | ⬜ 대기 | Gateway API 및 HTTPRoute 기반 고급 트래픽 분배 |
 | **Module 2.2** | **Istio 장애 허용 (Fault Tolerance)** | ⬜ 대기 | 서킷 브레이커, 재시도, 타임아웃, 폴트 인젝션 실습 |
 | **Module 3.1** | **OSSM v3 상호 TLS (mTLS) 보안** | ⬜ 대기 | PeerAuthentication 활용 종단간 mTLS 강제 및 확인 |

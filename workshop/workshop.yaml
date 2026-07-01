@@ -6,3 +6,4 @@ modules:
     - index
     - lab1.1_architecture
     - lab1.2_application_intro
+    - lab1.3_application_deployment
