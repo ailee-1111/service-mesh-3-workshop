@@ -21,84 +21,6 @@ fi
 USER_NAME="${JUPYTERHUB_USER:-user}"
 NAMESPACE="${USER_NAME}-meshintro-bookinfo"
 
-# [핵심 아키텍처] 신규 동적 네임스페이스를 서비스 메시 및 관찰 가능성 환경에 통합하는 헬퍼 함수
-function integrate_namespace_to_mesh() {
-    local ns="$1"
-    local user="$2"
-    
-    echo "🏷️  Applying Istio labels (rev=${user}, discovery=${user}) to namespace $ns..."
-    oc label namespace "$ns" istio.io/rev="${user}" --overwrite 2>/dev/null || true
-    oc label namespace "$ns" istio-discovery="${user}" --overwrite 2>/dev/null || true
-    
-    echo "🔑 Injecting Kiali view permissions into namespace $ns..."
-    oc create rolebinding "kiali-${user}-view" --clusterrole=view --serviceaccount="istio-system:kiali-service-account" -n "$ns" 2>/dev/null || true
-    
-    echo "🔑 Injecting Developer extended permissions into namespace $ns..."
-    oc create rolebinding "workshop-${user}-istio-extended-sa" --clusterrole=kiali-istio-extended-permissions --serviceaccount="homeroom:workshop-${user}" -n "$ns" 2>/dev/null || true
-    oc create rolebinding "workshop-${user}-istio-extended-user" --clusterrole=kiali-istio-extended-permissions --user="${user}" -n "$ns" 2>/dev/null || true
-    
-    echo "📊 Deploying metrics scraper (PodMonitor) into namespace $ns..."
-    cat << 'EOF' | sed "s/USER_NAME_PLACEHOLDER/${user}/g" | oc apply -f - -n "$ns"
-apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
-metadata:
-  name: istio-proxies-monitor
-spec:
-  podMetricsEndpoints:
-  - interval: 30s
-    path: /stats/prometheus
-    relabelings:
-    - action: keep
-      regex: istio-proxy
-      sourceLabels:
-      - __meta_kubernetes_pod_container_name
-    - action: keep
-      sourceLabels:
-      - __meta_kubernetes_pod_annotationpresent_prometheus_io_scrape
-    - action: replace
-      regex: (\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})
-      replacement: '[$2]:$1'
-      sourceLabels:
-      - __meta_kubernetes_pod_annotation_prometheus_io_port
-      - __meta_kubernetes_pod_ip
-      targetLabel: __address__
-    - action: replace
-      regex: (\d+);((([0-9]+?)(\.|$)){4})
-      replacement: $2:$1
-      sourceLabels:
-      - __meta_kubernetes_pod_annotation_prometheus_io_port
-      - __meta_kubernetes_pod_ip
-      targetLabel: __address__
-    - action: replace
-      regex: (.+);.*|.*;(.+)
-      replacement: ${1}${2}
-      separator: ;
-      sourceLabels:
-      - __meta_kubernetes_pod_label_app_kubernetes_io_name
-      - __meta_kubernetes_pod_label_app
-      targetLabel: app
-    - action: replace
-      regex: (.+);.*|.*;(.+)
-      replacement: ${1}${2}
-      separator: ;
-      sourceLabels:
-      - __meta_kubernetes_pod_label_app_kubernetes_io_version
-      - __meta_kubernetes_pod_label_version
-      targetLabel: version
-    - action: replace
-      sourceLabels:
-      - __meta_kubernetes_namespace
-      targetLabel: namespace
-    - action: replace
-      replacement: USER_NAME_PLACEHOLDER
-      targetLabel: mesh_id
-  selector:
-    matchExpressions:
-    - key: istio-prometheus-ignore
-      operator: DoesNotExist
-EOF
-}
-
 if [ "$COMMAND" = "start" ]; then
     echo "🤖 Running: lab start meshintro-bookinfo"
     
@@ -106,14 +28,11 @@ if [ "$COMMAND" = "start" ]; then
     echo "SUCCESS Making traffic_gen.py executable and adding to PATH"
     echo "SUCCESS Verifying cluster state"
     
-    # 2. 개별 사용자용 네임스페이스 기동
-    echo "📂 Creating the meshintro-bookinfo project..."
+    # 2. 개별 사용자용 네임스페이스 기동 및 이동
+    echo "📂 Creating/switching to the meshintro-bookinfo project..."
     oc new-project "$NAMESPACE" 2>/dev/null || oc project "$NAMESPACE"
     
-    # 3. 서비스 메시 통합 환경 및 권한 동적 이식
-    integrate_namespace_to_mesh "$NAMESPACE" "$USER_NAME"
-    
-    # 4. 진짜 북인포 실습 템플릿 자산 배포
+    # 3. 진짜 북인포 실습 템플릿 자산 배포
     MANIFESTS_DIR="/opt/app-root/src/labs/meshintro-bookinfo/manifests"
     if [ ! -d "$MANIFESTS_DIR" ]; then
         MANIFESTS_DIR="$(dirname "$0")/../labs/meshintro-bookinfo/manifests"
@@ -141,7 +60,7 @@ if [ "$COMMAND" = "start" ]; then
     echo "🧪 Installing curl pod..."
     oc apply -f "$MANIFESTS_DIR/curl.yaml" -n "$NAMESPACE"
     
-    # 5. 주요 디플로이먼트 가동 및 READY 상태 도달할 때까지 실시간 대기 추적
+    # 4. 주요 디플로이먼트 가동 및 READY 상태 도달할 때까지 실시간 대기 추적
     echo "⏱️  배포 중인 마이크로서비스들의 기동을 확인합니다 (약 수십 초 대기)..."
     oc rollout status deployment/productpage-v1 -n "$NAMESPACE" --timeout=60s || true
     oc rollout status deployment/details-v1 -n "$NAMESPACE" --timeout=60s || true
