@@ -74,6 +74,7 @@ perl -pi -e "s/YOUR_NEW_CLUSTER_SUBDOMAIN/${NEW_SUBDOMAIN}/g" homeroom_resources
 perl -pi -e "s/LAB_USER_COUNT_PLACEHOLDER/${USER_COUNT}/g" homeroom_resources_temp.yaml
 
 oc apply -f homeroom_resources_temp.yaml
+oc apply -f "$SCRIPT_DIR/homeroom-console-rbac.yaml"
 
 # 7. 현재 프로젝트의 Git 저장소를 공급 소스로 설정하여 BuildConfig 등록 및 빌드 실행
 echo "🏗️ 6. 현재 프로젝트 깃허브 저장소 연동 BuildConfig 생성 및 조립..."
