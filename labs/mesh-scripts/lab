@@ -26,11 +26,10 @@ function integrate_namespace_to_mesh() {
     local ns="$1"
     local user="$2"
     
-    # [권한 에러 돌파구] 일반 사용자는 Namespace 리소스를 라벨링할 수 없으므로, 소유권을 지닌 Project 리소스를 라벨링합니다.
-    # 오픈시프트가 Project 라벨을 하위 Namespace 라벨로 실시간 동기화시켜 줍니다!
-    echo "🏷️  Applying Istio labels to project $ns..."
-    oc label project "$ns" istio.io/rev="${user}" --overwrite 2>/dev/null || true
-    oc label project "$ns" istio-discovery="${user}" --overwrite 2>/dev/null || true
+    # [네임스페이스 레이블링] 이제 namespace-labeler RBAC 권한이 허용되어 학생 세션에서도 직접 레이블 작성이 가능합니다.
+    echo "🏷️  Applying Istio labels (rev=${user}, discovery=${user}) to namespace $ns..."
+    oc label namespace "$ns" istio.io/rev="${user}" --overwrite 2>/dev/null || true
+    oc label namespace "$ns" istio-discovery="${user}" --overwrite 2>/dev/null || true
     
     echo "🔑 Injecting Kiali view permissions into namespace $ns..."
     oc create rolebinding "kiali-${user}-view" --clusterrole=view --serviceaccount="istio-system:kiali-service-account" -n "$ns" 2>/dev/null || true
@@ -112,7 +111,7 @@ if [ "$COMMAND" = "start" ]; then
     echo "📂 Creating the meshintro-bookinfo project..."
     oc new-project "$NAMESPACE" 2>/dev/null || oc project "$NAMESPACE"
     
-    # 3. 서비스 메시 통합 환경 및 권한 동적 이식 (Project 라벨링 및 PodMonitor 자동 배포)
+    # 3. 서비스 메시 통합 환경 및 권한 동적 이식
     integrate_namespace_to_mesh "$NAMESPACE" "$USER_NAME"
     
     # 4. 진짜 북인포 실습 템플릿 자산 배포
