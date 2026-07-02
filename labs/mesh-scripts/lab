@@ -26,15 +26,23 @@ function integrate_namespace_to_mesh() {
     local ns="$1"
     local user="$2"
     
-    # [로컬 권한 결합] Kiali의 시각적 격리를 침해하지 않기 위해, 오직 이 신설 네임스페이스 내부에서만 레이블링(get/update/patch)을 수행하도록 로컬 RoleBinding을 바인딩합니다.
-    echo "🔑 Granting local namespace labeling permissions..."
-    oc create rolebinding "workshop-${user}-namespace-labeler-user" --clusterrole=namespace-labeler --user="${user}" -n "$ns" 2>/dev/null || true
-    oc create rolebinding "workshop-${user}-namespace-labeler-sa" --clusterrole=namespace-labeler --serviceaccount="homeroom:workshop-${user}" -n "$ns" 2>/dev/null || true
+    # [이중 토큰 위임] 학생 로그인 유저(userX)는 Kiali 시각 격리를 위해 네임스페이스 get/list 권한이 전혀 없습니다.
+    # 대신, 터미널 배후에서 가동되는 홈룸 ServiceAccount의 전용 토큰을 추출하여 레이블링 명령어에 일시 대행 기입합니다.
+    local sa_token=""
+    if [ -f "/var/run/secrets/kubernetes.io/serviceaccount/token" ]; then
+        sa_token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+    fi
     
-    # [네임스페이스 레이블링] 로컬 권한 부여 완료 후, 직접 네임스페이스를 정식으로 레이블링합니다. (가시성 격리와 사이드카 주입 동시 완성!)
-    echo "🏷️  Applying Istio labels (rev=${user}, discovery=${user}) to namespace $ns..."
-    oc label namespace "$ns" istio.io/rev="${user}" --overwrite 2>/dev/null || true
-    oc label namespace "$ns" istio-discovery="${user}" --overwrite 2>/dev/null || true
+    # [네임스페이스 레이블링] 홈룸 전용 토큰을 사용하여 안전하고 정식으로 네임스페이스 레이블을 기입합니다.
+    if [ -n "$sa_token" ]; then
+        echo "🏷️  Applying Istio labels to namespace $ns using ServiceAccount token delegation..."
+        oc label namespace "$ns" istio.io/rev="${user}" --overwrite --token="$sa_token" 2>/dev/null || true
+        oc label namespace "$ns" istio-discovery="${user}" --overwrite --token="$sa_token" 2>/dev/null || true
+    else
+        echo "🏷️  Applying Istio labels to namespace $ns..."
+        oc label namespace "$ns" istio.io/rev="${user}" --overwrite 2>/dev/null || true
+        oc label namespace "$ns" istio-discovery="${user}" --overwrite 2>/dev/null || true
+    fi
     
     echo "🔑 Injecting Kiali view permissions into namespace $ns..."
     oc create rolebinding "kiali-${user}-view" --clusterrole=view --serviceaccount="istio-system:kiali-service-account" -n "$ns" 2>/dev/null || true
