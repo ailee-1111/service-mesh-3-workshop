@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
 lab start meshtraffic-chaos
 ```
 
-또한, 다음 명령어를 실행하여 `$PATH` 변수를 업데이트하고 `traffic_gen.py` 명령어를 즉시 사용할 수 있도록 설정합니다. 새 환경을 생성한 후 한 번만 실행하면 됩니다.
+또한, 다음 명령어를 실행하여 `$PATH` 변수를 업데이트하고 `traffic_gen.py` 명령어를 즉시 사용할 수 있도록 설정합니다. 새 환경을 생성 한 후 한 번만 실행하면 됩니다.
 
 ```execute
 source ~/.bashrc
@@ -94,11 +94,11 @@ oc get pods
 ```
 
 ```bash
-NAME READY STATUS RESTARTS AGE
-ratings-v1-... 2/2 Running 0 5m
-reviews-v1-... 2/2 Running 0 5m
-reviews-v2-... 2/2 Running 0 5m
-reviews-v3-... 2/2 Running 0 5m
+NAME                               READY   STATUS    RESTARTS   AGE
+ratings-v1-7fbfd9458-958xb         2/2     Running   0          5m
+reviews-v1-7db5bd458-75tg4         2/2     Running   0          5m
+reviews-v2-5bcb6d7dd-m8wdq         2/2     Running   0          5m
+reviews-v3-cc8cb9b-l9lzd           2/2     Running   0          5m
 ```
 
 모든 파드는 `2/2` 컨테이너가 준비된 것으로 표시되어야 하며, 이는 Istio가 Envoy 사이드카 프록시를 주입했음을 나타냅니다.
@@ -110,11 +110,11 @@ oc get gateways.networking.istio.io,virtualservices.networking.istio.io
 ```
 
 ```bash
-NAME AGE
-gateway.networking.istio.io/reviews-gateway 2m
+NAME                                          AGE
+gateway.networking.istio.io/reviews-gateway   2m
 
-NAME GATEWAYS HOSTS AGE
-virtualservice.networking.istio.io/reviews-vs ["reviews-gateway"] ["*"] 2m
+NAME                                          GATEWAYS              HOSTS   AGE
+virtualservice.networking.istio.io/reviews-vs   ["reviews-gateway"]   ["*"]   2m
 ```
 
 1.4. 연습 디렉토리로 이동합니다.
@@ -130,8 +130,8 @@ traffic_gen.py finite.yaml
 ```
 
 ```bash
-   Finite mode: 20 requests to http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
-   curl -s http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
+   Finite mode: 20 requests to http://istio-ingressgateway-%username%-istio-ingress.apps.%cluster_subdomain%/reviews/1
+   curl -s http://istio-ingressgateway-%username%-istio-ingress.apps.%cluster_subdomain%/reviews/1
 [1/20] ✅ HTTP 200 -- No stars (10.5ms)
 [2/20] ✅ HTTP 200 -- No stars (7.4ms)
 [3/20] ✅ HTTP 200 -- Ratings: ✅ black (20.6ms)
@@ -178,8 +178,8 @@ traffic_gen.py finite.yaml
 
 직접 액세스 시의 지연 테스트를 통해 다음을 수행할 수 있습니다:
 * 클라이언트 타임아웃 설정 및 재시도 로직 검증
-* 외부 사용자가 느린 서비스 응답을 경험하는 양상을 확인
-* 클라이언트가 지연을 정상적으로 처리하는지 또는 갑자기 실패하는지 파악
+* 외부 사용자가 느린 서비스 응답을 어떻게 경험하는지 모니터링
+* 성능 저하 상황에서 클라이언트가 지연을 정상적으로 처리하는지 또는 갑자기 실패하는지 파악
 * 성능 저하 상태에서 SLA 준수 여부 검증
 
 2.1. `reviews-vs-delay.yaml` 파일을 검토합니다. 이 파일은 다음과 같은 지연 장애를 구성합니다:
@@ -218,11 +218,11 @@ spec:
 ```
 
 ❶ 카오스 엔지니어링을 위해 장애 주입(fault injection)을 구성합니다.
-❷ 지연(latency) 주입을 명시적으로 지정합니다.
+❷ 지연(delay) 주입을 명시적으로 지정합니다.
 ❸ 지연을 인입받을 전체 유입 요청의 비율을 50%로 제한 제어합니다.
 ❹ 고정 지연 지속 시간을 2초(2s)로 설정합니다.
 
-2.2. 지연 구성을 `reviews` 가상 서비스에 적용합니다.
+2.2. 지연 구성을 `reviews-vs` 가상 서비스에 적용합니다.
 
 ```execute
 oc replace -f reviews-vs-delay.yaml
@@ -239,8 +239,8 @@ traffic_gen.py finite.yaml
 ```
 
 ```bash
-   Finite mode: 20 requests to http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
-   curl -s http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
+   Finite mode: 20 requests to http://istio-ingressgateway-%username%-istio-ingress.apps.%cluster_subdomain%/reviews/1
+   curl -s http://istio-ingressgateway-%username%-istio-ingress.apps.%cluster_subdomain%/reviews/1
 [1/20] ✅ HTTP 200 -- No stars (2047.7ms)
 [2/20] ✅ HTTP 200 -- No stars (6.9ms)
 [3/20] ✅ HTTP 200 -- No stars (2013.7ms)
@@ -334,8 +334,8 @@ traffic_gen.py finite.yaml
 ```
 
 ```bash
-   Finite mode: 20 requests to http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
-   curl -s http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
+   Finite mode: 20 requests to http://istio-ingressgateway-%username%-istio-ingress.apps.%cluster_subdomain%/reviews/1
+   curl -s http://istio-ingressgateway-%username%-istio-ingress.apps.%cluster_subdomain%/reviews/1
 [1/20] ✅ HTTP 200 -- Ratings: ✅ black (171.2ms)
 [2/20] ❌ HTTP 503 -- (invalid-json) (3.7ms)
 [3/20] ✅ HTTP 200 -- Ratings: ✅ black (15.0ms)
@@ -359,7 +359,8 @@ traffic_gen.py finite.yaml
 요청의 약 50%는 HTTP 503 에러로 실패하는 반면, 나머지 50%는 평소대로 원활하게 성공함을 관찰해 주십시오. 실패한 요청들은 게이트웨이 루프에 의해 즉시 차단되므로, 몇 밀리초(3.7ms 내외) 안에 대단히 신속하게 응답이 끊어져 버립니다.
 
 3.4. 오픈시프트 웹 콘솔 상에서 서비스 메시의 토폴로지 변화를 관찰합니다.
-*(참고: 터미널 탭 옆의 Console 탭을 활용해 간단한 가동 상태를 살필 수 있지만, 플러그인 메뉴가 완전히 작동하려면 본 주소 링크 <a href="https://console-openshift-console.%cluster_subdomain%" target="_blank">https://console-openshift-console.%cluster_subdomain%</a> 를 클릭해 브라우저 새 탭으로 접속해 활용하시는 것을 적극 권장합니다.)*
+본 주소 링크 <a href="https://console-openshift-console.%cluster_subdomain%" target="_blank">https://console-openshift-console.%cluster_subdomain%</a> 를 클릭하여 로그인 단계를 진행합니다.
+*(참고: 터미널 탭의 옆에 위치한 Console 탭을 클릭하면 오픈시프트 화면을 간단히 볼 수 있는데, 이는 인증비활성화 옵션으로 인해 간단한 확인만 가능합니다. 특히 플러그인 형식의 Kiali 등의 인베딩된 메뉴는 제공되는 링크를 직접 브라우저 새 탭으로 열어서 실습하시기를 권장합니다.)*
 
 3.5. 오픈시프트 콘솔의 관리자 관점(Administrator perspective)에서 **Service Mesh > Traffic Graph**를 클릭합니다.
 
@@ -369,7 +370,7 @@ traffic_gen.py finite.yaml
 * 오류율은 가상 서비스에 구성된 50% 중단 설정과 일치합니다.
 * 세 개의 reviews 서비스 버전 모두 트래픽을 수신하지만, 요청의 50%는 애플리케이션 코드에 도달하기 전에 실패합니다.
 
-<img src="images/fig-006.svg" width="100%" alt="Figure 1.7: Traffic graph showing 50% HTTP 503 errors from abort fault injection" />
+<img src="images/lab2.2-fig-001.png" width="100%" alt="Figure 1.7: Traffic graph showing 50% HTTP 503 errors from abort fault injection" />
 
 그래픽 페이지를 열어 두십시오. 연습 전체에서 이 그래프로 돌아와 장애 주입이 네트워크 활동에 어떻게 영향을 미치는지 관찰할 수 있습니다.
 
@@ -454,8 +455,8 @@ traffic_gen.py finite.yaml
 ```
 
 ```bash
-   Finite mode: 20 requests to http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
-   curl -s http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
+   Finite mode: 20 requests to http://istio-ingressgateway-%username%-istio-ingress.apps.%cluster_subdomain%/reviews/1
+   curl -s http://istio-ingressgateway-%username%-istio-ingress.apps.%cluster_subdomain%/reviews/1
 [1/20] ✅ HTTP 200 -- Ratings: ✅ red (2099.4ms)
 [2/20] ✅ HTTP 200 -- Ratings: ✅ black (124.9ms)
 [3/20] ✅ HTTP 200 -- No stars (44.3ms)
@@ -488,7 +489,7 @@ traffic_gen.py finite.yaml
 * `ratings` 서비스에 종속된 서비스 버전들만 응답 지연 시간의 증가를 보여줍니다.
 * `reviews-v1`은 `ratings` 서비스에 연결되어 있지 않으므로 정상 응답 대기 시간을 고수합니다.
 
-<img src="images/fig-007.svg" width="100%" alt="Figure 1.8: Traffic graph showing response time delays in service-to-service communication" />
+<img src="images/lab2.2-fig-002.png" width="100%" alt="Figure 1.8: Traffic graph showing response time delays in service-to-service communication" />
 
 ---
 
@@ -553,8 +554,8 @@ traffic_gen.py finite.yaml
 ```
 
 ```bash
-   Finite mode: 20 requests to http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
-   curl -s http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
+   Finite mode: 20 requests to http://istio-ingressgateway-%username%-istio-ingress.apps.%cluster_subdomain%/reviews/1
+   curl -s http://istio-ingressgateway-%username%-istio-ingress.apps.%cluster_subdomain%/reviews/1
 [1/20] ✅ HTTP 200 -- Ratings: ✅ black (17.2ms)
 [2/20] ✅ HTTP 200 -- Ratings: ✅ black (13.4ms)
 [3/20] ✅ HTTP 200 -- Ratings: ✅ red (13.3ms)
@@ -596,7 +597,7 @@ traffic_gen.py finite.yaml
 
 5.5. **Select Namespaces**에서 `%username%-meshtraffic-chaos` 네임스페이스를 선택하여 그래프에 추가했는지 확인합니다. 트래픽 그래프에서 에러 전파 동작을 관찰하십시오:
 
-<img src="images/fig-008.svg" width="100%" alt="Figure 1.9: Traffic graph showing errors in service-to-service communication" />
+<img src="images/lab2.2-fig-003.png" width="100%" alt="Figure 1.9: Traffic graph showing errors in service-to-service communication" />
 
 ---
 
