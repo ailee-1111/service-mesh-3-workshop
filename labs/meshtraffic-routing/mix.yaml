@@ -1,19 +1,17 @@
 traffic:
   mode: "mix"
+  count: 30
   items:
     - name: "reviews-v1"
       endpoint: "/reviews/1"
-      count: 10
 
     - name: "reviews-v2"
       endpoint: "/reviews/1"
-      count: 10
       headers:
         default: {"x-user-type": "beta"}
 
     - name: "reviews-v3"
       endpoint: "/reviews/1"
-      count: 10
       headers:
         default: {"x-user-type": "internal"}
 
