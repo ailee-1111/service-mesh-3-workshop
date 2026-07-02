@@ -10,3 +10,4 @@ modules:
     - lab2.1_traffic_routing_and_splitting
     - lab2.2_fault_tolerance
     - lab2.3_resilience
+    - lab3.1_security_mtls

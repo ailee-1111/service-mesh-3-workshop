@@ -13,4 +13,6 @@ modules:
   lab2.2_fault_tolerance:
     name: lab2.2-장애 허용(Fault Injection)
   lab2.3_resilience:
-    name: lab2.3-복원력
+    name: lab2.3-회복력
+  lab3.1_security_mtls:
+    name: lab3.1-mTLS 보안
