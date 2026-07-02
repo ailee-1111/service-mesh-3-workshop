@@ -4,9 +4,12 @@ metadata:
   name: ratings-vs
 spec:
   hosts:
-  - ratings
+  - ratings.USER_NAME_PLACEHOLDER-meshtraffic-chaos.svc.cluster.local
   http:
-  - fault:
+  - match:
+    - uri:
+        prefix: /ratings
+    fault:
       delay:
         percentage:
           value: 50

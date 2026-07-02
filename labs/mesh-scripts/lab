@@ -133,6 +133,12 @@ if [ "$COMMAND" = "start" ]; then
         MANIFESTS_DIR="$(dirname "$0")/../labs/${LAB_NAME}/manifests"
     fi
     
+    # [실습지 파일 개인화] 학생 워크스페이스에 생성된 가이드용 yaml 파일들의 네임스페이스 플레이스홀더를 해당 유저명으로 실시간 변환!
+    if [ -d "$HOME/labs/$LAB_NAME" ]; then
+        echo "🔧 Personalizing lab YAML configurations in your workspace..."
+        perl -pi -e "s/USER_NAME_PLACEHOLDER/${USER_NAME}/g" "$HOME/labs/$LAB_NAME"/*.yaml 2>/dev/null || true
+    fi
+    
     if [ ! -d "$MANIFESTS_DIR" ]; then
         echo "❌ Error: 실습 리소스 디렉토리를 찾을 수 없습니다 ($MANIFESTS_DIR)"
         exit 1
