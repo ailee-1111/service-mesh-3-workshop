@@ -2,16 +2,18 @@ traffic:
   mode: "continuous"
   endpoint: "/reviews/1"
   duration: 5
-  sleep: 0.05
+  sleep: 0.1
   options:
-    parallel_workers: 20
+    parallel_workers: 10
+
 display:
   show_progress: true
   quiet_mode: false
-  response_view: "smart_json"
+  response_view: "extract"
+  extract_json_path: ".reviews[0].rating.color"
+
 analysis:
-  enabled: true
-  content_normalization: true
-  expected_responses: ["No stars", "red", "black", "Ratings: ❌ Ratings service is currently unavailable"]
+  expected_responses: ["white", "red", "black"]
   statistics:
     - "success_rate"
+    - "response_distribution"
