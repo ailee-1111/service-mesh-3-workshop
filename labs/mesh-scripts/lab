@@ -12,14 +12,14 @@ if [ -z "$COMMAND" ] || [ -z "$LAB_NAME" ]; then
     exit 1
 fi
 
-if [ "$LAB_NAME" != "meshintro-bookinfo" ]; then
+if [ "$LAB_NAME" != "meshintro-bookinfo" ] && [ "$LAB_NAME" != "meshtraffic-routing" ]; then
     echo "❌ Error: Lab '$LAB_NAME'은 현재 환경에서 지원되지 않는 랩 코드입니다."
     exit 1
 fi
 
-# 1. 환경 변수로부터 JUPYTERHUB_USER 감지 (user1~5)
+# 1. 환경 변수로부터 JUPYTERHUB_USER 감지 (user1~5) 및 해당 랩 네임스페이스 정의
 USER_NAME="${JUPYTERHUB_USER:-user}"
-NAMESPACE="${USER_NAME}-meshintro-bookinfo"
+NAMESPACE="${USER_NAME}-${LAB_NAME}"
 
 # [핵심 아키텍처] 신규 동적 네임스페이스를 서비스 메시 및 관찰 가능성 환경에 통합하는 헬퍼 함수
 function integrate_namespace_to_mesh() {
@@ -114,23 +114,23 @@ EOF
 }
 
 if [ "$COMMAND" = "start" ]; then
-    echo "🤖 Running: lab start meshintro-bookinfo"
+    echo "🤖 Running: lab start $LAB_NAME"
     
     echo "SUCCESS Copying lab files to workspace"
     echo "SUCCESS Making traffic_gen.py executable and adding to PATH"
     echo "SUCCESS Verifying cluster state"
     
     # 2. 개별 사용자용 네임스페이스 기동
-    echo "📂 Creating the meshintro-bookinfo project..."
+    echo "📂 Creating the $LAB_NAME project..."
     oc new-project "$NAMESPACE" 2>/dev/null || oc project "$NAMESPACE"
     
     # 3. 서비스 메시 통합 환경 및 권한 동적 이식
     integrate_namespace_to_mesh "$NAMESPACE" "$USER_NAME"
     
-    # 4. 진짜 북인포 실습 템플릿 자산 배포
-    MANIFESTS_DIR="/opt/app-root/src/labs/meshintro-bookinfo/manifests"
+    # 4. 각 랩 전용 실습 리소스 디렉토리 설정 및 배포
+    MANIFESTS_DIR="/opt/app-root/src/labs/${LAB_NAME}/manifests"
     if [ ! -d "$MANIFESTS_DIR" ]; then
-        MANIFESTS_DIR="$(dirname "$0")/../labs/meshintro-bookinfo/manifests"
+        MANIFESTS_DIR="$(dirname "$0")/../labs/${LAB_NAME}/manifests"
     fi
     
     if [ ! -d "$MANIFESTS_DIR" ]; then
@@ -138,36 +138,68 @@ if [ "$COMMAND" = "start" ]; then
         exit 1
     fi
     
-    echo "🏗️  Installing the Bookinfo Application..."
-    oc apply -f "$MANIFESTS_DIR/bookinfo.yaml" -n "$NAMESPACE"
-    oc apply -f "$MANIFESTS_DIR/bookinfo-gateway.yaml" -n "$NAMESPACE"
-    oc apply -f "$MANIFESTS_DIR/traffic-generator-configmap.yaml" -n "$NAMESPACE"
-    
-    # 트래픽 제너레이터의 대상을 해당 유저 전용 인그레스 게이트웨이 주소로 동적 패치!
-    INGRESS_HOST=$(oc get route istio-ingressgateway -n "${USER_NAME}-istio-ingress" -o jsonpath='{.spec.host}' 2>/dev/null || true)
-    if [ -n "$INGRESS_HOST" ]; then
-        echo "🔧 Patching traffic generator config to use dynamic route http://${INGRESS_HOST}/productpage..."
-        oc patch configmap traffic-generator-config -n "$NAMESPACE" --type=merge -p "{\"data\":{\"route\":\"http://${INGRESS_HOST}/productpage\"}}" 2>/dev/null || true
+    if [ "$LAB_NAME" = "meshintro-bookinfo" ]; then
+        echo "🏗️  Installing the Bookinfo Application..."
+        oc apply -f "$MANIFESTS_DIR/bookinfo.yaml" -n "$NAMESPACE"
+        oc apply -f "$MANIFESTS_DIR/bookinfo-gateway.yaml" -n "$NAMESPACE"
+        oc apply -f "$MANIFESTS_DIR/traffic-generator-configmap.yaml" -n "$NAMESPACE"
+        
+        # 트래픽 제너레이터의 대상을 해당 유저 전용 인그레스 게이트웨이 주소로 동적 패치!
+        INGRESS_HOST=$(oc get route istio-ingressgateway -n "${USER_NAME}-istio-ingress" -o jsonpath='{.spec.host}' 2>/dev/null || true)
+        if [ -n "$INGRESS_HOST" ]; then
+            echo "🔧 Patching traffic generator config to use dynamic route http://${INGRESS_HOST}/productpage..."
+            oc patch configmap traffic-generator-config -n "$NAMESPACE" --type=merge -p "{\"data\":{\"route\":\"http://${INGRESS_HOST}/productpage\"}}" 2>/dev/null || true
+        fi
+        
+        oc apply -f "$MANIFESTS_DIR/traffic-generator.yaml" -n "$NAMESPACE"
+        
+        echo "🧪 Installing curl pod..."
+        oc apply -f "$MANIFESTS_DIR/curl.yaml" -n "$NAMESPACE"
+        
+        # 5. 주요 디플로이먼트 가동 및 READY 상태 도달할 때까지 실시간 대기 추적
+        echo "⏱️  배포 중인 마이크로서비스들의 기동을 확인합니다 (약 수십 초 대기)..."
+        oc rollout status deployment/productpage-v1 -n "$NAMESPACE" --timeout=60s || true
+        oc rollout status deployment/details-v1 -n "$NAMESPACE" --timeout=60s || true
+        oc rollout status deployment/reviews-v1 -n "$NAMESPACE" --timeout=60s || true
+        oc rollout status deployment/reviews-v2 -n "$NAMESPACE" --timeout=60s || true
+        oc rollout status deployment/reviews-v3 -n "$NAMESPACE" --timeout=60s || true
+        oc rollout status deployment/ratings-v1 -n "$NAMESPACE" --timeout=60s || true
+        oc rollout status deployment/curl -n "$NAMESPACE" --timeout=60s || true
+        
+        echo "SUCCESS Installing the Bookinfo Application"
+        echo "SUCCESS Installing curl pod"
+        echo "🎉 Lab meshintro-bookinfo successfully started!"
+        
+    elif [ "$LAB_NAME" = "meshtraffic-routing" ]; then
+        echo "🏗️  Installing the Reviews and Ratings Applications..."
+        oc apply -f "$MANIFESTS_DIR/bookinfo-reviews.yaml" -n "$NAMESPACE"
+        oc apply -f "$MANIFESTS_DIR/bookinfo-gateway.yaml" -n "$NAMESPACE"
+        oc apply -f "$MANIFESTS_DIR/traffic-generator-configmap.yaml" -n "$NAMESPACE"
+        
+        # 트래픽 제너레이터의 대상을 해당 유저 전용 인그레스 게이트웨이 주소로 동적 패치! (reviews 에 맞는 주소 매핑)
+        INGRESS_HOST=$(oc get route istio-ingressgateway -n "${USER_NAME}-istio-ingress" -o jsonpath='{.spec.host}' 2>/dev/null || true)
+        if [ -n "$INGRESS_HOST" ]; then
+            echo "🔧 Patching traffic generator config to use dynamic route http://${INGRESS_HOST}/reviews/1..."
+            oc patch configmap traffic-generator-config -n "$NAMESPACE" --type=merge -p "{\"data\":{\"route\":\"http://${INGRESS_HOST}/reviews/1\"}}" 2>/dev/null || true
+        fi
+        
+        oc apply -f "$MANIFESTS_DIR/traffic-generator.yaml" -n "$NAMESPACE"
+        
+        echo "🧪 Installing curl pod..."
+        oc apply -f "$MANIFESTS_DIR/curl.yaml" -n "$NAMESPACE"
+        
+        # 5. 주요 디플로이먼트 가동 및 READY 상태 도달할 때까지 실시간 대기 추적
+        echo "⏱️  배포 중인 마이크로서비스들의 기동을 확인합니다 (약 수십 초 대기)..."
+        oc rollout status deployment/reviews-v1 -n "$NAMESPACE" --timeout=60s || true
+        oc rollout status deployment/reviews-v2 -n "$NAMESPACE" --timeout=60s || true
+        oc rollout status deployment/reviews-v3 -n "$NAMESPACE" --timeout=60s || true
+        oc rollout status deployment/ratings-v1 -n "$NAMESPACE" --timeout=60s || true
+        oc rollout status deployment/curl -n "$NAMESPACE" --timeout=60s || true
+        
+        echo "SUCCESS Installing the Reviews and Ratings Applications"
+        echo "SUCCESS Installing curl pod"
+        echo "🎉 Lab meshtraffic-routing successfully started!"
     fi
-    
-    oc apply -f "$MANIFESTS_DIR/traffic-generator.yaml" -n "$NAMESPACE"
-    
-    echo "🧪 Installing curl pod..."
-    oc apply -f "$MANIFESTS_DIR/curl.yaml" -n "$NAMESPACE"
-    
-    # 5. 주요 디플로이먼트 가동 및 READY 상태 도달할 때까지 실시간 대기 추적
-    echo "⏱️  배포 중인 마이크로서비스들의 기동을 확인합니다 (약 수십 초 대기)..."
-    oc rollout status deployment/productpage-v1 -n "$NAMESPACE" --timeout=60s || true
-    oc rollout status deployment/details-v1 -n "$NAMESPACE" --timeout=60s || true
-    oc rollout status deployment/reviews-v1 -n "$NAMESPACE" --timeout=60s || true
-    oc rollout status deployment/reviews-v2 -n "$NAMESPACE" --timeout=60s || true
-    oc rollout status deployment/reviews-v3 -n "$NAMESPACE" --timeout=60s || true
-    oc rollout status deployment/ratings-v1 -n "$NAMESPACE" --timeout=60s || true
-    oc rollout status deployment/curl -n "$NAMESPACE" --timeout=60s || true
-    
-    echo "SUCCESS Installing the Bookinfo Application"
-    echo "SUCCESS Installing curl pod"
-    echo "🎉 Lab meshintro-bookinfo successfully started!"
     
 elif [ "$COMMAND" = "finish" ]; then
     echo "🧹 Completing and cleaning up lab '$LAB_NAME'..."
@@ -178,7 +210,7 @@ elif [ "$COMMAND" = "finish" ]; then
     fi
     
     echo "SUCCESS Deleting project '$NAMESPACE'"
-    echo "🎉 Lab meshintro-bookinfo successfully completed and cleaned!"
+    echo "🎉 Lab $LAB_NAME successfully completed and cleaned!"
     
 else
     echo "❌ Unknown command: $COMMAND. Supported commands: start, finish"
