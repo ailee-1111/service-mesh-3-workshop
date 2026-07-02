@@ -8,5 +8,5 @@ modules:
     name: lab1.2-애플리케이션 소개
   lab1.3_application_deployment:
     name: lab1.3-쇼룸 실습 배포
-  lab2.1_Traffic Routing and Splitting:
+  lab2.1_traffic_routing_and_splitting:
     name: lab2.1-트래픽 라우팅/분배
