@@ -65,6 +65,7 @@ oc login -u %username% -p openshift https://api.%cluster_subdomain%:6443
 ```
 
 * **로그인 수행 완료 로그:**
+
 ```bash
 The server uses a certificate signed by an unknown authority.
 Use insecure connections? (y/n): y
@@ -82,6 +83,7 @@ oc project %username%-meshtraffic-resilience
 ```
 
 * **프로젝트 이동 결과 로그:**
+
 ```bash
 Now using project "%username%-meshtraffic-resilience" on server "https://api.%cluster_subdomain%:6443".
 ```
@@ -104,7 +106,7 @@ reviews-v3-cc8cb9b-l9lzd           2/2     Running   0          5m
 
 1.3. 연습 디렉토리로 이동합니다.
 
-```execute
+```execute-2
 cd ~/labs/meshtraffic-resilience
 ```
 
@@ -184,6 +186,10 @@ traffic_gen.py finite.yaml
 2.1. `ratings` 서비스에 대한 고정 지연 장애를 구성하는 `ratings-vs-delay.yaml` 파일을 검토합니다:
 * 지연을 동반한 장애 주입을 구성합니다.
 * 유입되는 요청 중 50%에 대해 2초의 지연을 적용합니다.
+
+```execute
+cd ~/labs/meshtraffic-resilience
+```
 
 ```execute
 cat ratings-vs-delay.yaml
