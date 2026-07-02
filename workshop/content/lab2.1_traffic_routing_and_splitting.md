@@ -103,7 +103,7 @@ reviews-v3-... 2/2 Running 0 5m
 
 1.3. 연습 디렉토리로 이동합니다.
 
-```execute
+```execute-2
 cd ~/labs/meshtraffic-routing
 ```
 
