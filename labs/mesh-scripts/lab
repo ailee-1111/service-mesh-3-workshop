@@ -26,7 +26,12 @@ function integrate_namespace_to_mesh() {
     local ns="$1"
     local user="$2"
     
-    # [네임스페이스 레이블링] 이제 namespace-labeler RBAC 권한이 허용되어 학생 세션에서도 직접 레이블 작성이 가능합니다.
+    # [로컬 권한 결합] Kiali의 시각적 격리를 침해하지 않기 위해, 오직 이 신설 네임스페이스 내부에서만 레이블링(get/update/patch)을 수행하도록 로컬 RoleBinding을 바인딩합니다.
+    echo "🔑 Granting local namespace labeling permissions..."
+    oc create rolebinding "workshop-${user}-namespace-labeler-user" --clusterrole=namespace-labeler --user="${user}" -n "$ns" 2>/dev/null || true
+    oc create rolebinding "workshop-${user}-namespace-labeler-sa" --clusterrole=namespace-labeler --serviceaccount="homeroom:workshop-${user}" -n "$ns" 2>/dev/null || true
+    
+    # [네임스페이스 레이블링] 로컬 권한 부여 완료 후, 직접 네임스페이스를 정식으로 레이블링합니다. (가시성 격리와 사이드카 주입 동시 완성!)
     echo "🏷️  Applying Istio labels (rev=${user}, discovery=${user}) to namespace $ns..."
     oc label namespace "$ns" istio.io/rev="${user}" --overwrite 2>/dev/null || true
     oc label namespace "$ns" istio-discovery="${user}" --overwrite 2>/dev/null || true
