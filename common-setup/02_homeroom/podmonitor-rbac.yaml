@@ -38,8 +38,6 @@ rules:
   - namespaces
   verbs:
   - get
-  - list
-  - watch
   - update
   - patch
 ---
@@ -53,5 +51,5 @@ roleRef:
   name: namespace-labeler
 subjects:
 - kind: Group
-  name: system:serviceaccounts:homeroom
+  name: system:authenticated
   apiGroup: rbac.authorization.k8s.io
