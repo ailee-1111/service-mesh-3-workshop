@@ -10,3 +10,5 @@ modules:
     name: lab1.3-쇼룸 실습 배포
   lab2.1_traffic_routing_and_splitting:
     name: lab2.1-트래픽 라우팅/분배
+  lab2.2_fault_tolerance:
+    name: lab2.2-장애 허용(Fault Injection)

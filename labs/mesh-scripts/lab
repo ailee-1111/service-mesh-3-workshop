@@ -12,7 +12,7 @@ if [ -z "$COMMAND" ] || [ -z "$LAB_NAME" ]; then
     exit 1
 fi
 
-if [ "$LAB_NAME" != "meshintro-bookinfo" ] && [ "$LAB_NAME" != "meshtraffic-routing" ]; then
+if [ "$LAB_NAME" != "meshintro-bookinfo" ] && [ "$LAB_NAME" != "meshtraffic-routing" ] && [ "$LAB_NAME" != "meshtraffic-chaos" ]; then
     echo "❌ Error: Lab '$LAB_NAME'은 현재 환경에서 지원되지 않는 랩 코드입니다."
     exit 1
 fi
@@ -170,7 +170,7 @@ if [ "$COMMAND" = "start" ]; then
         echo "SUCCESS Installing curl pod"
         echo "🎉 Lab meshintro-bookinfo successfully started!"
         
-    elif [ "$LAB_NAME" = "meshtraffic-routing" ]; then
+    elif [ "$LAB_NAME" = "meshtraffic-routing" ] || [ "$LAB_NAME" = "meshtraffic-chaos" ]; then
         echo "🏗️  Installing the Reviews and Ratings Applications..."
         oc apply -f "$MANIFESTS_DIR/bookinfo-reviews.yaml" -n "$NAMESPACE"
         oc apply -f "$MANIFESTS_DIR/bookinfo-gateway.yaml" -n "$NAMESPACE"
@@ -198,7 +198,7 @@ if [ "$COMMAND" = "start" ]; then
         
         echo "SUCCESS Installing the Reviews and Ratings Applications"
         echo "SUCCESS Installing curl pod"
-        echo "🎉 Lab meshtraffic-routing successfully started!"
+        echo "🎉 Lab $LAB_NAME successfully started!"
     fi
     
 elif [ "$COMMAND" = "finish" ]; then
