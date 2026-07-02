@@ -119,7 +119,7 @@ virtualservice.networking.istio.io/reviews-vs ["reviews-gateway"] ["*"] 2m
 
 1.4. 연습 디렉토리로 이동합니다.
 
-```execute
+```execute-2
 cd ~/labs/meshtraffic-chaos
 ```
 
@@ -183,6 +183,10 @@ traffic_gen.py finite.yaml
 
 2.1. `reviews-vs-delay.yaml` 파일을 검토합니다. 이 파일은 `reviews` 가상 서비스 OSSM 리소스를 업데이트하여 다음과 같은 지연 장애를 구현합니다:
 * `reviews` 가상 서비스로 유입되는 요청 중 50%에 대해 강제 2초의 지연(delay)을 유입합니다.
+
+```execute
+cd ~/labs/meshtraffic-chaos
+```
 
 ```execute
 cat reviews-vs-delay.yaml
