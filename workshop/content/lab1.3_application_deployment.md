@@ -60,8 +60,9 @@ source ~/.bashrc
 ### 1. 서비스 메시의 초기 상태를 검증합니다.
 
 1.1. 브라우저에서 OpenShift 웹 콘솔을 엽니다.
-`https://console-openshift-console.%cluster_subdomain%` 주소로 접속하여 로그인 단계를 진행합니다.
-*(참고: 대시보드 인터페이스 상단 메뉴에 장착되어 있는 **Web Console** 탭을 클릭하시면, 새 브라우저 창을 띄우거나 별도 주소를 입력하지 않고도 가이드북 내부에서 원스톱으로 오픈시프트 웹 콘솔에 즉시 원격 접속하여 더욱 쾌적하고 간편하게 실습을 즐기실 수 있습니다. 본 교육 과정에서는 이 탭 클릭 접속 방식을 매우 권장합니다!)*
+본 주소 링크 <a href="https://console-openshift-console.%cluster_subdomain%" target="_blank">https://console-openshift-console.%cluster_subdomain%</a> 를 클릭하여 로그인 단계를 진행합니다.
+
+*(참고: 터미널 탭의 옆에 위치한 Console 탭을 클릭하면 오픈시프트 화면을 간단히 볼 수 있는데, 이는 인증비활성화 옵션으로 인해 간단한 확인만 가능합니다. 특히 플러그인 형식의 Kiali 등의 인베딩된 메뉴는 제공되는 링크를 직접 브라우저 새 탭으로 열어서 실습하시기를 권장합니다.)*
 
 `htpasswd_provider`를 클릭하고 사용자 이름은 `%username%`을, 비밀번호는 `openshift`를 입력해 관리자 권한으로 로그인합니다. 가이드 투어(Guided Tour)가 표시되면 **Skip tour**를 클릭해 건너뜁니다.
 
@@ -80,7 +81,7 @@ source ~/.bashrc
 ### 2. Bookinfo 애플리케이션을 탐색합니다.
 
 2.1. 브라우저의 새 탭에서 Bookinfo `productpage` 웹 페이지를 엽니다.
-`http://istio-ingressgateway-%username%-istio-ingress.%cluster_subdomain%/productpage` 주소로 이동합니다.
+본 주소 링크 <a href="http://istio-ingressgateway-%username%-istio-ingress.%cluster_subdomain%/productpage" target="_blank">http://istio-ingressgateway-%username%-istio-ingress.%cluster_subdomain%/productpage</a> 를 클릭하여 제품 페이지로 이동합니다.
 
 <img src="images/fig-004.svg" width="100%" alt="Figure 1.12: Bookinfo application homepage" />
 
@@ -121,11 +122,11 @@ Now using project "%username%-meshintro-bookinfo" on server "https://api.%cluste
 
 2.3. 실습 가이드 디렉토리로 이동한 후, `traffic_gen.py` 스크립트를 즉시 실행시켜 reviews Bookinfo 마이크로서비스에 대해 균등한 트래픽 부하 주입을 수행합니다. 부하가 전송되는 중간에 이를 수동 정지시키려면 터미널 포커스를 두고 **Ctrl+C**를 누르면 중단됩니다.
 
-```execute
+```execute-2
 cd ~/labs/meshintro-bookinfo
 ```
 
-```execute
+```execute-2
 traffic_gen.py continuous.yaml
 ```
 
@@ -139,7 +140,7 @@ source ~/.bashrc
 
 2.4. `traffic_gen.py` 스크립트를 재실행하여 reviews 서비스에 대한 트래픽을 지속해서 주입하도록 설정합니다. 이 터미널은 멈추지 말고 그대로 가동한 상태로 놔둔 상태에서 진행하십시오.
 
-```execute
+```execute-2
 traffic_gen.py continuous.yaml
 ```
 
@@ -232,14 +233,14 @@ OpenShift Service Mesh 3.0 인프라가 실시간 트래픽 시프팅 설정을 
 > [!NOTE]
 > **참고 (NOTE)**
 > 만약 실행 중이던 `traffic_gen.py`가 중간에 전송 완료되어 자동 종료되었다면, 다음 명령어를 실행하여 다시 구동해 주시기 바랍니다:
-> ```execute
+> ```execute-2
 > cd ~/labs/meshintro-bookinfo
 > ```
-> ```execute
+> ```execute-2
 > traffic_gen.py continuous.yaml
 > ```
 
-4.6. 새 브라우저 탭에서 이스티오 인그레스 게이트웨이 주소인 `http://istio-ingressgateway-%username%-istio-ingress.%cluster_subdomain%/productpage`로 다시 접속하여 Bookinfo `productpage` 애플리케이션을 엽니다.
+4.6. 새 브라우저 탭에서 이스티오 인그레스 게이트웨이 주소인 <a href="http://istio-ingressgateway-%username%-istio-ingress.%cluster_subdomain%/productpage" target="_blank">http://istio-ingressgateway-%username%-istio-ingress.%cluster_subdomain%/productpage</a> 로 다시 접속하여 Bookinfo `productpage` 애플리케이션을 엽니다.
 
 <img src="images/fig-013.svg" width="100%" alt="Figure 1.21: Bookinfo application showing only red stars after traffic shifting to v3" />
 
