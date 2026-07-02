@@ -66,6 +66,7 @@ oc login -u %username% -p openshift https://api.%cluster_subdomain%:6443
 ```
 
 * **로그인 수행 완료 로그:**
+
 ```bash
 The server uses a certificate signed by an unknown authority.
 Use insecure connections? (y/n): y
@@ -83,6 +84,7 @@ oc project %username%-meshtraffic-chaos
 ```
 
 * **프로젝트 이동 결과 로그:**
+
 ```bash
 Now using project "%username%-meshtraffic-chaos" on server "https://api.%cluster_subdomain%:6443".
 ```
@@ -119,7 +121,7 @@ virtualservice.networking.istio.io/reviews-vs   ["reviews-gateway"]   ["*"]   2m
 
 1.4. 연습 디렉토리로 이동합니다.
 
-```execute
+```execute-2
 cd ~/labs/meshtraffic-chaos
 ```
 
@@ -186,6 +188,10 @@ traffic_gen.py finite.yaml
 * 인그레스 게이트웨이에서 고정된 지연을 가진 장애 주입을 구성합니다.
 * 유입되는 요청 중 50%에 대해 2초의 지연을 적용합니다.
 * 세 개의 reviews 서비스 버전에 대한 표준 라우팅 상태는 그대로 유지합니다.
+
+```execute
+cd ~/labs/meshtraffic-chaos
+```
 
 ```execute
 cat reviews-vs-delay.yaml
