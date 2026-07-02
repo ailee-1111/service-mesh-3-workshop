@@ -12,3 +12,5 @@ modules:
     name: lab2.1-트래픽 라우팅/분배
   lab2.2_fault_tolerance:
     name: lab2.2-장애 허용(Fault Injection)
+  lab2.3_resilience:
+    name: lab2.3-회복력
