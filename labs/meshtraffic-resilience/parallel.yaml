@@ -1,0 +1,16 @@
+traffic:
+  mode: "continuous"
+  endpoint: "/reviews/1"
+  duration: "5s"
+  sleep: 0.05
+  num_workers: 4
+display:
+  show_progress: true
+  quiet_mode: false
+  response_view: "smart_json"
+analysis:
+  enabled: true
+  content_normalization: true
+  expected_responses: ["No stars", "red", "black", "Ratings: ❌ Ratings service is currently unavailable"]
+  statistics:
+    - "success_rate"

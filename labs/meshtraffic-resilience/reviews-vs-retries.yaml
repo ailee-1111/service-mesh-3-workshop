@@ -1,0 +1,23 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: reviews-vs
+spec:
+  gateways:
+  - reviews-gateway
+  hosts:
+  - '*'
+  http:
+  - match:
+    - uri:
+        prefix: /reviews
+    retries:
+      attempts: 10
+      perTryTimeout: 0.1s
+      retryOn: 5xx
+    route:
+    - destination:
+        host: reviews
+        port:
+          number: 9080
+    timeout: 1s
