@@ -1,0 +1,18 @@
+connection:
+  gateway_url: ""
+  gateway:
+    namespace: "USER_NAME_PLACEHOLDER-istio-ingress"
+    route_name: "istio-ingressgateway"
+
+analysis:
+  enabled: true
+  content_normalization: true
+  expected_responses: []
+
+traffic:
+  mode: "continuous"
+  endpoint: "/productpage"
+  sleep: 0.1
+  options:
+    timeout: 30
+    parallel_workers: 1

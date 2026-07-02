@@ -86,6 +86,8 @@ class TrafficGen:
         try:
             gateway_config = self.config["connection"]["gateway"]
             namespace = gateway_config["namespace"]
+            user = os.environ.get("JUPYTERHUB_USER", "user")
+            namespace = namespace.replace("USER_NAME_PLACEHOLDER", user)
             route_name = gateway_config["route_name"]
 
             cmd = [
