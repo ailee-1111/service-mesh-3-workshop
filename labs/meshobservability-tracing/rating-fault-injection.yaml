@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: ratings-faults-vs
+  namespace: USER_NAME_PLACEHOLDER-meshobservability-tracing
+spec:
+  hosts:
+  - ratings.USER_NAME_PLACEHOLDER-meshobservability-tracing.svc.cluster.local
+  http:
+  - fault:
+      delay:
+        fixedDelay: 3s
+        percentage:
+          value: 50
+    route:
+    - destination:
+        host: ratings.USER_NAME_PLACEHOLDER-meshobservability-tracing.svc.cluster.local
+      weight: 100

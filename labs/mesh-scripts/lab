@@ -12,7 +12,7 @@ if [ -z "$COMMAND" ] || [ -z "$LAB_NAME" ]; then
     exit 1
 fi
 
-if [ "$LAB_NAME" != "meshintro-bookinfo" ] && [ "$LAB_NAME" != "meshtraffic-routing" ] && [ "$LAB_NAME" != "meshtraffic-chaos" ] && [ "$LAB_NAME" != "meshtraffic-resilience" ] && [ "$LAB_NAME" != "meshsecurity-mtls" ] && [ "$LAB_NAME" != "meshobservability-intro" ]; then
+if [ "$LAB_NAME" != "meshintro-bookinfo" ] && [ "$LAB_NAME" != "meshtraffic-routing" ] && [ "$LAB_NAME" != "meshtraffic-chaos" ] && [ "$LAB_NAME" != "meshtraffic-resilience" ] && [ "$LAB_NAME" != "meshsecurity-mtls" ] && [ "$LAB_NAME" != "meshobservability-intro" ] && [ "$LAB_NAME" != "meshobservability-tracing" ]; then
     echo "❌ Error: Lab '$LAB_NAME'은 현재 환경에서 지원되지 않는 랩 코드입니다."
     exit 1
 fi
@@ -144,7 +144,7 @@ if [ "$COMMAND" = "start" ]; then
         exit 1
     fi
     
-    if [ "$LAB_NAME" = "meshintro-bookinfo" ] || [ "$LAB_NAME" = "meshobservability-intro" ]; then
+    if [ "$LAB_NAME" = "meshintro-bookinfo" ] || [ "$LAB_NAME" = "meshobservability-intro" ] || [ "$LAB_NAME" = "meshobservability-tracing" ]; then
         echo "🏗️  Installing the Bookinfo Application..."
         oc apply -f "$MANIFESTS_DIR/bookinfo.yaml" -n "$NAMESPACE"
         oc apply -f "$MANIFESTS_DIR/bookinfo-gateway.yaml" -n "$NAMESPACE"
