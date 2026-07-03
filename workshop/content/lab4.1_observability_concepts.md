@@ -24,31 +24,8 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-# Chapter 1. Observing OpenShift Service Mesh
 
-오픈시프트 서비스 메시 환경 하에서 제공하는 핵심 모니터링 체계와 실시간 서비스 트래픽 가시성 시각화 수립 사상을 학습합니다.
-
-* Introduction to Red Hat OpenShift observability and OpenShift Service Mesh ([/rol/app/courses/ad0007l-3.1/pages/ch01](https://api.cluster-pgx9x.pgx9x.sandbox3385.opentlc.com:6443) <i class="fas fa-external-link-alt"></i>)
-* Guided Exercise: Introduction to Red Hat OpenShift observability and OpenShift Service Mesh ([/rol/app/courses/ad0007l-3.1/pages/ch01s02](https://api.cluster-pgx9x.pgx9x.sandbox3385.opentlc.com:6443) <i class="fas fa-external-link-alt"></i>)
-* Collecting Service Metrics ([/rol/app/courses/ad0007l-3.1/pages/ch01s03](https://api.cluster-pgx9x.pgx9x.sandbox3385.opentlc.com:6443) <i class="fas fa-external-link-alt"></i>)
-* Guided Exercise: Collecting Service Metrics ([/rol/app/courses/ad0007l-3.1/pages/ch01s04](https://api.cluster-pgx9x.pgx9x.sandbox3385.opentlc.com:6443) <i class="fas fa-external-link-alt"></i>)
-* Tracing Services With Kiali, Tempo and OpenTelemetry ([/rol/app/courses/ad0007l-3.1/pages/ch01s05](https://api.cluster-pgx9x.pgx9x.sandbox3385.opentlc.com:6443) <i class="fas fa-external-link-alt"></i>)
-* Guided Exercise: Tracing Services With Kiali, Tempo and OpenTelemetry ([/rol/app/courses/ad0007l-3.1/pages/ch01s06](https://api.cluster-pgx9x.pgx9x.sandbox3385.opentlc.com:6443) <i class="fas fa-external-link-alt"></i>)
-* Lab: Observing OpenShift Service Mesh ([/rol/app/courses/ad0007l-3.1/pages/ch01s07](https://api.cluster-pgx9x.pgx9x.sandbox3385.opentlc.com:6443) <i class="fas fa-external-link-alt"></i>)
-* Summary ([/rol/app/courses/ad0007l-3.1/pages/ch01s08](https://api.cluster-pgx9x.pgx9x.sandbox3385.opentlc.com:6443) <i class="fas fa-external-link-alt"></i>)
-
-### 개요 (Abstract)
-
-* **Goal (목표):** Red Hat OpenShift observability를 사용하여 OpenShift Service Mesh를 추적하고 시각화합니다.
-* **Sections (섹션):**
-  - Introduction to Red Hat OpenShift observability and OpenShift Service Mesh (and Guided Exercise)
-  - Collecting Service Metrics (and Guided Exercise)
-  - Tracing Services With Kiali, Tempo and OpenTelemetry (and Guided Exercise)
-* **Lab (실습):** Observing OpenShift Service Mesh
-
----
-
-## Introduction to Red Hat OpenShift observability and OpenShift Service Mesh
+## 모듈 4.1: Red Hat OpenShift observability and OpenShift Service Mesh 개념
 
 ### 학습 목표 (Objectives)
 * 모니터링과 분산 추적에 중점을 두어 옵저버빌리티의 기본 개념을 파악합니다.
