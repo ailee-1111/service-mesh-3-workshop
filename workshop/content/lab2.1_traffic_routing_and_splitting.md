@@ -194,8 +194,8 @@ spec:
       version: v3
 ```
 
-❶ `reviews` 마이크로서비스를 위한 Kubernetes 서비스 이름입니다.
-❷ `reviews` 서비스의 각 버전에 대한 서브셋(subsets)을 정의합니다.
+❶ `reviews` 마이크로서비스를 위한 Kubernetes 서비스 이름입니다.<br/>
+❷ `reviews` 서비스의 각 버전에 대한 서브셋(subsets)을 정의합니다.<br/>
 
 2.2. 대상 규칙(DestinationRule(대상 규칙)) OSSM 리소스를 생성합니다.
 
@@ -245,8 +245,8 @@ spec:
       weight: 5
 ```
 
-❶ 트래픽 분할을 위한 여러 목적지(destinations)를 정의합니다.
-❷ 각 서브셋에 대한 트래픽 비율을 지정합니다.
+❶ 트래픽 분할을 위한 여러 목적지(destinations)를 정의합니다.<br/>
+❷ 각 서브셋에 대한 트래픽 비율을 지정합니다.<br/>
 
 2.4. 가상 서비스(VirtualService(가상 서비스)) OSSM 리소스를 업데이트합니다.
 
@@ -357,9 +357,9 @@ spec:
         subset: v1
 ```
 
-❶ 내부 사용자(internal users)를 v3(최신 기능)로 라우팅합니다.
-❷ 베타 테스터(beta testers)를 v2로 라우팅합니다.
-❸ 다른 모든 사용자에 대한 기본 경로(default route)를 v1(안정 버전)으로 설정합니다.
+❶ 내부 사용자(internal users)를 v3(최신 기능)로 라우팅합니다.<br/>
+❷ 베타 테스터(beta testers)를 v2로 라우팅합니다.<br/>
+❸ 다른 모든 사용자에 대한 기본 경로(default route)를 v1(안정 버전)으로 설정합니다.<br/>
 
 3.2. 가상 서비스 OSSM 리소스를 업데이트합니다.
 
@@ -427,9 +427,9 @@ traffic:
 ...output omitted...
 ```
 
-❶ 헤더가 없는 `reviews-v1`에 대한 항목, 기본 버전으로 라우팅됩니다.
-❷ `x-user-type: beta` 헤더가 있는 `reviews-v2`에 대한 항목, 베타 버전으로 라우팅됩니다.
-❸ `x-user-type: internal` 헤더가 있는 `reviews-v3`에 대한 항목, 내부 버전으로 라우팅됩니다.
+❶ 헤더가 없는 `reviews-v1`에 대한 항목, 기본 버전으로 라우팅됩니다.<br/>
+❷ `x-user-type: beta` 헤더가 있는 `reviews-v2`에 대한 항목, 베타 버전으로 라우팅됩니다.<br/>
+❸ `x-user-type: internal` 헤더가 있는 `reviews-v3`에 대한 항목, 내부 버전으로 라우팅됩니다.<br/>
 
 3.5. 구성 파일로 `mix.yaml`을 사용하여 `traffic_gen.py` 스크립트를 다시 실행합니다.
 
@@ -528,10 +528,10 @@ spec:
         subset: v1
 ```
 
-❶ `/api/v3/reviews` URI 접두사가 있는 요청을 버전 3으로 라우팅하도록 매칭합니다.
-❷ 백엔드로 전달하기 전에 URI를 `/api/v3/reviews/*`에서 `/reviews/*`로 재작성합니다.
-❸ 버전 2 요청에 대해 URI를 `/api/v2/reviews/*`에서 `/reviews/*`로 재작성합니다.
-❹ 안정적인 버전 v1으로 향하는 표준 `/reviews` 경로에 대한 기본 라우팅입니다.
+❶ `/api/v3/reviews` URI 접두사가 있는 요청을 버전 3으로 라우팅하도록 매칭합니다.<br/>
+❷ 백엔드로 전달하기 전에 URI를 `/api/v3/reviews/*`에서 `/reviews/*`로 재작성합니다.<br/>
+❸ 버전 2 요청에 대해 URI를 `/api/v2/reviews/*`에서 `/reviews/*`로 재작성합니다.<br/>
+❹ 안정적인 버전 v1으로 향하는 표준 `/reviews` 경로에 대한 기본 라우팅입니다.<br/>
 
 4.2. 가상 서비스 OSSM 리소스를 업데이트합니다.
 
@@ -705,8 +705,8 @@ spec:
       weight: 5 ❷
 ```
 
-❶ 안정 버전(stable version)에 대부분의 트래픽을 유지합니다.
-❷ 새로운 카나리 버전(v3)에는 트래픽의 5%만 전달하기 시작합니다.
+❶ 안정 버전(stable version)에 대부분의 트래픽을 유지합니다.<br/>
+❷ 새로운 카나리 버전(v3)에는 트래픽의 5%만 전달하기 시작합니다.<br/>
 
 5.2. 가상 서비스 OSSM 리소스를 업데이트합니다.
 
@@ -785,7 +785,7 @@ spec:
       weight: 25 ❶
 ```
 
-❶ 카나리 트래픽을 25%로 증가시킵니다.
+❶ 카나리 트래픽을 25%로 증가시킵니다.<br/>
 
 5.5. 가상 서비스 OSSM 리소스를 업데이트합니다.
 
@@ -864,7 +864,7 @@ spec:
       weight: 50 ❶
 ```
 
-❶ 이제 카나리 버전이 트래픽의 절반을 받습니다.
+❶ 이제 카나리 버전이 트래픽의 절반을 받습니다.<br/>
 
 5.8. 가상 서비스 OSSM 리소스를 업데이트합니다.
 
