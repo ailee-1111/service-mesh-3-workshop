@@ -167,11 +167,3 @@ Interrupted by user (Ctrl+C). Stopping continuous mode...
 * **트래픽 수동 중단 지원:** 트래픽 생성을 수동으로 종료하려면 언제든지 터미널 화면 상에서 **`Ctrl+C`** 키를 눌러주면 즉시 기동이 안전하게 중지됩니다.
 
 ---
-
-## 4. 참고 자료 (References)
-
-Bookinfo 마이크로서비스 및 서비스 메시 설정 사양에 대한 자세한 정보나 연계 문서는 아래 공식 가이드 페이지들을 방문하여 정독해 주시기 바랍니다:
-
-* **Red Hat 공식 설치 문서:** [About the Bookinfo Application in Installing OpenShift Service Mesh 3.1](https://docs.redhat.com/en/documentation/red_hat_openshift_service_mesh/3.1/htmlsingle/installing/index#ossm-about-bookinfo-application_ossm-installing-openshift-service-mesh)
-* **Istio 공식 도큐먼트:** [Istio.io: Bookinfo Application](https://istio.io/v1.26/docs/examples/bookinfo/)
-* **공식 소스 코드 저장소:** [GitHub: Bookinfo Application Source Code (Istio v1.26)](https://github.com/istio/istio/tree/1.26.5/samples/bookinfo)
