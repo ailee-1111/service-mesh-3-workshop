@@ -28,17 +28,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 오픈시프트 서비스 메시가 제공하는 다양한 트래픽 제어 기술의 핵심 아키텍처와 라우팅 메커니즘을 학습합니다. 서비스 메시가 어떻게 비즈니스 애플리케이션 코드와 트래픽 논리를 정교하게 분리해 내는지 그 혜택을 다각도로 이해하고, 게이트웨이, 가상 서비스, 대상 규칙 등 핵심 라우팅 리소스의 역할과 구조를 파악합니다.
 
-## 개요 (Abstract)
-* **목표:** Red Hat OpenShift Service Mesh에서 라우팅 전략, 탄력성 정책 및 장애 주입 기술을 적용하여 애플리케이션 트래픽을 효율적으로 관리, 통제 및 테스트하고, 더욱 안전하고 신뢰할 수 있는 분산 시스템을 구축합니다.
-* **학습 단원:**
-  - OpenShift Service Mesh 트래픽 관리 소개 (및 관련 실습)
-  - OpenShift Service Mesh를 통한 트래픽 라우팅 및 스프리팅 (및 관련 실습)
-  - OpenShift Service Mesh를 통한 장애 주입 실습 (및 관련 실습)
-  - OpenShift Service Mesh를 통한 서비스 회복력 실습 (및 관련 실습)
-  - OpenShift Service Mesh를 통한 트래픽 미러링 실습 (및 관련 실습)
-  - Kubernetes Gateway API 소개 (및 관련 실습)
-
----
 
 ## OpenShift Service Mesh 트래픽 관리 소개
 
