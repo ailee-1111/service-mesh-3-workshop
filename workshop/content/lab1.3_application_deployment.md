@@ -69,7 +69,7 @@ source ~/.bashrc
 
 1.2. **Topology** 메뉴 항목을 클릭하여 토폴로지 위상도 뷰를 열고 배포 상태를 검사합니다. 프로젝트 목록 드롭다운 목록에서 `%username%-meshintro-bookinfo` 프로젝트가 정상 선택되어 구동 중인지 확인합니다.
 
-<img src="images/fig-003.svg" width="100%" alt="Figure 1.11: Bookinfo application topology view" />
+<img src="images/fig-003.png" width="100%" alt="Figure 1.11: Bookinfo application topology view" />
 
 프로젝트 내부에 총 7개의 마이크로서비스 배포가 존재하지만, 오른쪽 상단 모서리에 Route(외부 노출 주소) 아이콘이 있는 배포는 하나도 없음을 확인하십시오. 이는 모든 애플리케이션이 외부의 공격 및 임의 접속으로부터 안전하게 격리되어 있으며, 오직 OSSM 인그레스 게이트웨이(Ingress Gateway)를 통해서만 통합 진입 및 제어가 가능하기 때문입니다.
 
@@ -183,7 +183,7 @@ traffic_gen.py continuous.yaml
 
 3.2. 왼쪽의 통합 메뉴 중에서 **Service Mesh > Overview** 메뉴를 클릭하여 서비스 메시 관리 개요 섹션으로 진입합니다.
 
-<img src="images/fig-005.svg" width="100%" alt="Figure 1.13: Service Mesh overview perspective" />
+<img src="images/fig-005.png" width="100%" alt="Figure 1.13: Service Mesh overview perspective" />
 
 `%username%-meshintro-bookinfo` 프로젝트 영역의 분당 평균 요청 수가 약 200건(혹은 200 requests per minute) 전후로 원만하게 트래픽이 측정 기동 중인 상태인지 검증하십시오. (수치는 다를 수 있습니다.)
 
@@ -197,7 +197,7 @@ traffic_gen.py continuous.yaml
 > **중요 (IMPORTANT)**
 > 네임스페이스 체크박스를 선택한 후에는 반드시 드롭다운 선택 필터 영역 바깥의 빈 웹 콘솔 배경을 한 번 클릭해 주어야 필터 옵션이 실시간 화면에 정상 적용되어 매핑됩니다.
 
-<img src="images/fig-006.svg" width="100%" alt="Figure 1.14: Service Mesh traffic graph perspective" />
+<img src="images/fig-006.png" width="100%" alt="Figure 1.14: Service Mesh traffic graph perspective" />
 
 지정 필터링된 네임스페이스의 입체적인 서비스 간 트래픽 흐름 토폴로지 그래프를 관찰합니다.
 
