@@ -121,10 +121,6 @@ reviews-v3-5bf99fd74c-b2z26                     2/2     Running   0          15m
 * **웹 콘솔 진입 URL:** <a href="https://console-openshift-console.%cluster_subdomain%" target="_blank">https://console-openshift-console.%cluster_subdomain%</a>
 * 진입 후 `htpasswd_provider`를 클릭하고, `%username%` 계정명과 `openshift` 비밀번호를 입력하여 접속을 성료합니다.
 
-2.2. 오픈시프트 웹 콘솔 상단 관점 전환 메뉴를 클릭하여 **Administrator** 관점 메뉴로 정격 전향합니다. (최초 로그인 시 가이드 팝업창이 뜨면 가볍게 건너뛰기 `Skip tour`를 클릭하십시오.)
-
-<img src="images/lab4.2-fig-042.png" width="100%" alt="Figure 1.43: Menu for choosing the perspective in the OpenShift console" />
-
 ---
 
 ### 3. Traffic Graph를 통해 서비스 메시 토폴로지를 관제하고 세부 분산 트레이스 명세를 추적합니다.
