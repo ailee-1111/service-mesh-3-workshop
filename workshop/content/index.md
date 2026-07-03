@@ -24,8 +24,7 @@
 ##  앞으로 함께 작성해 나갈 실습 모듈
 본 대시보드는 뼈대 구성이 정상 가동 중이며, 아래 모듈들에 따른 세부 실습 가이드는 새로운 교육 시나리오 구성에 맞춰 이 디렉토리 하위에 순차적으로 채워 나갈 예정입니다.
 
-* **Module 1:** OSSM v3 컨트롤 플레인 설치 및 애플리케이션 가입
-* **Module 2:** Kiali 기반 트래픽 시각화 및 서비스 그래프 관찰
-* **Module 3:** OpenTelemetry 및 Tempo 분산 트래픽 추적 수집
-* **Module 4:** Gateway API를 이용한 서킷 브레이커 및 카나리 배포
-* **Module 5:** AuthorizationPolicy 기반 엔드투엔드 mTLS 보안 설정
+* **Module 1:** OSSM v3 Architecture 확인 및 애플리케이션 배포
+* **Module 2:** Kiali 기반 트래픽 시각화 및 관리, 장애관리, 복원력 
+* **Module 3:** mTLS 보안 설정
+* **Module 4:** OpenTelemetry 및 Tempo 분산 트래픽 추적 수집
