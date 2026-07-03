@@ -3,38 +3,34 @@ modules:
   index:
     name: Index
   lab1.1_architecture:
-    name: lab1.1-아키텍쳐
+    name: lab1.1-아키텍쳐 개요
   lab1.2_application_intro:
     name: lab1.2-애플리케이션 소개
   lab1.3_application_deployment:
-    name: lab1.3-쇼룸 실습 배포
+    name: lab1.3-[핸즈온]쇼룸 실습 배포
   lab2.1_concepts:
     name: lab2.1-트래픽 관리 개요
   lab2.1_traffic_routing_splitting_concepts:
-    name: lab2.1-라우팅/스프리팅 개요
+    name: lab2.1-라우팅/분배 개요
   lab2.1_traffic_routing_and_splitting:
-    name: lab2.1-트래픽 라우팅/분배
+    name: lab2.1-[핸즈온]트래픽 라우팅/분배
   lab2.2_fault_injection_concepts:
     name: lab2.2-장애주입 개요
   lab2.2_fault_tolerance:
-    name: lab2.2-장애 허용(Fault Injection)
+    name: lab2.2-[핸즈온]장애 허용(Fault Injection)
   lab2.3_resilience_concepts:
-    name: lab2.3-서비스 회복력 개요
+    name: lab2.3-서비스 탄력성 개요
   lab2.3_resilience:
-    name: lab2.3-서비스 탄력성(Resilience)
+    name: lab2.3-[핸즈온]서비스 탄력성(Resilience)
   lab3.1_security_concepts:
     name: lab3.1-mTLS 보안 개요
   lab3.1_security_mtls:
-    name: lab3.1-mTLS 보안
+    name: lab3.1-[핸즈온]mTLS 보안
   lab4.1_observability_concepts:
     name: lab4.1-옵저버빌리티 개요
   lab4.1_observability:
-    name: lab4.1-옵저버빌리티 및 서비스 메트릭
+    name: lab4.1-[핸즈온]옵저버빌리티 및 서비스 메트릭
   lab4.2_tracing_concepts:
     name: lab4.2-분산추적 개요
   lab4.2_tracing:
-    name: lab4.2-Tempo & OpenTelemetry 추적
-  lab4.3_custom_metrics_concepts:
-    name: lab4.3-메트릭수집 개요
-  lab4.3_service_metrics:
-    name: lab4.3-사용자 정의 메트릭
+    name: lab4.2-[핸즈온]Tempo & OpenTelemetry 추적
