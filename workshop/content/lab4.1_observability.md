@@ -65,6 +65,7 @@ oc login -u %username% -p openshift https://api.%cluster_subdomain%:6443
 ```
 
 * **로그인 수행 완료 로그:**
+
 ```bash
 The server uses a certificate signed by an unknown authority.
 Use insecure connections? (y/n): y
@@ -82,6 +83,7 @@ oc project %username%-meshobservability-intro
 ```
 
 * **프로젝트 이동 결과 로그:**
+
 ```bash
 Now using project "%username%-meshobservability-intro" on server "https://api.%cluster_subdomain%:6443".
 ```
@@ -187,7 +189,7 @@ Now using project "%username%-meshobservability-intro" on server "https://api.%c
 오픈시프트 콘솔에 인베딩된 플러그인(OSSMC) 뷰 외에, 외부 가동 중인 단독형 Kiali 대시보드를 전격 기동하여 보다 전문적이고 깊이 있는 옵저버빌리티 기능을 점검해 봅니다.
 
 4.1. 워크스테이션 브라우저 상에서 새로운 임의의 탭을 열고, 아래의 주소 링크로 진입하여 외부 단독형 Kiali 콘솔로 접속합니다:
-* **독립 Kiali 접속 주소 URL:** <a href="https://kiali-istio-system.apps.%cluster_subdomain%" target="_blank">https://kiali-istio-system.apps.%cluster_subdomain%</a>
+* **독립 Kiali 접속 주소 URL:** <a href="https://kiali-istio-system.%cluster_subdomain%" target="_blank">https://kiali-istio-system.apps.%cluster_subdomain%</a>
 
 4.2. 로그인 화면이 팝업되면, 클러스터에 지정된 `%username%` 계정명과 `openshift` 비밀번호 정보를 입력하여 정식 접속을 완료합니다.
 
