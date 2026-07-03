@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 분산 추적(Distributed Tracing)은 애플리케이션 내의 서비스 호출 경로를 추적하여 개별 서비스의 성능을 추적하는 프로세스입니다. 애플리케이션에서 수행되는 각 사용자 동작은 하나의 요청을 생성합니다. 이 요청은 응답을 생성하기 위해 많은 서비스들이 상호 작용하도록 요구할 수 있습니다. 이 요청이 거쳐 가는 경로가 바로 분산 트랜잭션(distributed transaction)입니다.
 
-<img src="images/lab4.2-tracing-fig-001.png" width="100%" alt="Figure 1.30 & 1.31: Traffic flow in a system with and without distributed tracing" />
+<img src="images/lab4.2-tracing-fig-001.svg" width="100%" alt="Figure 1.30 & 1.31: Traffic flow in a system with and without distributed tracing" />
 
 성능 문제를 해결하는 것은 분산 시스템의 유지 관리 및 개발에 있어 매우 중요합니다. 단일 클라이언트 호출이 여러 서비스와 상호 작용할 수 있기 때문에, 개별 서비스의 디버깅 로그를 개별 분석하는 것만으로는 성능 문제를 해결하는 데 도움이 되지 않을 수 있습니다.
 
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 다음과 같은 서비스들로 구성된 애플리케이션을 검토해 보겠습니다:
 
-<img src="images/lab4.2-tracing-fig-002.png" width="100%" alt="Figure 1.32: Request call path in an application composed of many components" />
+<img src="images/lab4.2-tracing-fig-002.svg" width="100%" alt="Figure 1.32: Request call path in an application composed of many components" />
 
 이 예제 시나리오에서는 다음과 같은 흐름이 진행됩니다:
 * `Service A`가 애플리케이션의 요청 진입점(request entry point) 역할을 맡습니다.
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 아래 다이어그램 차트 명세는 동일한 단일 트레이스와 이를 지탱하는 구성 스팬들의 시간 분포 계층 바(Horizontal Bars) 그래픽 형상입니다:
 
-<img src="images/lab4.2-tracing-fig-003.png" width="100%" alt="Figure 1.33: Traces and spans" />
+<img src="images/lab4.2-tracing-fig-003.svg" width="100%" alt="Figure 1.33: Traces and spans" />
 
 ---
 
@@ -94,7 +94,7 @@ OpenShift Service Mesh 하위에서 분산 추적을 감상하기 위한 기본 
 
 ### OpenShift 및 OpenShift Service Mesh 상의 분산 추적 구성 요소
 
-<img src="images/lab4.2-tracing-fig-004.png" width="100%" alt="Figure 1.34: Components for distributed tracing on OpenShift and OpenShift Service Mesh" />
+<img src="images/lab4.2-tracing-fig-004.svg" width="100%" alt="Figure 1.34: Components for distributed tracing on OpenShift and OpenShift Service Mesh" />
 
 오픈시프트 및 오픈시프트 서비스 메시 전역 상에 분산 추적 시스템을 설치 구성하는 세부 원리는 참고 자료 가이드를 참조하십시오.
 
