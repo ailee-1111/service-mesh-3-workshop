@@ -66,11 +66,8 @@ source ~/.bashrc
 
 `htpasswd_provider`를 클릭하고 사용자 이름은 `%username%`을, 비밀번호는 `openshift`를 입력해 관리자 권한으로 로그인합니다. 가이드 투어(Guided Tour)가 표시되면 **Skip tour**를 클릭해 건너뜁니다.
 
-1.2. 왼쪽 측면 메뉴에서 **Developer**를 클릭하여 개발자 관점(Developer perspective) 상태를 적용하고 유지 중인지 확인합니다.
 
-<img src="images/fig-002.svg" width="100%" alt="Figure 1.10: OpenShift Developer perspective navigation menu" />
-
-1.3. **Topology** 메뉴 항목을 클릭하여 토폴로지 위상도 뷰를 열고 배포 상태를 검사합니다. 프로젝트 목록 드롭다운 목록에서 `%username%-meshintro-bookinfo` 프로젝트가 정상 선택되어 구동 중인지 확인합니다.
+1.2. **Topology** 메뉴 항목을 클릭하여 토폴로지 위상도 뷰를 열고 배포 상태를 검사합니다. 프로젝트 목록 드롭다운 목록에서 `%username%-meshintro-bookinfo` 프로젝트가 정상 선택되어 구동 중인지 확인합니다.
 
 <img src="images/fig-003.svg" width="100%" alt="Figure 1.11: Bookinfo application topology view" />
 
