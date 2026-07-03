@@ -54,7 +54,7 @@ source ~/.bashrc
   - `reviews-v3`: 내부 `ratings` 서비스를 동기식으로 호출하며, 1~5점짜리 빨간색 별점으로 레이팅을 표출합니다.
 * **ratings:** 책 리뷰에 수반될 평점 점수 정보를 보존하고 있습니다.
 
-<img src="images/lab4.2-fig-042.png" width="100%" alt="Figure 1.42: The BookInfo application components" />
+<img src="images/lab4.2-fig-041.png" width="100%" alt="Figure 1.42: The BookInfo application components" />
 
 Bookinfo 애플리케이션은 Envoy 사이드카 프록시가 완벽히 주입된 상태로 `%username%-meshobservability-tracing` 네임스페이스 하위에 기동을 개시합니다. 동적 트래픽 제너레이터가 백그라운드에서 실시간 원격 메트릭과 원격 수집(Telemetry) 추적용 가중 트래픽 데이터를 지속 인입시킬 것입니다.
 
@@ -71,6 +71,7 @@ oc login -u %username% -p openshift https://api.%cluster_subdomain%:6443
 ```
 
 * **로그인 수행 완료 로그:**
+
 ```bash
 The server uses a certificate signed by an unknown authority.
 Use insecure connections? (y/n): y
@@ -88,6 +89,7 @@ oc project %username%-meshobservability-tracing
 ```
 
 * **프로젝트 이동 결과 로그:**
+
 ```bash
 Now using project "%username%-meshobservability-tracing" on server "https://api.%cluster_subdomain%:6443".
 ```
@@ -121,7 +123,7 @@ reviews-v3-5bf99fd74c-b2z26                     2/2     Running   0          15m
 
 2.2. 오픈시프트 웹 콘솔 상단 관점 전환 메뉴를 클릭하여 **Administrator** 관점 메뉴로 정격 전향합니다. (최초 로그인 시 가이드 팝업창이 뜨면 가볍게 건너뛰기 `Skip tour`를 클릭하십시오.)
 
-<img src="images/lab4.2-fig-043.png" width="100%" alt="Figure 1.43: Menu for choosing the perspective in the OpenShift console" />
+<img src="images/lab4.2-fig-042.png" width="100%" alt="Figure 1.43: Menu for choosing the perspective in the OpenShift console" />
 
 ---
 
@@ -131,7 +133,7 @@ reviews-v3-5bf99fd74c-b2z26                     2/2     Running   0          15m
 
 3.2. 화면 최상단 네임스페이스 선택 콤보 박스에서, 반드시 `%username%-meshobservability-tracing` 프로젝트만 단독 기입하여 적용합니다. 우측 상단의 수집 메트릭 갱신 기간 드롭다운 메뉴는 기본 1분에서 한층 정교한 데이터 수집 이력을 표출하기 위해 **Last 5m**으로 정정해 줍니다.
 
-<img src="images/lab4.2-fig-044.png" width="100%" alt="Figure 1.44: Namespace and time range selectors at the top of the Traffic Graph view" />
+<img src="images/lab4.2-fig-043.png" width="100%" alt="Figure 1.44: Namespace and time range selectors at the top of the Traffic Graph view" />
 
 일부 서비스 노드나 간선 연결 구간이 초반에 노란색 경고 색상으로 팝업될 수 있으며, 이는 각 마이크로서비스가 최초 구동될 때 짧은 레이턴시 유실 혹은 미열림 구간이 존재했음을 의미하는 전개 현상입니다.
 
@@ -148,23 +150,23 @@ reviews-v3-5bf99fd74c-b2z26                     2/2     Running   0          15m
 
 마우스 스크롤 휠을 부드럽게 줌인 확대해 봅니다. 확대에 따라 각 연결선 가닥 위에 세부 응답 밀도 및 세 가지 reviews 버전(`v1`, `v2`, `v3`)으로 트래픽 부하가 균등 배포되고 있는 기하학적 균형 상태를 직접 감수할 수 있습니다.
 
-<img src="images/lab4.2-fig-045.png" width="100%" alt="Figure 1.45: Graph with traffic distribution percentages visible on the edges" />
+<img src="images/lab4.2-fig-044.png" width="100%" alt="Figure 1.45: Graph with traffic distribution percentages visible on the edges" />
 
 3.5. 토폴로지 한가운데에 위치한 `productpage` 삼각형 서비스 노드를 마우스 왼쪽 클릭합니다. 클릭 즉시 우측에 해당 서비스의 요약 관제 대시보드 사이드 패널이 팝업됩니다. 해당 우측 사이드 패널 내에서 **Traces** 탭 메뉴를 클릭합니다.
 
-<img src="images/lab4.2-fig-046.png" width="100%" alt="Figure 1.46: Right side panel showing a list of traces that use the product service" />
+<img src="images/lab4.2-fig-045.png" width="100%" alt="Figure 1.46: Right side panel showing a list of traces that use the product service" />
 
 표출되는 분산 트레이스 목록들을 상세히 살펴보십시오. 이 중에서 어떤 트레이스는 수발신 통신 깊이가 7개 단계(**7 spans**)로 이루어져 있는 반면, 어떤 트레이스들은 9개 단계(**9 spans**)로 길게 연쇄 작동하고 있음을 관찰할 수 있습니다.
 
 3.6. 9개 미만(예: 7 spans)의 단계로 소화 완료된 비교적 짧은 트레이스 데이터 중 임의의 항목 하나를 선택해 마우스 클릭합니다.
 
-<img src="images/lab4.2-fig-047.png" width="100%" alt="Figure 1.47: Traffic graph showing a bookinfo trace of seven spans" />
+<img src="images/lab4.2-fig-046.png" width="100%" alt="Figure 1.47: Traffic graph showing a bookinfo trace of seven spans" />
 
 클릭하는 즉시, Kiali 토폴로지 차트 전경이 이 7 spans 요청이 실제 흘러간 마이크로서비스 경로들(예: productpage ➡️ reviews-v1 ➡️ ratings 패스는 타지 않음!)에만 **초록색 하이라이트 발광 라인**을 입히고 나머지 노드들은 어둡게 음영(Blur) 처리하는 환상적인 특정 요청 전용 시각화 관제를 전개해 줍니다!
 
 또한, 우측 패널에는 이 7 spans 트레이스의 정확한 마이크로초 단위 반응 기수 정보와 응답 200 OK 코드, 부모-자식 의존 분산 트리 전경이 직관적으로 팝업됩니다. 확인 후 요약 패널 하단의 닫기(X) 버튼을 부드럽게 닫아 줍니다.
 
-<img src="images/lab4.2-fig-048.png" width="100%" alt="Figure 1.48: Right side panel showing details of the selected trace and the closing button" />
+<img src="images/lab4.2-fig-047.png" width="100%" alt="Figure 1.48: Right side panel showing details of the selected trace and the closing button" />
 
 > [!NOTE]
 > **참고 (NOTE)**
@@ -172,7 +174,7 @@ reviews-v3-5bf99fd74c-b2z26                     2/2     Running   0          15m
 
 3.7. 이번에는 가장 연쇄 호출 깊이가 깊은 **9 spans**짜리 분산 트레이스 항목 중 하나를 전격 선택해 봅니다.
 
-<img src="images/lab4.2-fig-049.png" width="100%" alt="Figure 1.49: Traffic graph showing a bookinfo trace of nine spans with the span selector highlighted" />
+<img src="images/lab4.2-fig-048.png" width="100%" alt="Figure 1.49: Traffic graph showing a bookinfo trace of nine spans with the span selector highlighted" />
 
 ---
 
@@ -225,31 +227,31 @@ virtualservice.networking.istio.io/ratings-faults-vs created
 
 *적용 완료 후, 3초 지연에 따른 슬로우 다운(Slowdown) 경고 메트릭이 클러스터에 원활히 퍼지고 누적 반영될 수 있도록 **약 5분에서 6분가량** 차분히 터미널 뒤에서 대기해 줍니다.*
 
-<img src="images/lab4.2-fig-050.png" width="100%" alt="Figure 1.50: Traffic graph after applying the fault injection." />
+<img src="images/lab4.2-fig-049.png" width="100%" alt="Figure 1.50: Traffic graph after applying the fault injection." />
 
 4.3. 트래픽 애니메이션이 노란색으로 누적 지체 응답을 표출하고, 에러 유입 구간은 빨간색으로 표출되는 고유 전경을 관찰합니다.
 
 실시간 통계 수치 변화 추이를 더욱 긴 주기로 확장 관제하기 위해 상단 필터에서 **Last 30m** 혹은 **Last 1h**를 지정하고, 삼각형 모양의 **`reviews`** 서비스 노드를 마우스 클릭한 뒤 우측 패널의 **Traces** 탭 버튼을 클릭합니다.
 
-<img src="images/lab4.2-fig-051.png" width="100%" alt="Figure 1.51: List of the reviews service spans" />
+<img src="images/lab4.2-fig-050.png" width="100%" alt="Figure 1.51: List of the reviews service spans" />
 
 사이드바 대시보드가 `reviews` 서비스 노드에 유기적으로 기여한 요청 트레이스 명세들을 수집해 정밀 요약해 줍니다. 이 트레이스 리스트는 오직 `reviews` 마이크로서비스가 직·간접적으로 참여한 트레이스들만을 깔끔히 교차 수집하여 제공해 주는 혁신적인 서비스 중심 뷰(Service-centric view) 역할을 선사합니다.
 
 4.4. 이 중에서 가동 시간이 **2.0s를 훨씬 초과(예: 2.53s)하여 심각한 성능 저하**를 일으킨 특정 비정상 트레이스 중 하나를 클릭해 봅니다. 우측의 요약 패널에 해당 트레이스의 디테일 정보가 다음과 같이 정밀 팝업됩니다:
 
-<img src="images/lab4.2-fig-052.png" width="100%" alt="Figure 1.52: Traffic graph showing a trace with errors" />
+<img src="images/lab4.2-fig-051.png" width="100%" alt="Figure 1.52: Traffic graph showing a trace with errors" />
 
 4.5. 지체 원인을 파악하기 위해, 우측 패널 세부 정보 카드 창에서 화면을 아래로 부드럽게 스크롤 하여 맨 아래 파란색 앵커 글씨인 **`Show span`** 링크를 가볍게 클릭합니다.
 
 오픈시프트 콘솔 대시보드가 이 분산 트레이스의 진짜 마이크로 트리 상세 정보를 파싱 해내며, 해당 `reviews` 서비스 세부 정보의 **Traces** 메인 분산 탭 화면으로 우리를 리다이렉트 포워딩 시켜 줍니다.
 
-<img src="images/lab4.2-fig-053.png" width="100%" alt="Figure 1.53: Trace details in the service view" />
+<img src="images/lab4.2-fig-052.png" width="100%" alt="Figure 1.53: Trace details in the service view" />
 
 4.6. 에러가 감지되거나 지연이 유발된 특정 상세 슬롯(Span)을 정밀 관독해 봅니다.
 
 트레이스 챠트 정보 하단의 **Span Details** 데이터 테이블 목록으로 마우스를 스크롤 다운 합니다. 목록에 수 밀리초만에 응답을 소화한 건강한 스팬들이 나타나는 반면, 구동 지연 및 에러 기호가 우측에 새겨진 비정상 스팬 하나가 시선을 잡게 됩니다. 이 비정상 스팬의 오른쪽에 기입된 **컨텍스트 오버플로우 메뉴 버튼(세로 삼점 버튼 ➿)**을 부드럽게 누르고 **`Logs`** 메뉴를 클릭합니다.
 
-<img src="images/lab4.2-fig-054.png" width="100%" alt="Figure 1.54: Menu to inspect a specific span" />
+<img src="images/lab4.2-fig-053.png" width="100%" alt="Figure 1.54: Menu to inspect a specific span" />
 
 만약 선택한 트레이스 내부 상에 실패가 발생한 스팬이 여러 개 누적 매립되어 있다면, 리스트 최하위에 위치한 최종 단추 스팬(가장 깊숙한 백엔드 측 ratings 에러 단추)을 클릭하여 점검합니다.
 
@@ -267,7 +269,7 @@ virtualservice.networking.istio.io/ratings-faults-vs created
 
 5.2. 전개되는 Tempo 분산 추적 관제 판넬을 평화롭게 감상하십시오. 차트에는 Bookinfo 마이크로서비스 전역에서 OTel 수집기를 통해 누적 수렴되어 템포 스토리지로 모아져 흐르는 실시간 전체 트랙 리스트가 차트와 함께 직관적으로 전사 투영됩니다.
 
-<img src="images/lab4.2-fig-055.png" width="100%" alt="Figure 1.55: Traces view with a list of traces, including columns for trace name, number of spans, duration, and start time." />
+<img src="images/lab4.2-fig-054.png" width="100%" alt="Figure 1.55: Traces view with a list of traces, including columns for trace name, number of spans, duration, and start time." />
 
 5.3. 수집된 추적 대시보드 리스트의 세부 컬럼들을 유심히 검사하십시오.
 * **Trace name:** 이 추적에 연동된 주 통신 마이크로서비스 종류들(예: productpage, reviews 등)을 요약 표출해 줍니다.
