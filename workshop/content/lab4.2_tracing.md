@@ -185,6 +185,10 @@ reviews-v3-5bf99fd74c-b2z26                     2/2     Running   0          15m
 4.1. 워크스테이션 터미널 상에서 `ratings-fault-injection.yaml` 파일 명세를 검토합니다.
 
 ```execute
+cd ~/labs/meshobservability-tracing
+```
+
+```execute
 cat rating-fault-injection.yaml
 ```
 
