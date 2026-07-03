@@ -12,7 +12,7 @@ if [ -z "$COMMAND" ] || [ -z "$LAB_NAME" ]; then
     exit 1
 fi
 
-if [ "$LAB_NAME" != "meshintro-bookinfo" ] && [ "$LAB_NAME" != "meshtraffic-routing" ] && [ "$LAB_NAME" != "meshtraffic-chaos" ] && [ "$LAB_NAME" != "meshtraffic-resilience" ] && [ "$LAB_NAME" != "meshsecurity-mtls" ]; then
+if [ "$LAB_NAME" != "meshintro-bookinfo" ] && [ "$LAB_NAME" != "meshtraffic-routing" ] && [ "$LAB_NAME" != "meshtraffic-chaos" ] && [ "$LAB_NAME" != "meshtraffic-resilience" ] && [ "$LAB_NAME" != "meshsecurity-mtls" ] && [ "$LAB_NAME" != "meshobservability-intro" ]; then
     echo "❌ Error: Lab '$LAB_NAME'은 현재 환경에서 지원되지 않는 랩 코드입니다."
     exit 1
 fi
@@ -144,7 +144,7 @@ if [ "$COMMAND" = "start" ]; then
         exit 1
     fi
     
-    if [ "$LAB_NAME" = "meshintro-bookinfo" ]; then
+    if [ "$LAB_NAME" = "meshintro-bookinfo" ] || [ "$LAB_NAME" = "meshobservability-intro" ]; then
         echo "🏗️  Installing the Bookinfo Application..."
         oc apply -f "$MANIFESTS_DIR/bookinfo.yaml" -n "$NAMESPACE"
         oc apply -f "$MANIFESTS_DIR/bookinfo-gateway.yaml" -n "$NAMESPACE"
@@ -174,7 +174,7 @@ if [ "$COMMAND" = "start" ]; then
         
         echo "SUCCESS Installing the Bookinfo Application"
         echo "SUCCESS Installing curl pod"
-        echo "🎉 Lab meshintro-bookinfo successfully started!"
+        echo "🎉 Lab $LAB_NAME successfully started!"
         
     elif [ "$LAB_NAME" = "meshtraffic-routing" ] || [ "$LAB_NAME" = "meshtraffic-chaos" ] || [ "$LAB_NAME" = "meshtraffic-resilience" ]; then
         echo "🏗️  Installing the Reviews and Ratings Applications..."
