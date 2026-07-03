@@ -90,6 +90,7 @@ for ((i=1; i<=USER_COUNT; i++)); do
     echo "      📂 네임스페이스 및 레이블 셋업..."
     oc apply -f "$USER_RENDER_DIR/namespace-istio-system.yaml"
     oc apply -f "$USER_RENDER_DIR/namespace-istio-ingress.yaml"
+    oc label namespace "${USER_NAME}-istio-system" istio-discovery="${USER_NAME}" istio.io/rev="${USER_NAME}" --overwrite 2>/dev/null || true
     
     # Istio 및 OTel Collector CR 배포
     echo "      🏗️  Istio, OpenTelemetry 인스턴스 전개..."
