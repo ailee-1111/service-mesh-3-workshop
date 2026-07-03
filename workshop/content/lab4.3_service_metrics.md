@@ -548,6 +548,7 @@ traffic_gen.py traffic_order_and_product.yaml
 [3] Get ratings ✅ HTTP 200 -- You rated the order process 5 stars. Thank you! (1.4s)
 [4] Create orders ✅ HTTP 200 -- Thank you for your order! Your order id is 9400 (2.0s)
 ...output omitted...
+```
 
 ---
 
