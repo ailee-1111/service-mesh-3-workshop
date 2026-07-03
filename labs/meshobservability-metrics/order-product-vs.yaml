@@ -1,0 +1,32 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: order-product-vs
+  labels:
+    version: v1
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - meshobservability-metrics-gateway
+  http:
+  - match:
+    - uri:
+        exact: /order
+    - uri:
+        exact: /rating
+    route:
+    - destination:
+        host: order
+        port:
+          number: 8080
+  - match:
+    - uri:
+        exact: /spl50
+    rewrite:
+      uri: /spl50
+    route:
+    - destination:
+        host: product
+        port:
+          number: 8080

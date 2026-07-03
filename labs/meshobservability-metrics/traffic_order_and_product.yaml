@@ -1,0 +1,16 @@
+traffic:
+  mode: "mix"
+  duration: 6000
+  sleep: 0.5
+  pattern: round-robin
+  items:
+    - name: "Create orders"
+      endpoint: "/order"
+    - name: "Product offers"
+      endpoint: "/spl50"
+    - name: "Get ratings"
+      endpoint: "/rating"
+display:
+  show_progress: true
+analysis:
+  enabled: true

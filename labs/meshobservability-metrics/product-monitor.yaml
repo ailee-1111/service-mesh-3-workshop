@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: product-monitor
+  namespace: meshobservability-metrics
+spec:
+  endpoints:
+  - interval: 30s
+    path: /metrics
+    scheme: http
+    targetPort: 8080
+  selector:
+    matchLabels:
+      app: product
