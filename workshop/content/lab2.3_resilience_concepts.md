@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
   진정으로 장애를 견뎌낼 수 있으려면, 전체 인입 부하 처리에 필요한 정격 복제본 파드 수(N개) 외에 **최소한 1개 이상의 유휴 예비 복제본 파드(+1)를 상시 초과 구동하는 이중화 설계**를 견지해야 합니다.
   - **예시:** 초당 50건의 요청이 인입되고 개별 파드가 초당 최대 10건씩만 소화할 수 있다면, 실제 가동에 필요한 파드 5개(N) 외에 예비 파드 1개(+1)를 더해 **총 6개의 파드**를 상시 셋업합니다. 만일 이 중 1개의 복제본 파드가 기습 크래시로 소멸하더라도, 나머지 5개 파드가 즉석에서 초당 50건의 유량을 100% 한 치의 성능 손실 없이 무결하게 커버해 냅니다!
 
-<img src="images/lab2.3-resilience-fig-010.png" width="100%" alt="Figure 1.10: Load balancing with N+1 redundancy distributes traffic across six replicas" />
+<img src="images/lab2.3-resilience-fig-010.svg" width="100%" alt="Figure 1.10: Load balancing with N+1 redundancy distributes traffic across six replicas" />
 
 오픈시프트 서비스 메시는 대상 규칙(`DestinationRule`)의 `spec.trafficPolicy.loadBalancer.simple` 필드 설정을 동원하여 다음과 같은 대표적 L7 로드 밸런싱 정합 수단을 배포 수립합니다:
 
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
 현재 물려있는 미처리 요청 건수(Outstanding Requests)가 **가장 적은 한가한 파드 복제본 노드로 요청을 우선 우회 배정**합니다.
 * 엔드포인트 파드마다 통신 처리 비용 편차가 심하거나(가령 `/health` 처리는 1ms, `/report` 처리는 5s 등), 개별 하드웨어 파워가 불균형할 때 `ROUND_ROBIN` 방식보다 수십 배 안전하게 파드 편향적 병목 가부하 현상을 방지해 줍니다.
 
-<img src="images/lab2.3-resilience-fig-011.png" width="100%" alt="Figure 1.11: Comparison between LEAST_REQUEST and ROUND_ROBIN load-balancing strategies" />
+<img src="images/lab2.3-resilience-fig-011.svg" width="100%" alt="Figure 1.11: Comparison between LEAST_REQUEST and ROUND_ROBIN load-balancing strategies" />
 
 ### ② ROUND_ROBIN
 특별한 가중치 없이 순서대로 돌려가며 모든 파드로 패킷을 1/N 배분합니다. 모든 파드의 성능 명세가 완전히 동일하고 일정한 지연 처리 속도를 가질 때 주로 사용합니다.
@@ -144,7 +144,7 @@ spec:
   - `refused-stream`: 백엔드가 가부하로 인해 TCP 채널 스트림 접속을 거부했을 때 작동
   - `unavailable`: 백엔드 파드가 503 및 gRPC UNAVAILABLE 코드를 뿜어냈을 때 기동
 
-<img src="images/lab2.3-resilience-fig-012.png" width="100%" alt="Figure 1.12: Retry pattern automatically retries failed requests" />
+<img src="images/lab2.3-resilience-fig-012.svg" width="100%" alt="Figure 1.12: Retry pattern automatically retries failed requests" />
 
 다음 예제 명세서는 reviews 서비스 실패 감지 시 최대 **`3회`** 자동으로 재시도를 셋업하되, 개별 재시도당 **`2초`**만 대기 소요 제한을 걸며 오직 게이트웨이 오류 및 접속 차단 시에만 개입하는 명세서입니다:
 
@@ -210,7 +210,7 @@ spec:
 
 서킷 브레이커는 특정 파드 복제본 노드가 비정상적으로 에러를 뿜어내거나 과도하게 접속 스레드가 폭증하여 고사 직전에 도달했음을 감지하는 즉시, **해당 파드 복제본 노드로 유입되던 통신 선로를 즉각 물리 차단(Eject) 격리**시키고 건강하게 연동 가동 중인 다른 동료 파드 복제본 노드로만 요청을 수송 처리하는 지능형 인프라 안전장치입니다.
 
-<img src="images/lab2.3-resilience-fig-013.png" width="100%" alt="Figure 1.13: The circuit breaker" />
+<img src="images/lab2.3-resilience-fig-013.svg" width="100%" alt="Figure 1.13: The circuit breaker" />
 
 오픈시프트 서비스 메시는 서킷 브레이커 작동을 구현하기 위해 대상 규칙(`DestinationRule`)의 `trafficPolicy` 하위에 두 가지 핵심 백그라운드 구동 메커니즘을 상호 연계 보완적으로 투입 가동합니다:
 
