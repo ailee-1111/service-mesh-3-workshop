@@ -12,3 +12,4 @@ modules:
     - lab2.3_resilience
     - lab3.1_security_mtls
     - lab4.1_observability
+    - lab4.2_tracing

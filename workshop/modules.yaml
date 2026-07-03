@@ -18,3 +18,5 @@ modules:
     name: lab3.1-mTLS 보안
   lab4.1_observability:
     name: lab4.1-옵저버빌리티 및 서비스 메트릭
+  lab4.2_tracing:
+    name: lab4.2-Tempo & OpenTelemetry 추적
