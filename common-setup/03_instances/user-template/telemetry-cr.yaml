@@ -1,0 +1,10 @@
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: default
+  namespace: USER_NAME_PLACEHOLDER-istio-system
+spec:
+  tracing:
+  - providers:
+    - name: otel
+    randomSamplingPercentage: 100.0
