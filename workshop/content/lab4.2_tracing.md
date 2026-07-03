@@ -54,7 +54,7 @@ source ~/.bashrc
   - `reviews-v3`: 내부 `ratings` 서비스를 동기식으로 호출하며, 1~5점짜리 빨간색 별점으로 레이팅을 표출합니다.
 * **ratings:** 책 리뷰에 수반될 평점 점수 정보를 보존하고 있습니다.
 
-<img src="images/lab4.2-fig-041.png" width="100%" alt="Figure 1.42: The BookInfo application components" />
+<img src="images/lab4.2-fig-041.svg" width="100%" alt="Figure 1.42: The BookInfo application components" />
 
 Bookinfo 애플리케이션은 Envoy 사이드카 프록시가 완벽히 주입된 상태로 `%username%-meshobservability-tracing` 네임스페이스 하위에 기동을 개시합니다. 동적 트래픽 제너레이터가 백그라운드에서 실시간 원격 메트릭과 원격 수집(Telemetry) 추적용 가중 트래픽 데이터를 지속 인입시킬 것입니다.
 
