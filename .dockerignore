@@ -1,0 +1,14 @@
+# .dockerignore
+.git
+.gitmodules
+.gitignore
+.DS_Store
+PDFs/
+appendix/
+common-setup/
+README.md
+GEMINI.md
+fix_markdown.py
+fix_linebreaks.py
+notebook_crash.log
+translate_docs.py
