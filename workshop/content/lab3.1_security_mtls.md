@@ -66,6 +66,7 @@ oc login -u %username% -p openshift https://api.%cluster_subdomain%:6443
 ```
 
 * **로그인 수행 완료 로그:**
+
 ```bash
 The server uses a certificate signed by an unknown authority.
 Use insecure connections? (y/n): y
@@ -83,6 +84,7 @@ oc project %username%-meshsecurity-mtls
 ```
 
 * **프로젝트 이동 결과 로그:**
+
 ```bash
 Now using project "%username%-meshsecurity-mtls" on server "https://api.%cluster_subdomain%:6443".
 ```
@@ -457,7 +459,7 @@ oc exec $CURL_INSIDE_POD -- curl -s reviews.%username%-meshsecurity-mtls.svc.clu
 }
 ```
 
-* **대성공 감상 포인트:** 인증서 자격 증명이 실시간 교체 및 자동 순환되었음에도 불구하고, **그 어떤 통신 유실이나 끊김 패킷 장애 없이 극치 무중단으로 mTLS 보안 암호화 통신을 원활히 지속해 나감**을 완벽하게 확인할 수 있습니다!
+*인증서 자격 증명이 실시간 교체 및 자동 순환되었음에도 불구하고, **그 어떤 통신 유실이나 끊김 패킷 장애 없이 극치 무중단으로 mTLS 보안 암호화 통신을 원활히 지속해 나감**을 완벽하게 확인할 수 있습니다!
 
 ---
 
