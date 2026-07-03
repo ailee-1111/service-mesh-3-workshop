@@ -22,11 +22,19 @@ modules:
     name: lab2.3-서비스 회복력 개요
   lab2.3_resilience:
     name: lab2.3-서비스 탄력성(Resilience)
+  lab3.1_security_concepts:
+    name: lab3.1-mTLS 보안 개요
   lab3.1_security_mtls:
     name: lab3.1-mTLS 보안
+  lab4.1_observability_concepts:
+    name: lab4.1-옵저버빌리티 개요
   lab4.1_observability:
     name: lab4.1-옵저버빌리티 및 서비스 메트릭
+  lab4.2_tracing_concepts:
+    name: lab4.2-분산추적 개요
   lab4.2_tracing:
     name: lab4.2-Tempo & OpenTelemetry 추적
+  lab4.3_custom_metrics_concepts:
+    name: lab4.3-메트릭수집 개요
   lab4.3_service_metrics:
-    name: lab4.3-메트릭 수집
+    name: lab4.3-사용자 정의 메트릭

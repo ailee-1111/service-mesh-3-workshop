@@ -14,7 +14,11 @@ modules:
     - lab2.2_fault_tolerance
     - lab2.3_resilience_concepts
     - lab2.3_resilience
+    - lab3.1_security_concepts
     - lab3.1_security_mtls
+    - lab4.1_observability_concepts
     - lab4.1_observability
+    - lab4.2_tracing_concepts
     - lab4.2_tracing
+    - lab4.3_custom_metrics_concepts
     - lab4.3_service_metrics
