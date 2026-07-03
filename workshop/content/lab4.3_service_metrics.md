@@ -535,6 +535,10 @@ servicemonitor.monitoring.coreos.com/order-monitor created
 4.3. 두 서비스 모니터 장벽 배후로 계측 메트릭이 화려하게 쌓일 수 있도록, `traffic_gen.py` 스크립트를 연동 모드 파일인 `traffic_order_and_product.yaml` 명세서로 전격 가동하여 복합적인 트래픽을 백그라운드로 쏟아붓기 시작합니다.
 
 ```execute-2
+cd ~/labs/meshobservability-metrics
+```
+
+```execute-2
 traffic_gen.py traffic_order_and_product.yaml
 ```
 
