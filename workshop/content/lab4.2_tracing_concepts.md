@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <img src="images/lab4.2-tracing-fig-001.svg" width="100%" alt="Figure 1.30 & 1.31: Traffic flow in a system with and without distributed tracing" />
 
+<img src="images/lab4.2-tracing-fig-001-1.svg" width="100%" alt="Figure 1.30 & 1.31: Traffic flow in a system with and without distributed tracing2" />
+
 성능 문제를 해결하는 것은 분산 시스템의 유지 관리 및 개발에 있어 매우 중요합니다. 단일 클라이언트 호출이 여러 서비스와 상호 작용할 수 있기 때문에, 개별 서비스의 디버깅 로그를 개별 분석하는 것만으로는 성능 문제를 해결하는 데 도움이 되지 않을 수 있습니다.
 
 분산 추적은 개발자가 분산 애플리케이션의 호출 흐름을 시각화할 수 있도록 지원합니다. 호출의 순서, 직렬로 발생하는 호출 수와 병렬로 발생하는 호출 수의 파악, 그리고 레이턴시(지연 시간)의 발생 원인을 파악하는 것은 분산 시스템을 유지 관리할 때 유용합니다.
