@@ -9,13 +9,19 @@ modules:
   lab1.3_application_deployment:
     name: lab1.3-쇼룸 실습 배포
   lab2.1_concepts:
-    name: lab2.1-개요
+    name: lab2.1-트래픽 관리 개요
+  lab2.1_traffic_routing_splitting_concepts:
+    name: lab2.1-라우팅/스프리팅 개요
   lab2.1_traffic_routing_and_splitting:
     name: lab2.1-트래픽 라우팅/분배
+  lab2.2_fault_injection_concepts:
+    name: lab2.2-장애주입 개요
   lab2.2_fault_tolerance:
     name: lab2.2-장애 허용(Fault Injection)
+  lab2.3_resilience_concepts:
+    name: lab2.3-서비스 회복력 개요
   lab2.3_resilience:
-    name: lab2.3-회복력
+    name: lab2.3-서비스 탄력성(Resilience)
   lab3.1_security_mtls:
     name: lab3.1-mTLS 보안
   lab4.1_observability:

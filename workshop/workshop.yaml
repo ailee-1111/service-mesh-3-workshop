@@ -8,8 +8,11 @@ modules:
     - lab1.2_application_intro
     - lab1.3_application_deployment
     - lab2.1_concepts
+    - lab2.1_traffic_routing_splitting_concepts
     - lab2.1_traffic_routing_and_splitting
+    - lab2.2_fault_injection_concepts
     - lab2.2_fault_tolerance
+    - lab2.3_resilience_concepts
     - lab2.3_resilience
     - lab3.1_security_mtls
     - lab4.1_observability
