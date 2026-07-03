@@ -111,6 +111,19 @@ spec:
     - key: istio-prometheus-ignore
       operator: DoesNotExist
 EOF
+
+    echo "📊 Deploying Telemetry CR (OTel tracing collector filter) into namespace $ns..."
+    cat << 'EOF' | oc apply -f - -n "$ns" 2>/dev/null || true
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: default
+spec:
+  tracing:
+  - providers:
+    - name: otel
+    randomSamplingPercentage: 100.0
+EOF
 }
 
 if [ "$COMMAND" = "start" ]; then
