@@ -20,5 +20,4 @@ modules:
     - lab4.1_observability
     - lab4.2_tracing_concepts
     - lab4.2_tracing
-    - lab4.3_custom_metrics_concepts
-    - lab4.3_service_metrics
+
