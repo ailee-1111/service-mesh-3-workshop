@@ -127,7 +127,39 @@ cd ~/labs/meshintro-bookinfo
 traffic_gen.py continuous.yaml
 ```
 
-<img src="images/fig-005.svg" width="100%" alt="Traffic Output and Statistics" />
+```bash
+🔄 Continuous mode: 600s to http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
+🔗 curl -s http://istio-ingressgateway-istio-ingress.apps.ocp4.example.com/reviews/1
+[1] ✅ HTTP 200 -- red (0.0s)
+[2] ✅ HTTP 200 -- No stars (0.1s)
+[3] ✅ HTTP 200 -- black (0.4s)
+[4] ✅ HTTP 200 -- black (0.5s)
+[5] ✅ HTTP 200 -- black (0.6s)
+[6] ✅ HTTP 200 -- No stars (0.8s)
+[7] ✅ HTTP 200 -- No stars (0.9s)
+[8] ✅ HTTP 200 -- red (1.0s)
+[9] ✅ HTTP 200 -- black (1.1s)
+...output omitted...
+⏸️  Interrupted by user (Ctrl+C). Stopping continuous mode...
+
+📊 Traffic Statistics
+================================================================================
+┌───────────────┬────────────────┬─────────────┬─────────────┬─────────────┐
+│ Total Request │ Success Rate   │  Average    │ P50         │ P95         │
+├───────────────┼────────────────┼─────────────┼─────────────┼─────────────┤
+│ 39            │ 100.0% (39/39) │     23.1ms  │     16.0ms  │     79.8ms  │
+└───────────────┴────────────────┴─────────────┴─────────────┴─────────────┘
+
+📈 Response Distribution
+================================================================================
+┌─────────────────────────────┬───────────┬─────────────────┐
+│ Response                    │ Count     │ Percentage      │
+├─────────────────────────────┼───────────┼─────────────────┤
+│ No stars                    │ 15        │   38.5%         │
+│ black                       │ 14        │   35.9%         │
+│ red                         │ 10        │   25.6%         │
+└─────────────────────────────┴───────────┴─────────────────┘
+```
 
 세 가지 버전의 reviews 서비스 모두가 균형 있게 트래픽을 처리하며 골고루 분사되어 기동 응답을 전송하고 있는지 확인하십시오. (본인의 출력되는 응답 건수 및 응답 시간 percentiles 수치는 환경 상태에 따라 다르게 나타날 수 있습니다.)
 
