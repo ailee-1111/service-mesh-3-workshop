@@ -12,7 +12,7 @@ if [ -z "$COMMAND" ] || [ -z "$LAB_NAME" ]; then
     exit 1
 fi
 
-if [ "$LAB_NAME" != "meshintro-bookinfo" ] && [ "$LAB_NAME" != "meshtraffic-routing" ] && [ "$LAB_NAME" != "meshtraffic-chaos" ] && [ "$LAB_NAME" != "meshtraffic-resilience" ]; then
+if [ "$LAB_NAME" != "meshintro-bookinfo" ] && [ "$LAB_NAME" != "meshtraffic-routing" ] && [ "$LAB_NAME" != "meshtraffic-chaos" ] && [ "$LAB_NAME" != "meshtraffic-resilience" ] && [ "$LAB_NAME" != "meshsecurity-mtls" ]; then
     echo "❌ Error: Lab '$LAB_NAME'은 현재 환경에서 지원되지 않는 랩 코드입니다."
     exit 1
 fi
@@ -205,10 +205,44 @@ if [ "$COMMAND" = "start" ]; then
         echo "SUCCESS Installing the Reviews and Ratings Applications"
         echo "SUCCESS Installing curl pod"
         echo "🎉 Lab $LAB_NAME successfully started!"
+        
+    elif [ "$LAB_NAME" = "meshsecurity-mtls" ]; then
+        # 1. 메시 외부 네임스페이스 기동 및 평문 curl 파드 배포
+        OUTSIDE_NS="${USER_NAME}-mesh-outside"
+        echo "📂 Creating the outside mesh project $OUTSIDE_NS..."
+        oc new-project "$OUTSIDE_NS" 2>/dev/null || oc project "$OUTSIDE_NS"
+        echo "🏗️  Installing curl pod outside of the mesh..."
+        oc apply -f "$MANIFESTS_DIR/curl-outside.yaml" -n "$OUTSIDE_NS"
+        oc rollout status deployment/curl -n "$OUTSIDE_NS" --timeout=60s || true
+        
+        # 2. 메시 내부 네임스페이스 기동 및 서비스 통합
+        # (메인 NAMESPACE인 ${USER_NAME}-meshsecurity-mtls는 상위 루프에서 이미 생성되어 열려 있으므로 이를 활용합니다)
+        echo "🏗️  Installing Bookinfo Security workloads inside the mesh..."
+        oc apply -f "$MANIFESTS_DIR/bookinfo-security.yaml" -n "$NAMESPACE"
+        
+        # 3. 주요 디플로이먼트 가동 완료 추적
+        echo "⏱️  배포 중인 메시 내부 서비스 가동 확인..."
+        oc rollout status deployment/curl -n "$NAMESPACE" --timeout=60s || true
+        oc rollout status deployment/ratings-v1 -n "$NAMESPACE" --timeout=60s || true
+        oc rollout status deployment/reviews-v2 -n "$NAMESPACE" --timeout=60s || true
+        
+        # 다시 메인 네임스페이스로 현재 프로젝트 콘텍스트 전환
+        oc project "$NAMESPACE" >/dev/null 2>&1 || true
+        
+        echo "SUCCESS Installing Bookinfo Security workloads"
+        echo "🎉 Lab $LAB_NAME successfully started!"
     fi
     
 elif [ "$COMMAND" = "finish" ]; then
     echo "🧹 Completing and cleaning up lab '$LAB_NAME'..."
+    
+    if [ "$LAB_NAME" = "meshsecurity-mtls" ]; then
+        OUTSIDE_NS="${USER_NAME}-mesh-outside"
+        if oc get project "$OUTSIDE_NS" &>/dev/null; then
+            echo "📂 Deleting outside project '$OUTSIDE_NS'..."
+            oc delete project "$OUTSIDE_NS" --wait=false 2>/dev/null || true
+        fi
+    fi
     
     if oc get project "$NAMESPACE" &>/dev/null; then
         echo "📂 Deleting project '$NAMESPACE'..."
