@@ -259,40 +259,6 @@ virtualservice.networking.istio.io/ratings-faults-vs created
 
 ---
 
-### 5. OpenShift 관제 메뉴인 Observe 메뉴를 통해 Tempo Stack 분산 추적을 점검합니다.
-
-이전까지는 서비스 메시 전용 Kiali 토폴로지 UI를 동원해 추적을 감상했습니다. 이번에는 오픈시프트의 전역 관제 허브인 **Observe > Traces** 콘솔을 기동하여, 클러스터에 영구 각인되어 동작 중인 Tempo 스택 및 OTel 컬렉터 허브 관제판을 직접 다루어 봅니다.
-
-5.1. 오픈시프트 웹 콘솔 메뉴 탐색 바에서, **Observe > Traces** 메뉴 버튼을 클릭합니다.
-
-* 상단의 **Tempo instance** 검색 조건 드롭다운 메뉴를 확장하여, 미리 생성되어 있는 공용 템포스택 인스턴스인 **`tracing-system/sample`**을 선택 지정합니다. 테넌트(Tenant) 지정 필터 조건은 기본값인 **`north`** 상태 그대로 평온하게 유지해 둡니다.
-
-5.2. 전개되는 Tempo 분산 추적 관제 판넬을 평화롭게 감상하십시오. 차트에는 Bookinfo 마이크로서비스 전역에서 OTel 수집기를 통해 누적 수렴되어 템포 스토리지로 모아져 흐르는 실시간 전체 트랙 리스트가 차트와 함께 직관적으로 전사 투영됩니다.
-
-<img src="images/lab4.2-fig-054.png" width="100%" alt="Figure 1.55: Traces view with a list of traces, including columns for trace name, number of spans, duration, and start time." />
-
-5.3. 수집된 추적 대시보드 리스트의 세부 컬럼들을 유심히 검사하십시오.
-* **Trace name:** 이 추적에 연동된 주 통신 마이크로서비스 종류들(예: productpage, reviews 등)을 요약 표출해 줍니다.
-* **Spans:** 이 추적을 성료하기 위해 연쇄 가동된 세부 스팬(요청 통신 블록)의 단계적 누적 깊이를 숫자로 증명해 줍니다.
-* **Duration:** 이 특정 요청이 최초 진입하여 최종 종결 완료되기까지 걸린 순수 전체 레이턴시 지속 시간을 밀리초 단위로 입증해 줍니다.
-* **Start Time:** 이 트랜잭션이 최초 노크하여 구동 개시된 정식 타임스탬프 일자를 기록해 줍니다.
-
-5.4. 이 중에서 특정 이력 정보 하나를 클릭하여, 세부 분산 스팬의 수평 타임라인 도해 그래프를 기동해 봅니다.
-
-리스트에서 임의의 트레이스 이름을 마우스 클릭합니다. 클릭 즉시 하단에 수평 막대그래프(Horizontal Bars) 양식으로 팝업되는 **상세 분산 타임라인 뷰(Trace detail view with a timeline of spans)**가 환상적으로 팝업됩니다.
-
-<img src="images/lab4.2-fig-055.png" width="100%" alt="Figure 1.56: Trace detail view with a timeline of spans, showing as horizontal bars" /> (참고: 교재 원장 상에서 본 Figure 1.56은 이전 차트의 이미지가 중복 출력되어 인쇄되어 있는 사양입니다.)
-
-5.5. 트레이스 내부 의존 구조를 최종 분석해 봅니다.
-
-* **최종 점검 포인트:**
-  - 최초 인입 통신은 백그라운드 트래픽 제너레이터로부터 최상위 관문인 `productpage` 서비스 노드로 진입하며 수평 최상단 바를 형성합니다.
-  - 이 `productpage` 부모 바 아래로 자식 스팬인 `details` 호출 바와 `reviews(v1, v2, v3 중 하나)` 호출 바가 평화롭게 들여쓰기 트리 구조를 구성합니다.
-  - 만약 해당 요청 트랙이 `reviews-v2`나 `v3` 노드를 관통했을 경우, 이 `reviews` 자식 바 하위로 3단계 깊이의 손자 스팬인 `ratings` 서비스 호출 수평 바가 계층적으로 기입되어 작동하고 있음을 온전히 식별 및 검수해 낼 수 있습니다!
-
-이로써 이스티오 서비스 메시 환경 하에서의 Tempo Stack 및 OpenTelemetry 수집 기반의 최상급 분산 추적 시각화 및 옵저버빌리티 엔지니어링 실습이 대성공적으로 수립 완료되었습니다!
-
----
 
 ## 실습 완료 (Finish)
 
