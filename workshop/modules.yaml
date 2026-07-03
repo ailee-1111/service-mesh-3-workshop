@@ -20,3 +20,5 @@ modules:
     name: lab4.1-옵저버빌리티 및 서비스 메트릭
   lab4.2_tracing:
     name: lab4.2-Tempo & OpenTelemetry 추적
+  lab4.3_service_metrics:
+    name: lab4.3-사용자 정의 메트릭

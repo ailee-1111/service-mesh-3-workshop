@@ -13,3 +13,4 @@ modules:
     - lab3.1_security_mtls
     - lab4.1_observability
     - lab4.2_tracing
+    - lab4.3_service_metrics
