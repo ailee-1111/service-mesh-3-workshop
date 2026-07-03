@@ -12,7 +12,7 @@ RUN cp /tmp/src/labs/mesh-scripts/traffic_gen.py /usr/local/bin/traffic_gen.py &
     cp /tmp/src/labs/mesh-scripts/defaults.yaml /usr/local/bin/defaults.yaml && \
     cp /tmp/src/labs/mesh-scripts/lab /usr/local/bin/lab && \
     chmod +x /usr/local/bin/lab && \
-    curl -sL https://github.com/istio/istio/releases/download/1.20.3/istioctl-1.20.3-linux-amd64.tar.gz | tar -xz -C /usr/local/bin/ istioctl
+    curl -sL https://github.com/istio/istio/releases/download/1.26.2/istio-1.26.2-linux-amd64.tar.gz | tar -xz --strip-components=2 -C /usr/local/bin/ istio-1.26.2/bin/istioctl
 
 RUN rm -rf /tmp/src/.git* && \
     chown -R 1001 /tmp/src && \
