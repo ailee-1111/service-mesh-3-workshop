@@ -16,3 +16,5 @@ modules:
     name: lab2.3-회복력
   lab3.1_security_mtls:
     name: lab3.1-mTLS 보안
+  lab4.1_observability:
+    name: lab4.1-옵저버빌리티 및 서비스 메트릭

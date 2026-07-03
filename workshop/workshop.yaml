@@ -11,3 +11,4 @@ modules:
     - lab2.2_fault_tolerance
     - lab2.3_resilience
     - lab3.1_security_mtls
+    - lab4.1_observability
