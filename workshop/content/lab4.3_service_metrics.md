@@ -24,9 +24,9 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-# 모듈 4.3: 사용자 지정 애플리케이션 메트릭 수집 및 모니터링 (Collecting Service Metrics with OpenShift User Workload Monitoring)
+# 모듈 4.3: 사용자 지정 애플리케이션 메트릭 수집 및 모니터링 (Collecting Service(서비스) Metrics(메트릭) with OpenShift User Workload Monitoring)
 
-오픈시프트 서비스 메시 환경 하에서 Node.js(JavaScript) 및 Quarkus(Java) 마이크로서비스 소스 코드 내에 프로메테우스 규격의 사용자 지정 메트릭 수집(Metrics Instrumentation) 코드를 탑재하고, 이를 오픈시프트 전역 유저 모니터링(User Workload Monitoring) 시스템 및 프로메테우스 모니터링 엔진에 연동 수집하여 실시간 가동 메트릭을 추적 관제합니다.
+오픈시프트 서비스 메시 환경 하에서 Node.js(JavaScript) 및 Quarkus(Java) 마이크로서비스 소스 코드 내에 프로메테우스 규격의 사용자 지정 메트릭 수집(Metrics(메트릭) Instrumentation) 코드를 탑재하고, 이를 오픈시프트 전역 유저 모니터링(User Workload Monitoring) 시스템 및 프로메테우스 모니터링 엔진에 연동 수집하여 실시간 가동 메트릭을 추적 관제합니다.
 
 ## 결과 (Outcomes)
 * 모니터링 수집 관제를 위해 Red Hat OpenShift Service Mesh (OSSM) 프로젝트 환경을 완벽하게 준비 및 구성합니다.
@@ -442,7 +442,7 @@ order-674fd6496c-xd2sm             2/2     Running   0          10s
 product-64c7f7fd68-jh9b5           2/2     Running   0          45s
 ```
 
-3.4. 외부 진입 관문을 열어주기 위해 이스티오 인그레스 게이트웨이(Gateway) 설정을 배포합니다.
+3.4. 외부 진입 관문을 열어주기 위해 이스티오 인그레스 게이트웨이(Gateway(게이트웨이)) 설정을 배포합니다.
 
 ```execute
 oc apply -f gateway.yaml
@@ -561,11 +561,11 @@ traffic_gen.py traffic_order_and_product.yaml
 5.1. 오픈시프트 웹 콘솔 상에서 로그인 단계를 완료합니다.
 *(참고: 플러그인 메뉴가 완전히 작동하려면 본 주소 링크 <a href="https://console-openshift-console.%cluster_subdomain%" target="_blank">https://console-openshift-console.%cluster_subdomain%</a> 를 클릭해 브라우저 새 탭으로 접속해 활용하시는 것을 적극 권장합니다.)*
 
-5.2. 웹 콘솔 상단의 관점 전환 메뉴를 클릭하여 **Developer** 관점 메뉴로 전향합니다. 이후 왼쪽 탐색 창 메뉴에서 **Observe** 관제판을 클릭합니다. 상단 프로젝트 대상 필터 콤보 박스에서, 오직 본인 고유의 실습 공간인 **`%username%-meshobservability-metrics`** 프로젝트를 수렴 선택해 줍니다.
+5.2. 웹 콘솔 상단의 관점 전환 메뉴를 클릭하여 **Developer(개발자)** 관점 메뉴로 전향합니다. 이후 왼쪽 탐색 창 메뉴에서 **Observe(관찰)** 관제판을 클릭합니다. 상단 프로젝트 대상 필터 콤보 박스에서, 오직 본인 고유의 실습 공간인 **`%username%-meshobservability-metrics`** 프로젝트를 수렴 선택해 줍니다.
 
-<img src="images/lab4.3-fig-028.png" width="100%" alt="Figure 1.28: The menu Observe in the OpenShift developer console." />
+<img src="images/lab4.3-fig-028.png" width="100%" alt="Figure 1.28: The menu Observe(관찰) in the OpenShift developer console." />
 
-5.3. 상단의 **Metrics** 탭 메뉴를 클릭하고 화면을 아래로 스크롤 합니다. **Expression** 쿼리 입력창에 아래 카운터 명세를 입력한 뒤 **`Run queries`** 버튼을 클릭하여 수렴된 실시간 그래프 곡선을 감상합니다.
+5.3. 상단의 **Metrics(메트릭)** 탭 메뉴를 클릭하고 화면을 아래로 스크롤 합니다. **Expression** 쿼리 입력창에 아래 카운터 명세를 입력한 뒤 **`Run queries`** 버튼을 클릭하여 수렴된 실시간 그래프 곡선을 감상합니다.
 * **입력할 Expression:** `product_svc:spl50_page_view_count`
 
 5.4. **`Add query`** 버튼을 추가로 클릭하여 다른 두 번째 사용자 지정 메트릭 지표를 동일 차트 상에 추가 결합해 봅니다.

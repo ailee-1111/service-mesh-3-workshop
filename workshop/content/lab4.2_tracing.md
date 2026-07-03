@@ -24,13 +24,13 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-# 모듈 4.2: Tempo & OpenTelemetry 분산 추적 (Tracing Services With Kiali, Tempo and OpenTelemetry)
+# 모듈 4.2: Tempo & OpenTelemetry 분산 추적 (Tracing Services(서비스) With Kiali, Tempo and OpenTelemetry)
 
 오픈시프트 서비스 메시의 고급 옵저버빌리티 요소인 분산 추적(Distributed Tracing) 기능을 학습합니다. Kiali 트래픽 그래프를 통해 전체 트래픽 흐름을 분석하고, Red Hat OpenShift 웹 콘솔 내부의 모니터링 메뉴와 Tempo Stack, OpenTelemetry 수집기를 완벽하게 결합하여 분산되어 구동 중인 마이크로서비스 간의 연쇄 지연 및 통신 병목 현상을 깊이 추적하고 검증합니다.
 
 ## 결과 (Outcomes)
 * Red Hat OpenShift 콘솔을 활용하여 서비스 메시 트래픽 토폴로지를 실시간으로 시각화합니다.
-* 애플리케이션 수집 메트릭을 분석하고 이를 분산 추적(Distributed Traces) 데이터와 유기적으로 대조 연동합니다.
+* 애플리케이션 수집 메트릭을 분석하고 이를 분산 추적(Distributed Traces(추적)) 데이터와 유기적으로 대조 연동합니다.
 * 다수의 마이크로서비스 간의 세부 분산 트레이스 명세를 해독하여 트래픽 상호 작용 지표 및 전사적 가동 성능을 파악합니다.
 
 워크스테이션 머신의 사용자 터미널에서 아래의 `lab` 명령어를 실행하여 본 실습을 위한 환경을 준비하고, 모든 필요한 리소스들이 가용하게 전개되었는지 검증 및 보장합니다:
@@ -129,7 +129,7 @@ reviews-v3-5bf99fd74c-b2z26                     2/2     Running   0          15m
 
 3.2. 화면 최상단 네임스페이스 선택 콤보 박스에서, 반드시 `%username%-meshobservability-tracing` 프로젝트만 단독 기입하여 적용합니다. 우측 상단의 수집 메트릭 갱신 기간 드롭다운 메뉴는 기본 1분에서 한층 정교한 데이터 수집 이력을 표출하기 위해 **Last 5m**으로 정정해 줍니다.
 
-<img src="images/lab4.2-fig-043.png" width="100%" alt="Figure 1.44: Namespace and time range selectors at the top of the Traffic Graph view" />
+<img src="images/lab4.2-fig-043.png" width="100%" alt="Figure 1.44: Namespace(네임스페이스) and time range selectors at the top of the Traffic Graph view" />
 
 일부 서비스 노드나 간선 연결 구간이 초반에 노란색 경고 색상으로 팝업될 수 있으며, 이는 각 마이크로서비스가 최초 구동될 때 짧은 레이턴시 유실 혹은 미열림 구간이 존재했음을 의미하는 전개 현상입니다.
 
@@ -148,7 +148,7 @@ reviews-v3-5bf99fd74c-b2z26                     2/2     Running   0          15m
 
 <img src="images/lab4.2-fig-044.png" width="100%" alt="Figure 1.45: Graph with traffic distribution percentages visible on the edges" />
 
-3.5. 토폴로지 한가운데에 위치한 `productpage` 삼각형 서비스 노드를 마우스 왼쪽 클릭합니다. 클릭 즉시 우측에 해당 서비스의 요약 관제 대시보드 사이드 패널이 팝업됩니다. 해당 우측 사이드 패널 내에서 **Traces** 탭 메뉴를 클릭합니다.
+3.5. 토폴로지 한가운데에 위치한 `productpage` 삼각형 서비스 노드를 마우스 왼쪽 클릭합니다. 클릭 즉시 우측에 해당 서비스의 요약 관제 대시보드 사이드 패널이 팝업됩니다. 해당 우측 사이드 패널 내에서 **Traces(추적)** 탭 메뉴를 클릭합니다.
 
 <img src="images/lab4.2-fig-045.png" width="100%" alt="Figure 1.46: Right side panel showing a list of traces that use the product service" />
 
@@ -231,11 +231,11 @@ virtualservice.networking.istio.io/ratings-faults-vs created
 
 4.3. 트래픽 애니메이션이 노란색으로 누적 지체 응답을 표출하고, 에러 유입 구간은 빨간색으로 표출되는 고유 전경을 관찰합니다.
 
-실시간 통계 수치 변화 추이를 더욱 긴 주기로 확장 관제하기 위해 상단 필터에서 **Last 30m** 혹은 **Last 1h**를 지정하고, 삼각형 모양의 **`reviews`** 서비스 노드를 마우스 클릭한 뒤 우측 패널의 **Traces** 탭 버튼을 클릭합니다.
+실시간 통계 수치 변화 추이를 더욱 긴 주기로 확장 관제하기 위해 상단 필터에서 **Last 30m** 혹은 **Last 1h**를 지정하고, 삼각형 모양의 **`reviews`** 서비스 노드를 마우스 클릭한 뒤 우측 패널의 **Traces(추적)** 탭 버튼을 클릭합니다.
 
 <img src="images/lab4.2-fig-050.png" width="100%" alt="Figure 1.51: List of the reviews service spans" />
 
-사이드바 대시보드가 `reviews` 서비스 노드에 유기적으로 기여한 요청 트레이스 명세들을 수집해 정밀 요약해 줍니다. 이 트레이스 리스트는 오직 `reviews` 마이크로서비스가 직·간접적으로 참여한 트레이스들만을 깔끔히 교차 수집하여 제공해 주는 혁신적인 서비스 중심 뷰(Service-centric view) 역할을 선사합니다.
+사이드바 대시보드가 `reviews` 서비스 노드에 유기적으로 기여한 요청 트레이스 명세들을 수집해 정밀 요약해 줍니다. 이 트레이스 리스트는 오직 `reviews` 마이크로서비스가 직·간접적으로 참여한 트레이스들만을 깔끔히 교차 수집하여 제공해 주는 혁신적인 서비스 중심 뷰(Service(서비스)-centric view) 역할을 선사합니다.
 
 4.4. 이 중에서 가동 시간이 **2.0s를 훨씬 초과(예: 2.53s)하여 심각한 성능 저하**를 일으킨 특정 비정상 트레이스 중 하나를 클릭해 봅니다. 우측의 요약 패널에 해당 트레이스의 디테일 정보가 다음과 같이 정밀 팝업됩니다:
 
@@ -243,7 +243,7 @@ virtualservice.networking.istio.io/ratings-faults-vs created
 
 4.5. 지체 원인을 파악하기 위해, 우측 패널 세부 정보 카드 창에서 화면을 아래로 부드럽게 스크롤 하여 맨 아래 파란색 앵커 글씨인 **`Show span`** 링크를 가볍게 클릭합니다.
 
-오픈시프트 콘솔 대시보드가 이 분산 트레이스의 진짜 마이크로 트리 상세 정보를 파싱 해내며, 해당 `reviews` 서비스 세부 정보의 **Traces** 메인 분산 탭 화면으로 우리를 리다이렉트 포워딩 시켜 줍니다.
+오픈시프트 콘솔 대시보드가 이 분산 트레이스의 진짜 마이크로 트리 상세 정보를 파싱 해내며, 해당 `reviews` 서비스 세부 정보의 **Traces(추적)** 메인 분산 탭 화면으로 우리를 리다이렉트 포워딩 시켜 줍니다.
 
 <img src="images/lab4.2-fig-052.png" width="100%" alt="Figure 1.53: Trace details in the service view" />
 

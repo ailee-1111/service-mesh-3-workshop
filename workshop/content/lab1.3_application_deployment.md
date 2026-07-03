@@ -67,11 +67,11 @@ source ~/.bashrc
 `htpasswd_provider`를 클릭하고 사용자 이름은 `%username%`을, 비밀번호는 `openshift`를 입력해 관리자 권한으로 로그인합니다. 가이드 투어(Guided Tour)가 표시되면 **Skip tour**를 클릭해 건너뜁니다.
 
 
-1.2. **Topology** 메뉴 항목을 클릭하여 토폴로지 위상도 뷰를 열고 배포 상태를 검사합니다. 프로젝트 목록 드롭다운 목록에서 `%username%-meshintro-bookinfo` 프로젝트가 정상 선택되어 구동 중인지 확인합니다.
+1.2. **Topology(토폴로지)** 메뉴 항목을 클릭하여 토폴로지 위상도 뷰를 열고 배포 상태를 검사합니다. 프로젝트 목록 드롭다운 목록에서 `%username%-meshintro-bookinfo` 프로젝트가 정상 선택되어 구동 중인지 확인합니다.
 
 <img src="images/fig-003.png" width="100%" alt="Figure 1.11: Bookinfo application topology view" />
 
-프로젝트 내부에 총 7개의 마이크로서비스 배포가 존재하지만, 오른쪽 상단 모서리에 Route(외부 노출 주소) 아이콘이 있는 배포는 하나도 없음을 확인하십시오. 이는 모든 애플리케이션이 외부의 공격 및 임의 접속으로부터 안전하게 격리되어 있으며, 오직 OSSM 인그레스 게이트웨이(Ingress Gateway)를 통해서만 통합 진입 및 제어가 가능하기 때문입니다.
+프로젝트 내부에 총 7개의 마이크로서비스 배포가 존재하지만, 오른쪽 상단 모서리에 Route(라우트)(외부 노출 주소) 아이콘이 있는 배포는 하나도 없음을 확인하십시오. 이는 모든 애플리케이션이 외부의 공격 및 임의 접속으로부터 안전하게 격리되어 있으며, 오직 OSSM 인그레스 게이트웨이(Ingress(인그레스) Gateway(게이트웨이))를 통해서만 통합 진입 및 제어가 가능하기 때문입니다.
 
 ---
 
@@ -179,7 +179,7 @@ traffic_gen.py continuous.yaml
 
 3.1. OpenShift 웹 콘솔 화면으로 이동합니다.
 *(참고: 가이드북 상단의 **Web Console** 탭을 클릭해 열어둔 화면에서 손쉽게 계속 진행하실 수 있습니다.)*
-관리자(Administrator) 관점으로 뷰를 전환합니다. 콘솔 상단 좌측 모서리의 **Developer** 전환 콤보박스를 클릭하고 **Administrator**를 선택합니다.
+관리자(Administrator(관리자)) 관점으로 뷰를 전환합니다. 콘솔 상단 좌측 모서리의 **Developer(개발자)** 전환 콤보박스를 클릭하고 **Administrator(관리자)**를 선택합니다.
 
 3.2. 왼쪽의 통합 메뉴 중에서 **Service Mesh > Overview** 메뉴를 클릭하여 서비스 메시 관리 개요 섹션으로 진입합니다.
 
@@ -191,7 +191,7 @@ traffic_gen.py continuous.yaml
 > **참고 (NOTE)**
 > 실시간 요청 성능 그래프 수치나 통계 그래프 레이아웃은 본인의 기동 주기 및 브라우저 확대비에 따라 조금씩 가변적으로 나타날 수 있습니다.
 
-3.3. 왼쪽 서브메뉴에서 **Traffic Graph** 항목을 클릭하고, 화면 중앙 상단의 **Select Namespaces** 콤보박스를 열어 오직 `%username%-meshintro-bookinfo` 프로젝트 단 하나만 선택하도록 지정합니다.
+3.3. 왼쪽 서브메뉴에서 **Traffic Graph** 항목을 클릭하고, 화면 중앙 상단의 **Select Namespaces(네임스페이스)** 콤보박스를 열어 오직 `%username%-meshintro-bookinfo` 프로젝트 단 하나만 선택하도록 지정합니다.
 
 > [!IMPORTANT]
 > **중요 (IMPORTANT)**
@@ -227,9 +227,9 @@ traffic_gen.py continuous.yaml
 
 4.2. Create Traffic Shifting 설정 입력 화면에서, 빨간색 별점을 출력하는 새로운 버전인 `reviews-v3` 서비스의 Traffic Weight(트래픽 가중치 비율)를 **100**으로 정의하고, 나머지 `reviews-v1` 및 `reviews-v2` 서비스의 가중치 비율은 전부 **0**으로 입력해 정비합니다. 설정이 끝나면 하단의 **Preview** 버튼을 클릭하여 생성될 OSSM 리소스 명세를 시각적으로 검증합니다.
 
-4.3. **VirtualService** 탭을 선택하고 화면을 아래로 스크롤하여, 트래픽의 100%가 서비스 서브셋 `v3`으로 전량 강제 할당되고 `v1` 및 `v2`로는 0% 할당되는 이스티오 설정이 맞게 구성되었는지 최종 검증 및 검사합니다. 확인이 완료되면 **Create** 버튼을 클릭합니다.
+4.3. **VirtualService(가상 서비스)** 탭을 선택하고 화면을 아래로 스크롤하여, 트래픽의 100%가 서비스 서브셋 `v3`으로 전량 강제 할당되고 `v1` 및 `v2`로는 0% 할당되는 이스티오 설정이 맞게 구성되었는지 최종 검증 및 검사합니다. 확인이 완료되면 **Create** 버튼을 클릭합니다.
 
-<img src="images/fig-012.svg" width="100%" alt="Figure 1.20: reviews VirtualService traffic routing configuration" />
+<img src="images/fig-012.svg" width="100%" alt="Figure 1.20: reviews VirtualService(가상 서비스) traffic routing configuration" />
 
 4.4. 리소스 생성 확인 대화 상자에서 **Create**를 클릭하여 OSSM 리소스 생성을 최종 확인합니다.
 

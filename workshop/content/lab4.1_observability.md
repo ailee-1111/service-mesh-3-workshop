@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 ## 결과 (Outcomes)
 * 트래픽 그래프(Traffic Graph)를 사용하여 서비스 메시 토폴로지 및 실시간 트래픽 연쇄 상호 작용을 시각화합니다.
-* 다양한 그래프 유형(Service graph, Workload graph 등)을 통해 마이크로서비스들의 가동 성능 데이터를 입체적으로 분석합니다.
+* 다양한 그래프 유형(Service(서비스) graph, Workload graph 등)을 통해 마이크로서비스들의 가동 성능 데이터를 입체적으로 분석합니다.
 * 서비스 상태 정보 및 트래픽 유입 양상을 실시간으로 완벽히 모니터링합니다.
 * OpenShift Service Mesh 콘솔 플러그인(OSSMC)과 외부 Kiali 콘솔의 고유 기능 범주 및 메트릭 시각화 기법을 직접 비교하고 검증합니다.
 
@@ -88,18 +88,18 @@ oc project %username%-meshobservability-intro
 Now using project "%username%-meshobservability-intro" on server "https://api.%cluster_subdomain%:6443".
 ```
 
-1.2. 오픈시프트 웹 콘솔 상에서 로그인 단계를 완료한 뒤, 관리자 관점(Administrator perspective) 메뉴의 왼쪽 탐색 창에서 **Service Mesh > Traffic Graph**를 클릭합니다.
+1.2. 오픈시프트 웹 콘솔 상에서 로그인 단계를 완료한 뒤, 관리자 관점(Administrator(관리자) perspective) 메뉴의 왼쪽 탐색 창에서 **Service Mesh > Traffic Graph**를 클릭합니다.
 *(참고: 플러그인 메뉴가 완전히 작동하려면 본 주소 링크 <a href="https://console-openshift-console.%cluster_subdomain%" target="_blank">https://console-openshift-console.%cluster_subdomain%</a> 를 클릭해 브라우저 새 탭으로 접속해 활용하시는 것을 적극 권장합니다.)*
 
 <img src="images/lab4.1-fig-012.png" width="100%" alt="Figure 1.12: Access to the Traffic Graph" />
 
-1.3. 그래프 상단의 **Select Namespaces** 드롭다운 메뉴를 클릭하고, `%username%-meshobservability-intro` 네임스페이스를 선택하여 그래프에 추가합니다. 그런 다음 텍스트 상자 바깥의 임의의 영역을 클릭하여 필터링 설정을 정격 적용합니다.
+1.3. 그래프 상단의 **Select Namespaces(네임스페이스)** 드롭다운 메뉴를 클릭하고, `%username%-meshobservability-intro` 네임스페이스를 선택하여 그래프에 추가합니다. 그런 다음 텍스트 상자 바깥의 임의의 영역을 클릭하여 필터링 설정을 정격 적용합니다.
 
 <img src="images/lab4.1-fig-013.png" width="100%" alt="Figure 1.13: Mesh traffic graph overview" />
 
-1.4. 상단 그래프 옵션 드롭다운 메뉴에서 그래프 유형을 **Versioned app graph**에서 **Service graph**로 변경하고, 범례(Legend) 명세를 점검합니다.
+1.4. 상단 그래프 옵션 드롭다운 메뉴에서 그래프 유형을 **Versioned app graph**에서 **Service(서비스) graph**로 변경하고, 범례(Legend) 명세를 점검합니다.
 
-* **Service graph의 특성:** 서비스 그래프 유형은 메시에서 가장 간결하고 직관적인 도해를 제공합니다. 해당 토폴로지 상에서 이 애플리케이션의 최상위 주 진입로가 `productpage` 마이크로서비스임을 확인할 수 있습니다.
+* **Service(서비스) graph의 특성:** 서비스 그래프 유형은 메시에서 가장 간결하고 직관적인 도해를 제공합니다. 해당 토폴로지 상에서 이 애플리케이션의 최상위 주 진입로가 `productpage` 마이크로서비스임을 확인할 수 있습니다.
 * `productpage` 서비스는 내부의 다른 두 서비스인 `details` 및 `reviews` 서비스에 동기식으로 의존하고 있습니다. 또한 `reviews` 서비스는 최종적으로 `ratings` 서비스에 전폭 의존하고 있습니다.
 
 토폴로지 그래프 화면 왼쪽 하단에 위치한 **범례 표시 아이콘(Legend display icon)**을 클릭하여 서비스 메시 토폴로지의 범례 사이드 패널을 띄웁니다.
@@ -114,7 +114,7 @@ Now using project "%username%-meshobservability-intro" on server "https://api.%c
 
 2.1. `ratings-v1` 파드의 복제본 수를 0으로 축소 중단(Stop)시켜 Bookinfo 연쇄 서비스 체인망에 인위적 실패 장애를 적용합니다.
 
-오픈시프트 콘솔 왼쪽 메뉴에서 **Workloads > Deployments** 메뉴로 이동한 뒤, `%username%-meshobservability-intro` 프로젝트가 상단 콤보 박스에 정상 선택되어 있는지 확인합니다. 이후 목록에서 **`ratings-v1`** 디플로이먼트를 클릭합니다.
+오픈시프트 콘솔 왼쪽 메뉴에서 **Workloads > Deployments(배포)** 메뉴로 이동한 뒤, `%username%-meshobservability-intro` 프로젝트가 상단 콤보 박스에 정상 선택되어 있는지 확인합니다. 이후 목록에서 **`ratings-v1`** 디플로이먼트를 클릭합니다.
 
 <img src="images/lab4.1-fig-015.png" width="100%" alt="Figure 1.15: The ratings deployment" />
 
@@ -122,17 +122,17 @@ Now using project "%username%-meshobservability-intro" on server "https://api.%c
 
 2.2. 오픈시프트 콘솔 메뉴의 **Service Mesh > Traffic Graph**로 다시 부드럽게 돌아옵니다. 약 2~3분가량 대기한 다음, 실패 장애가 발생한 특정 노드 및 연쇄 간선들이 빨간색 오류 형태 지표로 전사 전파되는 토폴로지 전경을 정밀 점검합니다.
 
-<img src="images/lab4.1-fig-016.png" width="100%" alt="Figure 1.16: Service traffic graph showing errors" />
+<img src="images/lab4.1-fig-016.png" width="100%" alt="Figure 1.16: Service(서비스) traffic graph showing errors" />
 
 2.3. 서비스 정지 상태가 수 분가량 누적 유지된 것을 확인한 뒤, 상단 갱신 범위 콤보 박스를 **Last 5m** 수준으로 타이트하게 변경합니다. 
 
 선택한 시간 범위 및 단계별 대기 시간에 따라, 서비스 메시의 누적된 메트릭 손실 및 점진적 가동 상태 변화가 어떻게 점진적으로 다른 색상(노란색 및 연한 주황색 Degrading 상태)으로 차트에 누적 표현되는지 실시간 대조해 봅니다.
 
-<img src="images/lab4.1-fig-017.png" width="100%" alt="Figure 1.17: Service traffic graph showing degraded status" />
+<img src="images/lab4.1-fig-017.png" width="100%" alt="Figure 1.17: Service(서비스) traffic graph showing degraded status" />
 
 다양한 수집 시간 간격(Last 30m, Last 1h 등)을 자유롭게 변경 대조해 보며 차트 통계 수치의 시각 변화 추이를 체득합니다.
 
-2.4. 비정상 파드 중단 실습을 성료했으므로, 다시 **Workloads > Deployments** 메뉴의 `ratings-v1` 디플로이먼트로 이동하여 **위 화살표(up arrow) 버튼**을 눌러 파드 복제본 수를 다시 1개로 복구 이륙시킵니다.
+2.4. 비정상 파드 중단 실습을 성료했으므로, 다시 **Workloads > Deployments(배포)** 메뉴의 `ratings-v1` 디플로이먼트로 이동하여 **위 화살표(up arrow) 버튼**을 눌러 파드 복제본 수를 다시 1개로 복구 이륙시킵니다.
 
 ---
 
@@ -146,7 +146,7 @@ Now using project "%username%-meshobservability-intro" on server "https://api.%c
 
 마우스 스크롤 휠을 부드럽게 굴려 토폴로지 줌 레벨을 확대 조율합니다. 화면이 확대됨에 따라 각 간선(Edge) 가닥 위에 흐르는 **실시간 HTTP 트래픽 분배 비율(%)**이 수치 지표로 팝업되는 것을 똑똑히 확인할 수 있습니다.
 
-3.2. 상단의 그래프 유형 종류를 **Service graph**에서 **Workload graph**로 격상 정정하고, 세 가지 버전으로 분할 구동 중인 `reviews` 마이크로서비스 워크로드 간의 실시간 트래픽 가중 비율 전사 상태를 점검합니다.
+3.2. 상단의 그래프 유형 종류를 **Service(서비스) graph**에서 **Workload graph**로 격상 정정하고, 세 가지 버전으로 분할 구동 중인 `reviews` 마이크로서비스 워크로드 간의 실시간 트래픽 가중 비율 전사 상태를 점검합니다.
 
 <img src="images/lab4.1-fig-019.png" width="100%" alt="Figure 1.19: Traffic distribution between the three versions of the reviews service" />
 
@@ -156,7 +156,7 @@ Now using project "%username%-meshobservability-intro" on server "https://api.%c
   - 워크로드 그래프를 동원하면 메시 내부의 세부 노드들에 직접 유입 접속해 보지 않고도, 각 워크로드 버전별 연결 종속 관계와 성능 격차 원인을 고도로 추론해 낼 수 있습니다.
   - **예시 분석:** 왜 세 가지 `reviews` 워크로드 버전 중 오직 **`reviews-v1`** 노드만이 단연 독보적인 속도로 번개처럼 빠르게 통신을 소화해 낼까요?
   - 그래프 연결 가닥을 면밀히 관찰해 보면, `reviews-v1` 노드는 우측의 `ratings` 서비스 노드와 연결선 가닥이 전혀 수립되어 있지 않음을 알 수 있습니다. 즉, 동기식 백엔드 호출을 가동하지 않는 자급자족 구조이므로 가장 빠른 성능을 고수하는 원리임을 토폴로지가 단번에 입증해 줍니다!
-  - 이처럼 그래프 종류에 따라 표현 가능한 메트릭 범위가 다르며, 일반 Service graph 유형에서는 버전에 따른 연쇄 레이턴시 지연 수치가 차트 상에 세분화되어 노출되지 않습니다.
+  - 이처럼 그래프 종류에 따라 표현 가능한 메트릭 범위가 다르며, 일반 Service(서비스) graph 유형에서는 버전에 따른 연쇄 레이턴시 지연 수치가 차트 상에 세분화되어 노출되지 않습니다.
 
 3.4. 개별 워크로드 노드가 보유한 세부 성능 데이터를 즉석에서 추출해 봅니다.
 
@@ -174,7 +174,7 @@ Now using project "%username%-meshobservability-intro" on server "https://api.%c
 
 삼각형 서비스 액션 메뉴에는 워크로드 메뉴와 달리, 서비스 가동 정책을 동적 통제 및 주입(Fault Injection 주입, Timeout 주입, Dynamic Routing 분기 주입 등)할 수 있는 이스티오 관리자용 고급 퀵 체인 가동 메뉴가 대거 팝업됩니다. 
 
-이 중에서 **Inbound Metrics** 메뉴 버튼을 가볍게 클릭하여, `reviews` 마이크로서비스로 인입되는 실시간 트래픽 볼륨, 응답 레이턴시 변화 추이, 수·발신 GRPC 패킷량 등의 입체적인 전사 차트 메인 통계 대시보드를 직접 감상 및 확인합니다.
+이 중에서 **Inbound Metrics(메트릭)** 메뉴 버튼을 가볍게 클릭하여, `reviews` 마이크로서비스로 인입되는 실시간 트래픽 볼륨, 응답 레이턴시 변화 추이, 수·발신 GRPC 패킷량 등의 입체적인 전사 차트 메인 통계 대시보드를 직접 감상 및 확인합니다.
 
 <img src="images/lab4.1-fig-022.png" width="100%" alt="Figure 1.22: Inbound metrics for the reviews service" />
 
@@ -196,14 +196,14 @@ Now using project "%username%-meshobservability-intro" on server "https://api.%c
 4.3. 외부 Kiali 콘솔 내부의 메뉴 구성 요소들이 앞서 다룬 오픈시프트 인베딩 콘솔(OSSMC)과 어떻게 완벽한 일란성 쌍둥이처럼 일치하여 상호 연동되고 있는지 직접 탐색 및 보증합니다:
 * Kiali의 **Overview** 메뉴 항목은 오픈시프트 콘솔의 **Service Mesh > Overview** 화면과 완벽히 동일합니다.
 * Kiali의 **Traffic Graph** 메뉴 항목은 앞서 오랜 시간 탐색한 오픈시프트 **Service Mesh > Traffic Graph** 콘솔과 한치의 어긋남 없이 정합 호환됩니다.
-* Kiali의 **Workloads** 및 **Services** 항목 역시 오픈시프트 워크로드 디플로이먼트 가동 목록들과 백그라운드로 온전히 실시간 동기화되어 상호 작용합니다.
+* Kiali의 **Workloads** 및 **Services(서비스)** 항목 역시 오픈시프트 워크로드 디플로이먼트 가동 목록들과 백그라운드로 온전히 실시간 동기화되어 상호 작용합니다.
 
 4.4. 왼쪽 탐색 메뉴 바에서, 오직 독립형 Kiali 단독 콘솔에서만 전문적 분석 도구로 기습 제공하고 오픈시프트 인베딩 플러그인 뷰에서는 보이지 않는 **Applications** 메뉴 버튼을 정격 클릭합니다.
 
 <img src="images/lab4.1-fig-023.png" width="100%" alt="Figure 1.23: Kiali's applications menu" />
 
 * **Applications 메뉴의 차별적 혜택:**
-  - 이 화면에서는 현재 활성화된 가상 서비스(VirtualService), 목적지 정책(DestinationRule), 게이트웨이(Gateway) 등 이스티오 통제 보안 API 리소스들의 전체 선언 상태와 결합 세부 목록들을 한눈에 지도처럼 종합 조망하고, 각 API 리소스 명세의 정합성 유무를 원스톱으로 깊이 있게 디버깅할 수 있습니다.
+  - 이 화면에서는 현재 활성화된 가상 서비스(VirtualService(가상 서비스)), 목적지 정책(DestinationRule(대상 규칙)), 게이트웨이(Gateway(게이트웨이)) 등 이스티오 통제 보안 API 리소스들의 전체 선언 상태와 결합 세부 목록들을 한눈에 지도처럼 종합 조망하고, 각 API 리소스 명세의 정합성 유무를 원스톱으로 깊이 있게 디버깅할 수 있습니다.
 
 ---
 

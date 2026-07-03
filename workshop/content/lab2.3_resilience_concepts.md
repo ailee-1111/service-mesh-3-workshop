@@ -47,8 +47,8 @@ document.addEventListener("DOMContentLoaded", function() {
 > [!NOTE]
 > **용어 사전 (Terminology)**
 > * **Application (애플리케이션):** 우리가 정격 배포하는 독립 소프트웨어 워크로드 자체를 뜻합니다 (예: 웹 서버, API 등).
-> * **Service (서비스):** 파드 인스턴스 장비군에 대해 고정 도메인 엔드포인트를 열어주는 쿠버네티스 서비스(`Service`) 리소스를 대변합니다.
-> * **Replica or Pod (복제본 혹은 파드):** 서비스 도메인 배후에서 실제로 처리를 감당하고 연동 가동 중인 개별 컨테이너 파드를 지칭합니다.
+> * **Service(서비스) (서비스):** 파드 인스턴스 장비군에 대해 고정 도메인 엔드포인트를 열어주는 쿠버네티스 서비스(`Service(서비스)`) 리소스를 대변합니다.
+> * **Replica or Pod(파드) (복제본 혹은 파드):** 서비스 도메인 배후에서 실제로 처리를 감당하고 연동 가동 중인 개별 컨테이너 파드를 지칭합니다.
 > * **Host (호스트):** 이스티오의 회복력 정책 문서 상에서 "호스트"는 쿠버네티스 서비스가 아닌, **개별 물리 복제본 파드 인스턴스 단위**를 뜻합니다. 즉, 이스티오의 모든 회복력 정책은 파드 단위(Replica level)로 미세 개입 적용됩니다.
 
 ---
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <img src="images/lab2.3-resilience-fig-010.svg" width="100%" alt="Figure 1.10: Load balancing with N+1 redundancy distributes traffic across six replicas" />
 
-오픈시프트 서비스 메시는 대상 규칙(`DestinationRule`)의 `spec.trafficPolicy.loadBalancer.simple` 필드 설정을 동원하여 다음과 같은 대표적 L7 로드 밸런싱 정합 수단을 배포 수립합니다:
+오픈시프트 서비스 메시는 대상 규칙(`DestinationRule(대상 규칙)`)의 `spec.trafficPolicy.loadBalancer.simple` 필드 설정을 동원하여 다음과 같은 대표적 L7 로드 밸런싱 정합 수단을 배포 수립합니다:
 
 ### ① LEAST_REQUEST
 현재 물려있는 미처리 요청 건수(Outstanding Requests)가 **가장 적은 한가한 파드 복제본 노드로 요청을 우선 우회 배정**합니다.
@@ -212,7 +212,7 @@ spec:
 
 <img src="images/lab2.3-resilience-fig-013.svg" width="100%" alt="Figure 1.13: The circuit breaker" />
 
-오픈시프트 서비스 메시는 서킷 브레이커 작동을 구현하기 위해 대상 규칙(`DestinationRule`)의 `trafficPolicy` 하위에 두 가지 핵심 백그라운드 구동 메커니즘을 상호 연계 보완적으로 투입 가동합니다:
+오픈시프트 서비스 메시는 서킷 브레이커 작동을 구현하기 위해 대상 규칙(`DestinationRule(대상 규칙)`)의 `trafficPolicy` 하위에 두 가지 핵심 백그라운드 구동 메커니즘을 상호 연계 보완적으로 투입 가동합니다:
 
 ### ① 정적 방어: 커넥션 풀링 (Connection Pooling)
 동시 인입 접속수 및 대기 큐 크기 한계를 정적으로 물리 제한 셋업하여 복제본 노드가 파워 한계를 넘어 크래시 되는 현상을 예방합니다.

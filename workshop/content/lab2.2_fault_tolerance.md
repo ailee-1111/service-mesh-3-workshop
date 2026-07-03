@@ -51,7 +51,7 @@ source ~/.bashrc
 * `%username%-meshtraffic-chaos` 네임스페이스를 서비스 메시에 추가합니다.
 * `%username%-meshtraffic-chaos` 네임스페이스에 `ratings`와 세 가지 버전의 `reviews` 애플리케이션을 배포합니다.
 * `traffic_gen.py` 스크립트가 트래픽을 생성하도록 구성합니다.
-* `reviews` 서비스를 위한 초기 게이트웨이 및 가상 서비스(VirtualService) OSSM 리소스를 생성합니다.
+* `reviews` 서비스를 위한 초기 게이트웨이 및 가상 서비스(VirtualService(가상 서비스)) OSSM 리소스를 생성합니다.
 
 ---
 
@@ -287,7 +287,7 @@ traffic_gen.py finite.yaml
 
 3.1. `reviews-vs-abort.yaml` 파일을 검토합니다. 이 파일은 `reviews` 서비스에 대한 중단 장애를 구성하며, 다음과 같은 작업을 수행합니다:
 * `reviews-vs` 가상 서비스에서 HTTP 중단 에러가 발생하도록 장애 주입을 구성합니다.
-* 유입되는 요청 중 50%에 대해 HTTP 503(Service Unavailable) 에러를 대입합니다.
+* 유입되는 요청 중 50%에 대해 HTTP 503(Service(서비스) Unavailable) 에러를 대입합니다.
 * 세 개의 reviews 서비스 버전에 대한 표준 라우팅 경로 상태는 그대로 유지합니다.
 
 ```execute
@@ -321,7 +321,7 @@ spec:
 ```
 
 ❶ 중단(오류) 장애 주입 사양을 선언합니다.
-❷ 반환할 HTTP 상태 코드를 503(Service Unavailable)으로 강제 매핑합니다.
+❷ 반환할 HTTP 상태 코드를 503(Service(서비스) Unavailable)으로 강제 매핑합니다.
 
 3.2. 중단 구성을 `reviews-vs` 가상 서비스에 적용합니다.
 
@@ -368,9 +368,9 @@ traffic_gen.py finite.yaml
 본 주소 링크 <a href="https://console-openshift-console.%cluster_subdomain%" target="_blank">https://console-openshift-console.%cluster_subdomain%</a> 를 클릭하여 로그인 단계를 진행합니다.
 *(참고: 터미널 탭의 옆에 위치한 Console 탭을 클릭하면 오픈시프트 화면을 간단히 볼 수 있는데, 이는 인증비활성화 옵션으로 인해 간단한 확인만 가능합니다. 특히 플러그인 형식의 Kiali 등의 인베딩된 메뉴는 제공되는 링크를 직접 브라우저 새 탭으로 열어서 실습하시기를 권장합니다.)*
 
-3.5. 오픈시프트 콘솔의 관리자 관점(Administrator perspective)에서 **Service Mesh > Traffic Graph**를 클릭합니다.
+3.5. 오픈시프트 콘솔의 관리자 관점(Administrator(관리자) perspective)에서 **Service Mesh > Traffic Graph**를 클릭합니다.
 
-3.6. **Select Namespaces**에서 `%username%-meshtraffic-chaos` 네임스페이스를 선택하여 그래프에 추가합니다. 트래픽 그래프에서 장애 주입 동작을 관찰하십시오:
+3.6. **Select Namespaces(네임스페이스)**에서 `%username%-meshtraffic-chaos` 네임스페이스를 선택하여 그래프에 추가합니다. 트래픽 그래프에서 장애 주입 동작을 관찰하십시오:
 * 빨간색 화살표가 `istio-ingressgateway`를 `reviews` 서비스에 연결하여 HTTP 오류를 나타냅니다.
 * 오른쪽의 **Current graph summary** 패널에는 약 50%의 HTTP 5xx 에러가 표시됩니다.
 * 오류율은 가상 서비스에 구성된 50% 중단 설정과 일치합니다.
@@ -489,7 +489,7 @@ traffic_gen.py finite.yaml
 
 4.5. 오픈시프트 웹 콘솔 상에서 **Service Mesh > Traffic Graph** 메뉴로 이동합니다.
 
-4.6. **Select Namespaces**에서 `%username%-meshtraffic-chaos` 네임스페이스를 선택하여 그래프에 추가했는지 확인합니다.
+4.6. **Select Namespaces(네임스페이스)**에서 `%username%-meshtraffic-chaos` 네임스페이스를 선택하여 그래프에 추가했는지 확인합니다.
 
 4.7. **Display** 콤보 박스에서 **Response Time > 95th Percentile**을 선택합니다. 트래픽 그래프에서 지연 전파를 관찰하십시오:
 * `ratings` 서비스에 종속된 서비스 버전들만 응답 지연 시간의 증가를 보여줍니다.
@@ -601,7 +601,7 @@ traffic_gen.py finite.yaml
 
 5.4. 오픈시프트 웹 콘솔 상에서 **Service Mesh > Traffic Graph** 메뉴로 이동합니다.
 
-5.5. **Select Namespaces**에서 `%username%-meshtraffic-chaos` 네임스페이스를 선택하여 그래프에 추가했는지 확인합니다. 트래픽 그래프에서 에러 전파 동작을 관찰하십시오:
+5.5. **Select Namespaces(네임스페이스)**에서 `%username%-meshtraffic-chaos` 네임스페이스를 선택하여 그래프에 추가했는지 확인합니다. 트래픽 그래프에서 에러 전파 동작을 관찰하십시오:
 
 <img src="images/lab2.2-fig-003.png" width="100%" alt="Figure 1.9: Traffic graph showing errors in service-to-service communication" />
 

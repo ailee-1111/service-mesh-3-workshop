@@ -24,13 +24,13 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-## 모듈 4.2: Tracing Services With Kiali, Tempo and OpenTelemetry 개념
+## 모듈 4.2: Tracing Services(서비스) With Kiali, Tempo and OpenTelemetry 개념
 
 ### 학습 목표 (Objectives)
 * 트레이스(traces), 스팬(spans) 및 트레이스 컨텍스트 전파(trace context propagation)를 포함한 분산 추적(distributed tracing) 개념을 설명합니다.
 * OpenTelemetry, Tempo 및 Kiali를 포함하여 OpenShift Service Mesh의 분산 추적 구성 요소를 설명합니다.
 * OpenShift Service Mesh에서 분산 추적을 위한 자동 및 수동 계측(instrumentation) 옵션을 파악합니다.
-* 분산 추적 결과를 보고 분석하기 위한 세 가지 시각화 인터페이스(트래픽 그래프, Observe 메뉴, Service Mesh 워크로드 탭)를 비교합니다.
+* 분산 추적 결과를 보고 분석하기 위한 세 가지 시각화 인터페이스(트래픽 그래프, Observe(관찰) 메뉴, Service Mesh 워크로드 탭)를 비교합니다.
 
 ---
 
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 ---
 
-### 분산 추적의 Traces와 Spans (Traces and Spans in Distributed Tracing)
+### 분산 추적의 Traces와 Spans (Traces(추적) and Spans in Distributed Tracing)
 
 분산 추적은 다음 두 가지 핵심 용어를 사용합니다:
 
@@ -67,17 +67,17 @@ document.addEventListener("DOMContentLoaded", function() {
 <img src="images/lab4.2-tracing-fig-002.svg" width="100%" alt="Figure 1.32: Request call path in an application composed of many components" />
 
 이 예제 시나리오에서는 다음과 같은 흐름이 진행됩니다:
-* `Service A`가 애플리케이션의 요청 진입점(request entry point) 역할을 맡습니다.
-* `Service A`가 애플리케이션의 진입점이므로, 시스템은 이 단위를 **부모 스팬 (parent span)**이라고 부릅니다. `Service A`는 두 가지 서비스 호출을 수행하는데, 하나는 `Service B`로의 호출이고 다른 하나는 `Service E`로의 호출입니다. 따라서 `Service B`와 `Service E`는 `Service A` 배후 하위에 속한 **자식 스팬 (child spans)**이 됩니다.
-* `Service B`는 다시 `Service A`로 최종 응답을 회신하여 돌려보내기 전에 `Service C`와 `Service D`를 순차 호출합니다. 이 경우 `Service B`가 부모 스팬 역할을 수행하게 되며, `Service C`와 `Service D`가 이 `Service B` 하위의 자식 스팬이 됩니다.
+* `Service(서비스) A`가 애플리케이션의 요청 진입점(request entry point) 역할을 맡습니다.
+* `Service(서비스) A`가 애플리케이션의 진입점이므로, 시스템은 이 단위를 **부모 스팬 (parent span)**이라고 부릅니다. `Service(서비스) A`는 두 가지 서비스 호출을 수행하는데, 하나는 `Service(서비스) B`로의 호출이고 다른 하나는 `Service(서비스) E`로의 호출입니다. 따라서 `Service(서비스) B`와 `Service(서비스) E`는 `Service(서비스) A` 배후 하위에 속한 **자식 스팬 (child spans)**이 됩니다.
+* `Service(서비스) B`는 다시 `Service(서비스) A`로 최종 응답을 회신하여 돌려보내기 전에 `Service(서비스) C`와 `Service(서비스) D`를 순차 호출합니다. 이 경우 `Service(서비스) B`가 부모 스팬 역할을 수행하게 되며, `Service(서비스) C`와 `Service(서비스) D`가 이 `Service(서비스) B` 하위의 자식 스팬이 됩니다.
 
 아래 다이어그램 차트 명세는 동일한 단일 트레이스와 이를 지탱하는 구성 스팬들의 시간 분포 계층 바(Horizontal Bars) 그래픽 형상입니다:
 
-<img src="images/lab4.2-tracing-fig-003.svg" width="100%" alt="Figure 1.33: Traces and spans" />
+<img src="images/lab4.2-tracing-fig-003.svg" width="100%" alt="Figure 1.33: Traces(추적) and spans" />
 
 ---
 
-### Red Hat OpenShift 환경에서의 분산 추적 (Distributed Traces in Red Hat OpenShift)
+### Red Hat OpenShift 환경에서의 분산 추적 (Distributed Traces(추적) in Red Hat OpenShift)
 
 Red Hat OpenShift Service Mesh는 OpenShift 옵저버빌리티 플랫폼을 통해 분산 추적 기능을 통합 제공합니다.
 
@@ -207,7 +207,7 @@ function rollTheDice(rolls, min, max) {
 
 ---
 
-### 분산 추적 시각화 기법: 트래픽 그래프 통합 (Visualizing Traces: Traffic Graph Integration)
+### 분산 추적 시각화 기법: 트래픽 그래프 통합 (Visualizing Traces(추적): Traffic Graph Integration)
 
 오픈시프트 전용 웹 콘솔은 분산 추적 결과를 감상하고 분석하기 위해 다양한 종류의 다단식 관제 인터페이스를 지원 제공합니다.
 
@@ -216,7 +216,7 @@ function rollTheDice(rolls, min, max) {
 
 <img src="images/lab4.2-tracing-fig-006.png" width="100%" alt="Figure 1.36: Traffic graph after clicking a service node" />
 
-* 노드 상세 우측 패널 하단에 개설된 여러 가용 탭 중에서 **`Traces`** 탭을 클릭하여, 해당 서비스가 관여된 실시간 트레이스들의 리스트 정보를 조회합니다.
+* 노드 상세 우측 패널 하단에 개설된 여러 가용 탭 중에서 **`Traces(추적)`** 탭을 클릭하여, 해당 서비스가 관여된 실시간 트레이스들의 리스트 정보를 조회합니다.
 * 트레이스 목록 중 타깃 한 건을 클릭하는 즉시, 해당 트랜잭션 패킷이 통과해 나간 동서 통신 노선들이 그래프 맵 상에 **하늘색 굵은 실선으로 실시간 비주얼 가시화**됩니다! 또한, 우측 디테일 패널 하위로 해당 트레이스의 상세 정보 주머니를 개설해 줍니다.
 
 <img src="images/lab4.2-tracing-fig-007.png" width="100%" alt="Figure 1.37: The service detail panel containing the trace subpanel" />
@@ -225,11 +225,11 @@ function rollTheDice(rolls, min, max) {
 
 ---
 
-### 분산 추적 시각화 기법: Observe ➔ Traces 전역 메뉴 (Visualizing Traces: The OpenShift Console Observe Menu)
+### 분산 추적 시각화 기법: Observe(관찰) ➔ Traces(추적) 전역 메뉴 (Visualizing Traces(추적): The OpenShift Console Observe(관찰) Menu)
 
-오픈시프트 웹 콘솔은 클러스터 전역 단위의 대규모 트레이스 지표를 검색 집계하기 위해, 개발자 관점 왼쪽 탐색 창의 **`Observe ➔ Traces`** 메뉴를 제공합니다. Red Hat Observability 오퍼레이터가 이 인터페이스 화면을 정식 렌더링 구동해 줍니다.
+오픈시프트 웹 콘솔은 클러스터 전역 단위의 대규모 트레이스 지표를 검색 집계하기 위해, 개발자 관점 왼쪽 탐색 창의 **`Observe(관찰) ➔ Traces(추적)`** 메뉴를 제공합니다. Red Hat Observability 오퍼레이터가 이 인터페이스 화면을 정식 렌더링 구동해 줍니다.
 
-<img src="images/lab4.2-tracing-fig-008.png" width="100%" alt="Figure 1.38: Observe traces view in OpenShift console" />
+<img src="images/lab4.2-tracing-fig-008.png" width="100%" alt="Figure 1.38: Observe(관찰) traces view in OpenShift console" />
 
 이 전역 관제 메뉴판을 통하면 다음 액션들을 고속 소화할 수 있습니다:
 * **트레이스 필터링 검색 (Search and filter traces):** 서비스명, 호출 오퍼레이션 유형, 쿠키 태그, 소요 지속 시간 범위 및 특정 시간 대역 윈도우 조건을 입력하여 원하는 이상 요청 건만 콕 집어 고속 발굴해 냅니다.
@@ -246,15 +246,15 @@ function rollTheDice(rolls, min, max) {
 
 ---
 
-### 분산 추적 시각화 기법: Service Mesh 및 Traces 상세 탭 (Visualizing Traces: Service Mesh Workload and Service Traces Tab)
+### 분산 추적 시각화 기법: Service Mesh 및 Traces(추적) 상세 탭 (Visualizing Traces(추적): Service Mesh Workload and Service(서비스) Traces(추적) Tab)
 
-오픈시프트 서비스 메시 콘솔 플러그인은 개발자의 파드 관리 상세 화면(Deployments, Services, StatefulSets 등) 내부에 **"Service Mesh"** 라는 고유의 정식 통합 탭을 마운트해 줍니다.
+오픈시프트 서비스 메시 콘솔 플러그인은 개발자의 파드 관리 상세 화면(Deployments(배포), Services(서비스), StatefulSets(스테이트풀셋) 등) 내부에 **"Service Mesh"** 라는 고유의 정식 통합 탭을 마운트해 줍니다.
 
-<img src="images/lab4.2-tracing-fig-010.png" width="100%" alt="Figure 1.40: Service mesh tab in an OpenShift resource" />
+<img src="images/lab4.2-tracing-fig-010.png" width="100%" alt="Figure 1.40: Service(서비스) mesh tab in an OpenShift resource" />
 
-이 서비스 메시 상세 탭 안에는 추가로 **`Traces`** 라는 고유의 분산 추적 관제 서브 메뉴 탭이 수립 기동 됩니다.
+이 서비스 메시 상세 탭 안에는 추가로 **`Traces(추적)`** 라는 고유의 분산 추적 관제 서브 메뉴 탭이 수립 기동 됩니다.
 
-<img src="images/lab4.2-tracing-fig-011.png" width="100%" alt="Figure 1.41: Traces tab view in a deployment resource" />
+<img src="images/lab4.2-tracing-fig-011.png" width="100%" alt="Figure 1.41: Traces(추적) tab view in a deployment resource" />
 
 개발자는 이 특정 워크로드 전용 탭 선상에서 다음 세부 분석을 집중 수행할 수 있습니다:
 * **특정 워크로드 관여 트레이스 일괄 조회:** 해당 마이크로서비스 파드가 최초 인입 수신점 역할을 수행했거나 통신 선로 도중에 가입하여 처리했던 모든 전용 트레이스 목록만 격리 조회합니다.
@@ -277,15 +277,15 @@ function rollTheDice(rolls, min, max) {
 | **시각 인터페이스 (Visualization)** | **최고 조도 관제 스코프 (Best For)** | **실무 핵심 기동 사례 (Primary Use Cases)** |
 | :--- | :--- | :--- |
 | **Traffic Graph (Kiali 토폴로지)** | 메시 전역 트래픽 우회 공간 기하 관제 | mTLS 보안 유실 지점 색출, 라우팅 룰 이탈 검출, 병목 컴포넌트 거시 스캐닝 |
-| **Observe Menu (오픈시프트 전역)** | 클러스터 단위 대량 트레이스 산포 집계 | 전역 에러 필터링 검색, 장기 시계열 히스토그램 대조, 성능 이상 아웃라이어 발굴 |
+| **Observe(관찰) Menu (오픈시프트 전역)** | 클러스터 단위 대량 트레이스 산포 집계 | 전역 에러 필터링 검색, 장기 시계열 히스토그램 대조, 성능 이상 아웃라이어 발굴 |
 | **Service Mesh Workload Tab** | 특정 마이크로서비스 한정 심층 미세 관제 | 특정 파드 단위 미세 레이턴시 소모 계산, 수·발신 통신 비율과 트레이스의 실시간 교차 대조 |
 
 ---
 
-### 수립된 메트릭 지표와 트레이스의 상관정합 분석 기법 (Correlating Metrics and Traces)
+### 수립된 메트릭 지표와 트레이스의 상관정합 분석 기법 (Correlating Metrics(메트릭) and Traces(추적))
 
 오픈시프트 웹 콘솔은 메트릭 통계 곡선과 트레이스 타임라인을 긴밀히 하나의 화면에 상호 교차 매칭해 전시하는 정합 분석 기조를 기본 선사합니다:
-* **토폴로지 맵(Kiali):** 전역 트래픽의 호출 경로와 실시간 서비스 간 상호 의존 관계(Topology)를 매끄럽게 모니터링합니다.
+* **토폴로지 맵(Kiali):** 전역 트래픽의 호출 경로와 실시간 서비스 간 상호 의존 관계(Topology(토폴로지))를 매끄럽게 모니터링합니다.
 * **메트릭 차트(Prometheus):** 병목 발생 마이크로서비스 노드가 뿜어내는 수발신 평균 트래픽 수치 편동을 실시간 감상합니다.
 * **분산 트레이스(Tempo/OTel):** 해당 특정 결락 시점에 유입 소멸되었던 트랜잭션 개별 단 건의 심층 타임라인 계층 바와 오류 원장(Error logs)을 정교하게 분석합니다.
 

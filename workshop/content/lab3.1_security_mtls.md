@@ -234,9 +234,9 @@ oc exec -n %username%-mesh-outside $CURL_OUTSIDE_POD -- curl -s reviews.%usernam
 2.7. 오픈시프트 웹 콘솔 상에서 서비스 메시의 토폴로지 변화를 관찰합니다.
 *(참고: 플러그인 메뉴가 완전히 작동하려면 본 주소 링크 <a href="https://console-openshift-console.%cluster_subdomain%" target="_blank">https://console-openshift-console.%cluster_subdomain%</a> 를 클릭해 브라우저 새 탭으로 접속해 활용하시는 것을 적극 권장합니다.)*
 
-2.8. 콘솔의 관리자 관점(Administrator perspective)에서 **Service Mesh > Traffic Graph** 메뉴로 이동합니다.
+2.8. 콘솔의 관리자 관점(Administrator(관리자) perspective)에서 **Service Mesh > Traffic Graph** 메뉴로 이동합니다.
 
-2.9. **Select Namespaces**에서 `%username%-meshsecurity-mtls` 프로젝트를 정식 추가 필터링합니다.
+2.9. **Select Namespaces(네임스페이스)**에서 `%username%-meshsecurity-mtls` 프로젝트를 정식 추가 필터링합니다.
 
 2.10. 왼쪽 하단의 **Display** 옵션 메뉴에서 **Security** 점검 항목을 체크하여 전격 활성화합니다.
 

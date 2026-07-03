@@ -88,7 +88,7 @@ OpenShift Service Mesh는 오픈시프트 플랫폼 내의 다양한 타 핵심 
   * Cert Manager 오퍼레이터와 통합되면 `istio-csr` 인증 대행자가 동적으로 CSR 요청서를 발급하고 Cert Manager가 일괄 중앙 통제 갱신을 주도하게 되므로, 메시 내부의 상호 TLS(mTLS) 인증서 관리가 안전하고 완벽하게 자동화됩니다.
 * **Argo Workflows / Argo Rollouts (고급 Canary 배포 연동):**
   * 쿠버네티스의 기본 Rolling Update 방식보다 더욱 수려하고 복잡한 점진적 트래픽 이식 배포를 지원합니다.
-  * Argo Rollouts와 통합되면, 가상 라우팅 규칙(`VirtualService`)의 내부 가중치 비율을 메트릭 수집 현황에 따라 동적이고 세부적으로 조절하여 안전하게 카나리, 블루-그린 릴리즈를 통제할 수 있습니다.
+  * Argo Rollouts와 통합되면, 가상 라우팅 규칙(`VirtualService(가상 서비스)`)의 내부 가중치 비율을 메트릭 수집 현황에 따라 동적이고 세부적으로 조절하여 안전하게 카나리, 블루-그린 릴리즈를 통제할 수 있습니다.
 
 ---
 
@@ -99,7 +99,7 @@ OpenShift Service Mesh는 오픈시프트 플랫폼 내의 다양한 타 핵심 
 <img src="images/page-04.svg" width="100%" alt="Figure 1.4: Control Plane and Data Plane Architecture" />
 
 ### 제어 및 데이터 평면의 통신 흐름 방식
-1. 애플리케이션 개발자 또는 관리자가 오픈시프트 콘솔 및 API를 사용해 `VirtualService`나 `DestinationRule` 같은 이스티오 표준 가상 설정을 생성하거나 수정합니다.
+1. 애플리케이션 개발자 또는 관리자가 오픈시프트 콘솔 및 API를 사용해 `VirtualService(가상 서비스)`나 `DestinationRule(대상 규칙)` 같은 이스티오 표준 가상 설정을 생성하거나 수정합니다.
 2. 제어 평면 데몬인 `istiod`가 클러스터에 배포된 이러한 설정 명세들의 변화를 실시간으로 모니터링(Watch)합니다.
 3. `istiod`가 이 가상의 고수준 설정 규칙들을 가공하여, 실제 프록시 엔진인 Envoy가 해독할 수 있는 전용 바이너리 형태의 xDS 구성 정보로 컴파일 변환합니다.
 4. `istiod`가 이 변환된 최신의 설정을 네트워크 상에 배치된 개별 Envoy 사이드카 프록시들에게 암호화 채널을 통해 즉시 안전하게 배포(xDS)합니다.
@@ -112,11 +112,11 @@ OpenShift Service Mesh는 오픈시프트 플랫폼 내의 다양한 타 핵심 
 
 ---
 
-## 5. 데이터 평면 배포 모델 비교 (Data Plane Deployment Models)
+## 5. 데이터 평면 배포 모델 비교 (Data Plane Deployment(배포) Models)
 
 서비스 메시 3은 인프라 자원의 가용성 및 보안 요건에 맞추어 사이드카(Sidecar) 방식과 차세대 사이드카리스인 엠비언트(Ambient) 방식의 두 가지 데이터 평면 가동 모델을 완벽히 제공합니다.
 
-<img src="images/page-06.svg" width="100%" alt="Figure 1.5: Data Plane Deployment Models Comparison" />
+<img src="images/page-06.svg" width="100%" alt="Figure 1.5: Data Plane Deployment(배포) Models Comparison" />
 
 ### 사이드카 모드 (Sidecar Mode - 전통적 구조)
 각 애플리케이션 포드 내부마다 개별 Envoy 프록시가 가위 주입(Injection)되어 포드를 넘나드는 모든 인그레스 및 이그레스 트래픽을 완벽하게 가로챕니다.
@@ -140,15 +140,15 @@ OpenShift Service Mesh는 오픈시프트 플랫폼 내의 다양한 타 핵심 
 
 클러스터 내에서 조직의 규모와 애플리케이션 전파 범위가 넓어짐에 따라, 자원 고가용성과 독립 격리성을 유지하기 위해 고도의 확장 모델이 지원됩니다.
 
-<img src="images/page-08.svg" width="100%" alt="Figure 1.7 & 1.8: Scaling and Multicluster Deployment Models" />
+<img src="images/page-08.svg" width="100%" alt="Figure 1.7 & 1.8: Scaling and Multicluster Deployment(배포) Models" />
 
 ### 다중 테넌시 격리 (Multitenancy Features)
 * **네임스페이스 기반 단일 제어 모델:** 단일 이스티오 컨트롤 플레인(`Istio` 리소스)을 띄우고, `discoverySelectors` 필터를 사용하여 레이블이 지정된 격리된 특정 네임스페이스들의 자원들만 메시가 바라보도록 안전하게 격리합니다.
 * **다중 컨트롤 플레인 격리 모델:** 더 강력한 환경 격리가 수반되는 경우, 단일 오픈시프트 클러스터 내에 독립된 다중 서비스 메시 컨트롤 플레인 버전을 버전 리비전(`revisions`)에 매핑하여 별도 가동함으로써 완벽하게 격리된 부서별 메시 인프라를 동시에 가동할 수 있습니다.
 
-<img src="images/page-09.svg" width="100%" alt="Figure 1.7 & 1.8: Scaling and Multicluster Deployment Models" />
+<img src="images/page-09.svg" width="100%" alt="Figure 1.7 & 1.8: Scaling and Multicluster Deployment(배포) Models" />
 
-### 다중 클러스터 통합 모델 (Multicluster Deployments)
+### 다중 클러스터 통합 모델 (Multicluster Deployments(배포))
 클러스터를 지리적으로 분산 전파하여 고가용성 및 재해 복구(DR) 네트워크 환경을 수립하기 위해 3가지 다중 제어 모델과 네트워크 토폴로지(Single 또는 Multinetwork)가 제공됩니다:
 * **Multi-Primary:** 각 클러스터가 자체 컨트롤 플레인을 보유하고 상호 탐색을 통해 단일 메시 위상을 형성하는 모델 (고가용성 최적화).
 * **Primary-Remote:** 주 클러스터가 제어 평면을 가동하고 원격 클러스터들은 이에 결합되어 통신을 중대 위임받는 모델 (중앙 집중 통제).
