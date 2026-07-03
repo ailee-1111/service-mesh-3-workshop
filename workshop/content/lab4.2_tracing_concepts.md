@@ -24,13 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-# Observing OpenShift Service Mesh
-
-오픈시프트 서비스 메시 환경 하에서 제공하는 핵심 모니터링 체계와 실시간 서비스 트래픽 가시성 시각화 수립 사상을 학습합니다.
-
----
-
-## Tracing Services With Kiali, Tempo and OpenTelemetry
+## 모듈 4.2: Tracing Services With Kiali, Tempo and OpenTelemetry 개념
 
 ### 학습 목표 (Objectives)
 * 트레이스(traces), 스팬(spans) 및 트레이스 컨텍스트 전파(trace context propagation)를 포함한 분산 추적(distributed tracing) 개념을 설명합니다.
@@ -301,16 +295,3 @@ function rollTheDice(rolls, min, max) {
 * "특정 마이크로서비스의 L7 라우팅 가중치(Canary) 및 서킷 격리 설정이 실제 트랜잭션 수치에 어떤 물리적 부작용을 끼쳤는가?"
 
 ---
-
-### 연관 기술 참고 자료 (REFERENCES)
-
-* [Red Hat OpenShift: Distributed Tracing guide](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html-single/distributed_tracing/index) <i class="fas fa-external-link-alt"></i>
-* [Red Hat OpenShift: Installing the Distributed Tracing Platform](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html-single/distributed_tracing/index#distr-tracing-tempo-installing) <i class="fas fa-external-link-alt"></i>
-* [Red Hat OpenShift Service Mesh: Distributed Tracing and Service Mesh chapter in the Observability guide](https://docs.redhat.com/en/documentation/red_hat_openshift_service_mesh/3.1/html-single/observability/index#ossm-distr-tracing) <i class="fas fa-external-link-alt"></i>
-* [Red Hat Developers: The Path to Distributed Tracing - an OpenShift Observability Adventure](https://www.redhat.com/en/blog/the-path-to-distributed-tracing-an-openshift-observability-adventure) <i class="fas fa-external-link-alt"></i>
-* [Red Hat Developers: The path to distributed tracing - an OpenShift Observability adventure part II - A twist in the myth](https://www.redhat.com/en/blog/path-distributed-tracing-openshift-observability-adventure-part-ii-twist-myth) <i class="fas fa-external-link-alt"></i>
-* [Red Hat Developers: The Path to Distributed Tracing - a Red Hat OpenShift Observability Adventure part 3 Building the bridge](https://www.redhat.com/en/blog/the-path-to-distributed-tracing-part-3-building-the-bridge) <i class="fas fa-external-link-alt"></i>
-* [Quarkus: Using OpenTelemetry Tracing Quarkus Guide](https://quarkus.io/guides/opentelemetry-tracing) <i class="fas fa-external-link-alt"></i>
-* [OpenTelemetry.io: Getting Started Node.js OpenTelemetry Guide](https://opentelemetry.io/docs/languages/js/instrumentation/) <i class="fas fa-external-link-alt"></i>
-* [OpenTelemetry.io: Getting Started Python OpenTelemetry Guide](https://opentelemetry.io/docs/languages/python/getting-started/) <i class="fas fa-external-link-alt"></i>
-* [OpenTelemetry.io: Getting Started Go OpenTelemetry Guide](https://opentelemetry.io/docs/languages/go/getting-started/) <i class="fas fa-external-link-alt"></i>
