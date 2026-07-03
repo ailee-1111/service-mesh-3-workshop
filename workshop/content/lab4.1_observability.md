@@ -140,7 +140,7 @@ Now using project "%username%-meshobservability-intro" on server "https://api.%c
 
 3.1. **Service Mesh > Traffic Graph** 메뉴로 돌아옵니다.
 
-좌측 하단의 **Display** 콤보 박스 설정 메뉴를 활성화하여, **Traffic Distribution** 및 **Traffic Animation**의 체크 박스를 모두 선택하여 전격 활성화합니다.
+좌측 상단의 **Display** 콤보 박스 설정 메뉴를 활성화하여, **Traffic Distribution** 및 **Traffic Animation**의 체크 박스를 모두 선택하여 전격 활성화합니다.
 
 <img src="images/lab4.1-fig-018.png" width="100%" alt="Figure 1.18: Graph showing traffic animation and distribution" />
 
