@@ -90,7 +90,7 @@ spec:
 
 아래 설계 도해는 인그레스 관문을 통과한 유입 트래픽이 `80:15:5` 라는 구체적인 가중치 비율 분기 규칙에 맞춰 백엔드 reviews 파드 장비군(`v1`, `v2`, `v3`)으로 동적으로 정확히 조절되어 갈라져 흐르는 장엄한 광경을 명쾌하게 증명해 줍니다:
 
-<img src="images/lab2.1-routing-fig-004.svg" width="100%" alt="Figure 1.4: Weighted routing distributes traffic by percentage (80/15/5 split)" />
+<img src="images/lab2.1-routing-fig-004.png" width="100%" alt="Figure 1.4: Weighted routing distributes traffic by percentage (80/15/5 split)" />
 
 다음 가상 서비스 예제는 reviews 유입 호출 트래픽 명세를 `80:15:5` 비율로reviews 백엔드 subsets 선로들에 수학적 분산 이식하는 완벽 설계 원안을 수립 정의합니다:
 
