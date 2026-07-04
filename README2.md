@@ -27,9 +27,10 @@ oc login -u admin -p MjcwMjI3 https://api.cluster-pgx9x.pgx9x.sandbox3385.opentl
 ```
 
 ### 2. 청소 스크립트 실행
-`ServiceMesh3` 최상위 폴더 하위에 마련된 다음 자동 정리 스크립트를 기동합니다. 이 스크립트는 `user1~user5` 영역에 걸친 불필요한 ArgoCD 실습용 가설 프로젝트와 `openshift-gitops-operator` 서브스크립션을 완전 비동기 처리 및 완벽한 제거가 이루어질 때까지 대기하여 보장해 줍니다.
+`ServiceMesh3` 최상위 폴더 하위에 마련된 다음 자동 정리 스크립트를 기동합니다. 이 스크립트 또한 **고정된 5인 방식이 아닌, 관리자가 선언한 `USER_COUNT` 환경변수를 상속받아 동적으로 작동**하므로, 클러스터 규모에 맞게 실시간 동적 대입 처리가 성료됩니다:
 
 ```bash
+export USER_COUNT=20 # 동적으로 정리할 대상 사용자 정수를 기입 선언합니다.
 cd ~/gemini/ServiceMesh3/common-setup
 chmod +x cleanup_unused_resources.sh
 ./cleanup_unused_resources.sh
