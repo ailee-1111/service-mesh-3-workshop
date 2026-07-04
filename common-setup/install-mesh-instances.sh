@@ -119,10 +119,11 @@ while [ "$i" -le "$USER_COUNT" ]; do
     oc apply -f "$USER_RENDER_DIR/namespace-istio-ingress.yaml"
     oc label namespace "${USER_NAME}-istio-system" istio-discovery="${USER_NAME}" istio.io/rev="${USER_NAME}" --overwrite 2>/dev/null || true
     
-    # Istio 및 OTel Collector CR 배포
-    echo "      🏗️  Istio, OpenTelemetry 인스턴스 전개..."
+    # Istio 및 OTel Collector, Telemetry CR 배포
+    echo "      🏗️  Istio, OpenTelemetry, Telemetry 인스턴스 전개..."
     oc apply -f "$USER_RENDER_DIR/istio-cr.yaml"
     oc apply -f "$USER_RENDER_DIR/otel-collector-cr.yaml"
+    oc apply -f "$USER_RENDER_DIR/telemetry-cr.yaml" -n "${USER_NAME}-istio-system"
     
     # 메트릭 수집을 위한 ServiceMonitor 및 PodMonitor 전개 (cannot load the graph 완파 솔루션)
     echo "      📊 메트릭 수집용 ServiceMonitor 및 PodMonitor 배포..."
