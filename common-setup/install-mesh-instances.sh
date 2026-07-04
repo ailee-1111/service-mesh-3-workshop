@@ -69,7 +69,8 @@ TEMPLATE_DIR="$SCRIPT_DIR/03_instances/user-template"
 RENDER_DIR="/tmp/rendered-mesh-instances"
 rm -rf "$RENDER_DIR" && mkdir -p "$RENDER_DIR"
 
-for ((i=1; i<=USER_COUNT; i++)); do
+i=1
+while [ "$i" -le "$USER_COUNT" ]; do
     USER_NAME="user$i"
     echo "   👉 [사용자 $USER_NAME] 전용 격리 환경 조립 중..."
     
@@ -124,6 +125,8 @@ for ((i=1; i<=USER_COUNT; i++)); do
 
     oc create rolebinding "workshop-${USER_NAME}-istio-extended-user" --clusterrole=kiali-istio-extended-permissions --user="${USER_NAME}" -n "${USER_NAME}-istio-system" 2>/dev/null || true
     oc create rolebinding "workshop-${USER_NAME}-istio-extended-user" --clusterrole=kiali-istio-extended-permissions --user="${USER_NAME}" -n "${USER_NAME}-istio-ingress" 2>/dev/null || true
+    
+    i=$((i + 1))
 done
 
 # 6. OpenShift Web Console 'Service Mesh' 통합 플러그인 연동 및 기동 (전역 공유 Kiali 기준 단 1회 등록)
