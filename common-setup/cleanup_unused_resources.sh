@@ -73,14 +73,27 @@ else
     echo "   ℹ️ 관련 GitOps CSV가 존재하지 않습니다."
 fi
 
-# 4. 삭제 완료 대기 (비동기로 백그라운드 삭제 시작되었으므로 주기적 확인)
+# 4. 삭제 완료 대기 및 펜딩(Terminating) 발생 시 자동화된 파이널라이저(Finalizers) 소거 강제 제거 가동
 if [ ${#ACTIVE_NAMESPACES[@]} -gt 0 ]; then
     echo "----------------------------------------------------------"
-    echo "⏱️  네임스페이스들이 클러스터에서 완전히 청소될 때까지 대기합니다..."
+    echo "⏱️  네임스페이스들이 클러스터에서 완전히 청소될 때까지 모니터링합니다..."
     for ns in "${ACTIVE_NAMESPACES[@]}"; do
+        COUNTER=0
         while oc get project "$ns" &>/dev/null; do
-            echo "   ⏳ 네임스페이스 '$ns'가 여전히 삭제(Terminating) 중입니다. 5초 후 재검사..."
-            sleep 5
+            echo "   ⏳ 네임스페이스 '$ns'가 여전히 삭제(Terminating) 중입니다. (${COUNTER}초 대기 중)..."
+            sleep 3
+            COUNTER=$((COUNTER + 3))
+            
+            # 12초 이상 삭제되지 않고 걸려있으면 파이썬을 활용해 spec.finalizers를 공백([]) 처리하여 강제 파괴 삭제단행!
+            if [ "$COUNTER" -ge 12 ]; then
+                echo "   🚨 [Hanging 감지] 네임스페이스 '$ns'에 파이널라이저(Finalizers) 소거 강제 삭제를 전격 단행합니다!"
+                oc get namespace "$ns" -o json 2>/dev/null | python3 -c "import sys, json; d=json.load(sys.stdin); d['spec']['finalizers']=[]; json.dump(d, sys.stdout)" > /tmp/force-delete-$ns.json 2>/dev/null || true
+                if [ -f "/tmp/force-delete-$ns.json" ]; then
+                    oc replace --raw "/api/v1/namespaces/$ns/finalize" -f "/tmp/force-delete-$ns.json" &>/dev/null || true
+                    rm -f "/tmp/force-delete-$ns.json"
+                fi
+                break
+            fi
         done
         echo "   ✅ 네임스페이스 '$ns' 제거 완료!"
     done

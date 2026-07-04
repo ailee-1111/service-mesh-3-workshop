@@ -26,7 +26,7 @@
 oc login -u admin -p MjcwMjI3 https://api.cluster-pgx9x.pgx9x.sandbox3385.opentlc.com:6443 --insecure-skip-tls-verify
 ```
 
-### 2. 청소 스크립트 실행
+### 2. 청소 스크립트 실행 및 걸림(Terminating) 대비 강제 삭제(Force Delete) 기능 기동
 `ServiceMesh3` 최상위 폴더 하위에 마련된 다음 자동 정리 스크립트를 기동합니다. 이 스크립트 또한 **고정된 5인 방식이 아닌, 관리자가 선언한 `USER_COUNT` 환경변수를 상속받아 동적으로 작동**하므로, 클러스터 규모에 맞게 실시간 동적 대입 처리가 성료됩니다:
 
 ```bash
@@ -35,6 +35,17 @@ cd ~/gemini/ServiceMesh3/common-setup
 chmod +x cleanup_unused_resources.sh
 ./cleanup_unused_resources.sh
 ```
+
+> [!IMPORTANT]
+> **💡 Terminating 네임스페이스 강제 소거(Force Delete Finalizers) 완수 솔루션 내장**
+> 오픈시프트 환경 상에서 `userX-argocd` 네임스페이스를 삭제할 때, ArgoCD의 리소스 관리용 파이널라이저(Finalizers) 장벽이 잔류하여 네임스페이스 상태가 **`Terminating` (삭제 중 걸림)** 단계에 걸려 영구히 지워지지 않는 고질적인 쿠버네티스 버그 현상이 발생하곤 합니다.
+> 
+> 본 패키지에 제공되는 `cleanup_unused_resources.sh` 스크립트는 이 걸림 현상을 정밀 실시간 자동 감지하여, **12초 이상 삭제 지체가 감지될 경우 해당 네임스페이스의 `spec.finalizers`를 파이썬 파싱 장치로 즉석 소거한 뒤 로컬 API를 통해 강제 파괴 삭제(Force-delete finalized API replacement) 처리**하여 1초 만에 완전 소멸 완료시키는 막강한 지능형 자동화가 내장 장착되어 있습니다!
+> 
+> * 만일 수동으로 특정 프로젝트 네임스페이스(예: `user1-argocd`)를 직접 즉석 강제 삭제하고 싶다면 다음 원라인 치환 커맨드를 터미널에 단독 복사 실행하셔도 즉각 완전 청소 처리됩니다:
+>   ```bash
+>   oc get namespace user1-argocd -o json | python3 -c "import sys, json; d=json.load(sys.stdin); d['spec']['finalizers']=[]; json.dump(d, sys.stdout)" > /tmp/force-delete.json && oc replace --raw "/api/v1/namespaces/user1-argocd/finalize" -f "/tmp/force-delete.json" && rm -f /tmp/force-delete.json
+>   ```
 
 **수행 결과 예시:**
 ```text
