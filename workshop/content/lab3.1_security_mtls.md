@@ -139,25 +139,15 @@ oc get peerauthentication
 No resources found in %username%-meshsecurity-mtls namespace.
 ```
 
-2.2. `istio-system` 전역 네임스페이스에도 글로벌 피어 인증 정책이 설정되어 있지 않음을 확인합니다.
-
-```execute
-oc get peerauthentication -n istio-system
-```
-
-```bash
-No resources found in istio-system namespace.
-```
-
 이처럼 피어 인증 정책이 존재하지 않을 때, OpenShift Service Mesh는 기본적으로 허용(permissive) 모드로 통신을 조율하게 됩니다.
 
-2.3. 메시 내부에 안전하게 전개된 curl 파드의 이름을 `CURL_INSIDE_POD` 환경 변수에 담아 저장합니다.
+2.2. 메시 내부에 안전하게 전개된 curl 파드의 이름을 `CURL_INSIDE_POD` 환경 변수에 담아 저장합니다.
 
 ```execute
 CURL_INSIDE_POD=$(oc get pods -l app=curl -o jsonpath='{.items[*].metadata.name}')
 ```
 
-2.4. 메시 내부에서의 트래픽 통신이 원활히 성립되는지 검증합니다. 메시 내부에 소속된 curl 파드를 기동하여 `reviews` 서비스의 API 명세를 호출해 봅니다.
+2.3. 메시 내부에서의 트래픽 통신이 원활히 성립되는지 검증합니다. 메시 내부에 소속된 curl 파드를 기동하여 `reviews` 서비스의 API 명세를 호출해 봅니다.
 
 ```execute
 oc exec $CURL_INSIDE_POD -- curl -s reviews.%username%-meshsecurity-mtls.svc.cluster.local:9080/reviews/1 | jq
@@ -191,13 +181,13 @@ oc exec $CURL_INSIDE_POD -- curl -s reviews.%username%-meshsecurity-mtls.svc.clu
 
 이 요청은 정상적으로 성공합니다. 메시 내부의 curl 파드와 reviews 서비스는 모두 Envoy 사이드카 프록시를 동반하고 있으므로, 기본 permissive 모드 상태에서도 자동으로 안전한 상호 TLS(mTLS) 암호화 채널을 수립하여 통신하기 때문입니다. Kiali 시각화 상의 트래픽을 관측하기 위해 본 명령어를 5회에서 10회 가량 반복 수립하여 트래픽을 계속 인입시킵니다.
 
-2.5. 서비스 메시 외부에 배치되어 있는 curl 파드의 고유 이름을 `CURL_OUTSIDE_POD` 환경 변수에 저장합니다.
+2.4. 서비스 메시 외부에 배치되어 있는 curl 파드의 고유 이름을 `CURL_OUTSIDE_POD` 환경 변수에 저장합니다.
 
 ```execute
 CURL_OUTSIDE_POD=$(oc get pods -l app=curl -n %username%-mesh-outside -o jsonpath='{.items[*].metadata.name}')
 ```
 
-2.6. 메시 외부(사이드카 프록시가 전혀 없는 영역)로부터 인입되는 일반 평문(Plain-text) 트래픽 역시 permissive 모드에 의해 성공적으로 허용되는지 교차 확인합니다.
+2.5. 메시 외부(사이드카 프록시가 전혀 없는 영역)로부터 인입되는 일반 평문(Plain-text) 트래픽 역시 permissive 모드에 의해 성공적으로 허용되는지 교차 확인합니다.
 
 ```execute
 oc exec -n %username%-mesh-outside $CURL_OUTSIDE_POD -- curl -s reviews.%username%-meshsecurity-mtls.svc.cluster.local:9080/reviews/1 | jq
@@ -231,16 +221,16 @@ oc exec -n %username%-mesh-outside $CURL_OUTSIDE_POD -- curl -s reviews.%usernam
 
 메시 외부 영역으로부터 유입된 비암호화 통신도 정상 수립 완료되는 것을 관찰하십시오. 이는 기본 permissive 모드가 암호화 트래픽과 일반 텍스트 트래픽을 모두 관대하게 허용하고 있음을 물리적으로 증명합니다. Kiali 시각화 대조를 위해 본 명령어도 5회에서 10회 가량 동일하게 반복 호출합니다.
 
-2.7. 오픈시프트 웹 콘솔 상에서 서비스 메시의 토폴로지 변화를 관찰합니다.
+2.6. 오픈시프트 웹 콘솔 상에서 서비스 메시의 토폴로지 변화를 관찰합니다.
 *(참고: 플러그인 메뉴가 완전히 작동하려면 본 주소 링크 <a href="https://console-openshift-console.%cluster_subdomain%" target="_blank">https://console-openshift-console.%cluster_subdomain%</a> 를 클릭해 브라우저 새 탭으로 접속해 활용하시는 것을 적극 권장합니다.)*
 
-2.8. 콘솔의 관리자 관점(Administrator(관리자) perspective)에서 **Service Mesh > Traffic Graph** 메뉴로 이동합니다.
+2.7. 콘솔의 관리자 관점(Administrator(관리자) perspective)에서 **Service Mesh > Traffic Graph** 메뉴로 이동합니다.
 
-2.9. **Select Namespaces(네임스페이스)**에서 `%username%-meshsecurity-mtls` 프로젝트를 정식 추가 필터링합니다.
+2.8. **Select Namespaces(네임스페이스)**에서 `%username%-meshsecurity-mtls` 프로젝트를 정식 추가 필터링합니다.
 
-2.10. 왼쪽 하단의 **Display** 옵션 메뉴에서 **Security** 점검 항목을 체크하여 전격 활성화합니다.
+2.9. 왼쪽 하단의 **Display** 옵션 메뉴에서 **Security** 점검 항목을 체크하여 전격 활성화합니다.
 
-2.11. 가용한 메트릭 추출 범위를 확보하기 위해, 우측 상단 갱신 기준을 **Last 1h** 등으로 변경 지정합니다.
+2.10. 가용한 메트릭 추출 범위를 확보하기 위해, 우측 상단 갱신 기준을 **Last 1h** 등으로 변경 지정합니다.
 
 트래픽 그래프 상에 투영되는 허용(permissive) mTLS 동작의 전개 양상을 직접 관찰하십시오:
 * **메시 내부 통신 구간 (curl ➡️ reviews ➡️ ratings):** 연결 가닥 화살표 위에 **자물쇠(Padlock) 형태의 아이콘**이 표시되며, 이는 두 지점 간에 안전한 상호 TLS(mTLS) 암호화 연결이 원활히 수립되어 작동 중임을 대변합니다.
