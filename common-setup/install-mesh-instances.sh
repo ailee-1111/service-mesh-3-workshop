@@ -44,6 +44,19 @@ fi
 echo "📦 3. 글로벌 공통 서비스 메시 인프라 및 추적 백엔드 배포..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Global CNI 인스턴스 적용 전, IstioCNI CRD가 API 서버 상에 활성화될 때까지 검수 대기 (최대 60초)
+echo "🔍 CNI 인스턴스 생성 전, IstioCNI CRD의 정식 등록 여부를 검수 대기합니다..."
+crd_try=1
+while [ "$crd_try" -le 12 ]; do
+    if oc get crd istiocnis.sailoperator.io &>/dev/null; then
+        echo "   ✅ IstioCNI CRD가 정상적으로 클러스터 상에 안착 활성화되었습니다!"
+        break
+    fi
+    echo "   ⏳ CRD 등록 대기 중 ($crd_try/12)... 5초 후 재시도"
+    sleep 5
+    crd_try=$((crd_try + 1))
+done
+
 # Global CNI 인스턴스 적용
 echo "   ➡️ [CNI] 글로벌 IstioCNI 인스턴스 기동..."
 oc apply -f "$SCRIPT_DIR/01_operators/istio-cni-instance.yaml"
