@@ -44,6 +44,19 @@ fi
 echo "📦 3. 글로벌 공통 서비스 메시 인프라 및 추적 백엔드 배포..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# [UWM 활성화] Kiali 트래픽 토폴로지 감지 및 OTel 수집의 100% 정상 작동을 위한 사용자 워크로드 모니터링 개방
+echo "   ➡️ [UWM] 오픈시프트 전역 사용자 워크로드 모니터링(User Workload Monitoring) 기동 활성화..."
+cat <<EOF | oc apply -f - 2>/dev/null || true
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-monitoring-config
+  namespace: openshift-monitoring
+data:
+  config.yaml: |
+    enableUserWorkload: true
+EOF
+
 # Global CNI 인스턴스 적용 전, IstioCNI CRD가 API 서버 상에 활성화될 때까지 검수 대기 (최대 60초)
 echo "🔍 CNI 인스턴스 생성 전, IstioCNI CRD의 정식 등록 여부를 검수 대기합니다..."
 crd_try=1
