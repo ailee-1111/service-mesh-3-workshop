@@ -125,6 +125,10 @@ while [ "$i" -le "$USER_COUNT" ]; do
     oc apply -f "$USER_RENDER_DIR/otel-collector-cr.yaml"
     oc apply -f "$USER_RENDER_DIR/telemetry-cr.yaml" -n "${USER_NAME}-istio-system"
     
+    # OTel Collector가 Tempo Stack에 Traces를 정상 업로드(Ingest)할 수 있도록 전역 Writer 권한 허용 (401 PermissionDenied 완파 솔루션)
+    echo "      🔑 OTel Collector Tempo Ingestion 권한 부여..."
+    oc adm policy add-cluster-role-to-user tempostack-traces-writer "system:serviceaccount:${USER_NAME}-istio-system:otel-collector" 2>/dev/null || true
+    
     # 메트릭 수집을 위한 ServiceMonitor 및 PodMonitor 전개 (cannot load the graph 완파 솔루션)
     echo "      📊 메트릭 수집용 ServiceMonitor 및 PodMonitor 배포..."
     oc apply -f "$USER_RENDER_DIR/istiod-servicemonitor.yaml" -n "${USER_NAME}-istio-system"
