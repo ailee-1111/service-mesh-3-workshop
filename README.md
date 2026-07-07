@@ -43,10 +43,10 @@
 해당 실습환경은 단일 유저(student)에 의해 실습되는 환경으로 네임스페이스등의 환경이 단일화 구성이다.
 해당 실습 환경의 Workstation에 내제되어 있는 각 실습환경 구성 및 수행에 필요한 파일 및 스크립트, 환경은 새로 구성해야 하는 신규 '클러스터2'의 환경에 userN에 맞는 환경 내에 내제하고 사용할 수 있도록 구성해야 한다.
 
-* **API 서버 주소 (URL):** *https://api.ocp4.example.com:6443*
-* **kubeconfig :** /home/student/.auth/ocp4-kubeconfig  
-* **ssh 접속정보 :** ssh -i ~/.ssh/rht_classroom.rsa -J cloud-user@203.60.21.119:22022 student@172.25.252.1 -p 53009
-* **ssh 접속시 패스워드:** student
+* **API 서버 주소 (URL):** 
+* **kubeconfig :**  
+* **ssh 접속정보 :**
+* **ssh 접속시 패스워드:** 
 * **접속 로그인 토큰:** 
 * **주요 오퍼레이터 버전:** 
 * **네임스페이스 구성:** `user1`, `user2`, `user3` 등 사용자별 격리 네임스페이스 및 `homeroom` 대시보드 공간
@@ -59,11 +59,11 @@
 해당 클러스터의 userN은 변수처리되어, 실습에 필요한 namespace나 환경 구성, 그리고 로그인 명령어등의 실습 환경, 가이드 등에 변수처리되어 사용할 수 있어야 한다.
 
 
-* **API 서버 주소 (URL):** *https://api.cluster-pgx9x.pgx9x.sandbox3385.opentlc.com:6443*
-* **login user:** admin
-* **login password:** MjcwMjI3
-* **ssh 접속정보 :** ssh lab-user@bastion.pgx9x.sandbox3385.opentlc.com
-* **ssh 접속시 패스워드:** yOYT1y3NaMbH
+* **API 서버 주소 (URL):** 
+* **login user:** 
+* **login password:**
+* **ssh 접속정보 :** 
+* **ssh 접속시 패스워드:** 
 * **접속 로그인 토큰:** 
 * **주요 오퍼레이터 버전:** OSSM v3 (Sail Operator), Kiali Operator, OpenTelemetry, Tempo, Cert Manager
 * **네임스페이스 구성:** `homeroom` 및 사용자별 `userX-meshintro-bookinfo` 등 가동 프로젝트 영역을 user수에 맞게 변수처리하여 구분해야 한다.
@@ -79,16 +79,20 @@ OSSM v3 랩은 아래 실습 시나리오 목록을 목표로 순차 기획 및 
 | 모듈 ID | 실습 제목 | 한글화 상태 | 진행 상황 및 설명 |
 | :--- | :--- | :---: | :--- |
 | **Index** | [Index (워크숍 대시보드 홈)](./workshop/content/index.md) | ✅ 완료 | 서비스 메시 3.0 전체 아키텍처 및 코스 목차 설명 |
-| **Module 1.1** | [오픈시프트 서비스 메시 아키텍처 탐구](./workshop/content/lab1.1_architecture.md) | ✅ 완료 | OSSM v3 Sail Operator 및 CNI, 제어/데이터 평면 아키텍처 이론 |
-| **Module 1.2** | [서비스 메시 쇼룸 애플리케이션](./workshop/content/lab1.2_application_intro.md) | ✅ 완료 | Bookinfo 다국어 마이크로서비스 아키텍처 이론 및 트래픽 제너레이터 사용법 설명 |
-| **Module 1.3** | [서비스 메시 쇼룸 실습 배포](./workshop/content/lab1.3_application_deployment.md) | ✅ 완료 | Bookinfo 애플리케이션 설치 및 기본 인그레스 트래픽, Kiali 트래픽 시프팅 실습 |
-| **Module 2.1** | **Bookinfo 트래픽 제어** | ⬜ 대기 | Gateway API 및 HTTPRoute 기반 고급 트래픽 분배 |
-| **Module 2.2** | **Istio 장애 허용 (Fault Tolerance)** | ⬜ 대기 | 서킷 브레이커, 재시도, 타임아웃, 폴트 인젝션 실습 |
+| **Module 1.1** |  **Architecture**  | ✅ 완료 | OSSM v3 Sail Operator 및 CNI, 제어/데이터 평면 아키텍처 이론 |
+| **Module 1.2** |  **Application Intro**  | ✅ 완료 | Bookinfo 다국어 마이크로서비스 아키텍처 이론 및 트래픽 제너레이터 사용법 설명 |
+| **Module 1.3** | **Application Deployment** | ✅ 완료 | Bookinfo 애플리케이션 설치 및 기본 인그레스 트래픽, Kiali 트래픽 시프팅 실습 |
+| **Module 2.1** | **Traffic routing 및 분배** | ✅ 완료 | 트래픽 라우팅 및 분배 |
+| **Module 2.2** | **Istio 장애 허용 (Fault Tolerance)** | ✅ 완료 | 서킷 브레이커, 재시도, 타임아웃, 폴트 인젝션 실습 |
 | **Module 2.3** | **resilience** | ⬜ 대기 | 서킷 브레이커, 재시도, 타임아웃, 폴트 인젝션 실습 |
-| **Module 3.1** | **OSSM v3 상호 TLS (mTLS) 보안** | ⬜ 대기 | PeerAuthentication 활용 종단간 mTLS 강제 및 확인 |
-| **Module 3.2** | **OSSM v3 권한 부여 (Authorization)** | ⬜ 삭제예정 | AuthorizationPolicy 기반 세분화된 인가 제어 |
-| **Module 4.1** | **옵저버빌리티 및 서비스 메트릭** | ⬜ 대기 | Prometheus 연동 모니터링 메트릭 및 Kiali 시각화 |
-| **Module 4.2** | **Tempo & OpenTelemetry 추적** | ⬜ 대기 | OTel Collector 및 Tempo를 통한 마이크로서비스 간 분산 추적 |
+| **Module 3.1** | **OSSM v3 상호 TLS (mTLS) 보안** | ✅ 완료 | PeerAuthentication 활용 종단간 mTLS 강제 및 확인 |
+| **Module 3.2** | **OSSM v3 권한 부여 (Authorization)** | ⬜ 추가 예정 | AuthorizationPolicy 기반 세분화된 인가 제어 |
+| **Module 4.1** | **옵저버빌리티 및 서비스 메트릭** | ✅ 완료 | Prometheus 연동 모니터링 메트릭 및 Kiali 시각화 |
+| **Module 4.2** | **Tempo & OpenTelemetry 추적** | ✅ 완료 | OTel Collector 및 Tempo를 통한 마이크로서비스 간 분산 추적 |
+| **Module 4.3** | **Metric** | ⬜ 추가 예정 | OTel Collector 및 Tempo를 통한 마이크로서비스 간 분산 추적 |
+| **Module 5.1** | **Ambient mode** | ⬜ 추가 예정 |  |
+| **Module 5.2** | **Istio & Istio Revision** | ⬜ 추가 예정 |  |
+| **Module 5.3** | **Kubernetes Gateway API** | ⬜ 추가 예정 |  |
 
 ---
 
